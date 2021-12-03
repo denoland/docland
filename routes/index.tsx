@@ -10,6 +10,7 @@ import { getBody } from "../util.ts";
 function Meta() {
   return (
     <Helmet>
+      <title>Deno Doc</title>
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@denoland" />
       <meta name="twitter:creator" content="@denoland" />
