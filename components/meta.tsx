@@ -15,6 +15,7 @@ export function DocMeta(
     : `Deno Doc - ${getUrlLabel(url)}`;
   return (
     <Helmet>
+      <title>{title}</title>
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@denoland" />
       <meta name="twitter:creator" content="@denoland" />

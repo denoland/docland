@@ -2,14 +2,7 @@
 
 // Copyright 2021 the Deno authors. All rights reserved. MIT license.
 
-import {
-  Application,
-  colors,
-  HttpError,
-  lookup,
-  proxy,
-  Router,
-} from "./deps.ts";
+import { Application, colors, HttpError, lookup, Router } from "./deps.ts";
 import { handleNotFound } from "./middleware/notFound.tsx";
 import { handleErrors } from "./middleware/errors.tsx";
 import { createFaviconMW } from "./middleware/favicon.ts";
