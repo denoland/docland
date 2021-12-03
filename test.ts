@@ -61,6 +61,17 @@ Deno.test({
     assertEquals(res.status, 200);
     assertStringIncludes(await res.text(), ">Deno.connect<");
 
+    // doc query URLs are redirected to perm-link
+    res = await fetch(
+      `${server}doc?url=https%3A%2F%2Fdeno.land%2Fstd%2Ftesting%2Fasserts.ts`,
+    );
+    assertEquals(res.status, 200);
+    assertEquals(
+      res.url,
+      "http://0.0.0.0:5000/https://deno.land/std/testing/asserts.ts",
+    );
+    await res.text();
+
     teardown();
   },
 });
