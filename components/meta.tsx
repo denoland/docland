@@ -9,7 +9,7 @@ export function DocMeta(
 ) {
   const description = cleanMarkdown(doc);
   const href = item ? `${url}${url.endsWith("/") ? "" : "/"}~/${item}` : url;
-  const imageUrl = `https://deno-doc.deno.dev/img/${href}`;
+  const imageUrl = `https://doc-land.deno.dev/img/${href}`;
   const title = item
     ? `Deno Doc - ${getUrlLabel(url)} - ${item}`
     : `Deno Doc - ${getUrlLabel(url)}`;

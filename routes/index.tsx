@@ -16,7 +16,7 @@ function Meta() {
       <meta property="og:title" content="Deploy Doc" />
       <meta
         name="og:image"
-        content="https://deno-doc.deno.dev/static/banner.png"
+        content="https://doc-land.deno.dev/static/banner.png"
       />
       <meta
         name="og:image:alt"
