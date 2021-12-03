@@ -1,5 +1,8 @@
 # docland
 
+[![Build Status - Cirrus][]][Build status] [![Twitter handle][]][Twitter badge]
+[![Discord Chat](https://img.shields.io/discord/684898665143206084?logo=discord&style=social)](https://discord.gg/deno)
+
 A Deno CLI/Deploy server application which generates documentation for arbitrary
 JavaScript and TypeScript modules.
 
@@ -63,6 +66,22 @@ Or manually on the command line:
 > deno run --config deno.jsonc --allow-read=. --allow-write=./static --allow-net build.ts
 ```
 
+## Contributing
+
+We appreciate your help!
+
+To contribute, please read our
+[contributing instructions](https://deno.land/manual/contributing).
+
+This repository includes `.devcontainer` metadata which will allow a development
+container to be built which has all the development pre-requisites available to
+make contribution easier.
+
 ---
 
 Copyright 2021 the Deno Authors. All rights reserved. MIT License.
+
+[Build Status - Cirrus]: https://github.com/denoland/docland/workflows/ci/badge.svg?branch=main&event=push
+[Build status]: https://github.com/denoland/docland/actions
+[Twitter badge]: https://twitter.com/intent/follow?screen_name=deno_land
+[Twitter handle]: https://img.shields.io/twitter/follow/deno_land.svg?style=social&label=Follow
