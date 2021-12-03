@@ -42,6 +42,13 @@ router.get(
   "/builtin/unstable",
   (ctx) => ctx.response.redirect("/deno/unstable"),
 );
+router.get(
+  "/:proto(http|https)/:host/:path*",
+  (ctx) =>
+    ctx.response.redirect(
+      `/${ctx.params.proto}://${ctx.params.host}/${ctx.params.path}`,
+    ),
+);
 
 // The main documentation routes
 router.get("/:proto(http:/|https:/)/:host/:path*/~/:item+", pathGetHead);
