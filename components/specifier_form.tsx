@@ -111,7 +111,7 @@ export function SpecifierForm() {
                 `transition focus-visible:ring-2 focus-visible:ring-black focus:outline-none my-1 py-2 px-2.5 text-base text-gray-600 border border-gray-300 rounded-xl hover:shadow hidden lg:inline h-full`}
               href={`https://dash.deno.com/new?url=${
                 encodeURIComponent(
-                  "https://raw.githubusercontent.com/kitsonk/deploy_doc/main/main.ts",
+                  "https://raw.githubusercontent.com/denoland/docland/main/main.ts",
                 )
               }`}
               target="_blank"
