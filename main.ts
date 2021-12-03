@@ -3,6 +3,7 @@
 // Copyright 2021 the Deno authors. All rights reserved. MIT license.
 
 import { Application, colors, HttpError, lookup, Router } from "./deps.ts";
+import { createBadgeMW } from "./middleware/badge.ts";
 import { handleNotFound } from "./middleware/notFound.tsx";
 import { handleErrors } from "./middleware/errors.tsx";
 import { createFaviconMW } from "./middleware/favicon.ts";
@@ -72,6 +73,7 @@ export const app = new Application();
 app.use(logging);
 app.use(timing);
 app.use(createFaviconMW("https://deno.land/favicon.ico"));
+app.use(createBadgeMW());
 app.use(handleErrors);
 app.use(handleNotFound);
 

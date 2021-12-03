@@ -50,6 +50,12 @@ Deno.test({
       "<title>Deno Doc - deno/stable/</title>",
     );
 
+    // validate that badge.svg is available
+    res = await fetch(`${server}badge.svg`);
+    assertEquals(res.status, 200);
+    assertEquals(res.headers.get("content-type"), "image/svg+xml");
+    await res.arrayBuffer();
+
     teardown();
   },
 });
