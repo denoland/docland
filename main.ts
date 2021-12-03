@@ -1,0 +1,118 @@
+#!/usr/bin/env -S deno run --config deno.jsonc --allow-read=. --allow-net --allow-env
+
+// Copyright 2021 the Deno authors. All rights reserved. MIT license.
+
+import {
+  Application,
+  colors,
+  HttpError,
+  lookup,
+  proxy,
+  Router,
+} from "./deps.ts";
+import { handleNotFound } from "./middleware/notFound.tsx";
+import { handleErrors } from "./middleware/errors.tsx";
+import { createFaviconMW } from "./middleware/favicon.ts";
+import { logging, timing } from "./middleware/logging.ts";
+import { docGet, imgGet, pathGetHead } from "./routes/doc.tsx";
+import { indexGet } from "./routes/index.tsx";
+
+const router = new Router();
+
+// The index, renders "specifier_form"
+router.get("/", indexGet);
+
+// Servers up the static content
+router.get(
+  "/static/:path*",
+  proxy(new URL("./", import.meta.url), {
+    // when proxying static files, we aren't going to trust the content type, so
+    // we will override it.
+    contentType: (url, contentType) => lookup(url) ?? contentType,
+  }),
+);
+
+// redirects from legacy doc website
+router.get("/builtin/stable", (ctx) => ctx.response.redirect("/deno/stable"));
+router.get(
+  "/builtin/stable@:version",
+  (ctx) => ctx.response.redirect(`/deno/stable@${ctx.params.version}`),
+);
+router.get(
+  "/builtin/unstable",
+  (ctx) => ctx.response.redirect("/deno/unstable"),
+);
+
+// The main documentation routes
+router.get("/:proto(http:/|https:/)/:host/:path*/~/:item+", pathGetHead);
+router.get("/:proto(http:/|https:/)/:host/:path*", pathGetHead);
+router.get("/:proto(deno)/:host", pathGetHead);
+router.get("/:proto(deno)/:host/~/:item+", pathGetHead);
+router.head("/:proto(http:/|https:/)/:host/:path*/~/:item+", pathGetHead);
+router.head("/:proto(http:/|https:/)/:host/:path*", pathGetHead);
+router.head("/:proto(deno)/:host", pathGetHead);
+router.head("/:proto(deno)/:host/~/:item+", pathGetHead);
+
+// The server provides the ability to do a query parameter to identify the URL.
+router.get("/doc", docGet);
+
+// "card" image URLs for open graph/twitter
+router.get("/img/:proto(http:/|https:/)/:host/:path*/~/:item+", imgGet);
+router.get("/img/:proto(http:/|https:/)/:host/:path*", imgGet);
+router.get("/img/:proto(deno)/:host", imgGet);
+router.get("/img/:proto(deno)/:host/~/:item+", imgGet);
+
+export const app = new Application();
+
+// Some general processing
+app.use(logging);
+app.use(timing);
+app.use(createFaviconMW("https://deno.land/favicon.ico"));
+app.use(handleErrors);
+app.use(handleNotFound);
+
+app.use(router.routes());
+app.use(router.allowedMethods());
+
+app.addEventListener(
+  "listen",
+  ({ secure, hostname, port }) =>
+    console.log(
+      `${colors.yellow("Listening on")}: ${
+        secure ? "https" : "http"
+      }://${hostname}:${port}/`,
+    ),
+);
+
+// logs out information about oak application errors that were not handled by
+// the middleware
+app.addEventListener("error", (evt) => {
+  let msg = `[${colors.red("error")}] `;
+  if (evt.error instanceof Error) {
+    msg += `${evt.error.name}: ${evt.error.message}`;
+  } else {
+    msg += Deno.inspect(evt.error);
+  }
+  if (
+    (evt.error instanceof HttpError && evt.error.status >= 400 &&
+      evt.error.status <= 499)
+  ) {
+    if (evt.context) {
+      msg += `\n\nrequest:\n  url: ${evt.context.request.url}\n  headers: ${
+        Deno.inspect([...evt.context.request.headers])
+      }\n`;
+    }
+  }
+  if (evt.error instanceof Error && evt.error.stack) {
+    const stack = evt.error.stack.split("\n");
+    stack.shift();
+    msg += `\n\n${stack.join("\n")}\n`;
+  }
+  console.error(msg);
+});
+
+// we only listen if this is the main module, which allows use to facilitate
+// testing by lazily listening within the test harness
+if (Deno.env.get("DENO_DEPLOYMENT_ID") || Deno.mainModule === import.meta.url) {
+  app.listen({ port: 8080 });
+}

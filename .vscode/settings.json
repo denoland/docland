@@ -1,0 +1,10 @@
+{
+  "deno.enable": true,
+  "deno.lint": true,
+  "deno.config": "deno.jsonc",
+  "deno.codeLens.testArgs": [
+    "--allow-all",
+    "--config",
+    "deno.jsonc"
+  ]
+}

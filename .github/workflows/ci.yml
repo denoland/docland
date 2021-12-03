@@ -1,0 +1,36 @@
+name: ci
+
+on: [push, pull_request]
+
+jobs:
+  deno:
+    name: docland-${{ matrix.os }}
+    if: |
+      github.event_name == 'push' ||
+      !startsWith(github.event.pull_request.head.label, 'denoland:')
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    env:
+      GH_ACTIONS: 1
+
+    steps:
+      - name: ☑️ clone repository
+        uses: actions/checkout@v2
+
+      - name: ➡️  install Deno
+        uses: denoland/setup-deno@v1.0.0
+        with:
+          deno-version: 1.x
+
+      - name: 💄  format
+        run: deno fmt --check --ignore=static
+
+      - name: 💄  lint
+        run: deno lint
+
+      - name: 🧪  test
+        run: deno test --allow-read --allow-net --allow-env --config deno.jsonc
