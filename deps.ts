@@ -109,7 +109,6 @@ export {
 export {
   Application,
   HttpError,
-  proxy,
   Router,
   Status,
   STATUS_TEXT,

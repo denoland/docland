@@ -2,14 +2,7 @@
 
 // Copyright 2021 the Deno authors. All rights reserved. MIT license.
 
-import {
-  Application,
-  colors,
-  HttpError,
-  lookup,
-  proxy,
-  Router,
-} from "./deps.ts";
+import { Application, colors, HttpError, lookup, Router } from "./deps.ts";
 import { handleNotFound } from "./middleware/notFound.tsx";
 import { handleErrors } from "./middleware/errors.tsx";
 import { createFaviconMW } from "./middleware/favicon.ts";
@@ -22,14 +15,18 @@ const router = new Router();
 // The index, renders "specifier_form"
 router.get("/", indexGet);
 
-// Servers up the static content
+// Serves up the static content
 router.get(
   "/static/:path*",
-  proxy(new URL("./", import.meta.url), {
-    // when proxying static files, we aren't going to trust the content type, so
-    // we will override it.
-    contentType: (url, contentType) => lookup(url) ?? contentType,
-  }),
+  async (ctx) => {
+    const url = new URL(`./static/${ctx.params.path}`, import.meta.url);
+    ctx.response.type = lookup(url.toString());
+    ctx.response.body = await Deno.readFile(url);
+    ctx.response.headers.set(
+      "expires",
+      new Date(Date.now() + 86_400).toUTCString(),
+    );
+  },
 );
 
 // redirects from legacy doc website
