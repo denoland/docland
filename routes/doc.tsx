@@ -211,21 +211,23 @@ async function process<R extends string>(
   ctx.response.type = "html";
 }
 
+const decoder = new TextDecoder();
+
 async function maybeCacheStatic(url: string, host: string) {
   if (url.startsWith("deno") && !cachedEntries.has(url)) {
     try {
       const [lib, version] = host.split("@");
-      const res = await fetch(
+      const data = await Deno.readFile(
         new URL(
           `../static/${lib}${version ? `_${version}` : ""}.json`,
           import.meta.url,
         ),
       );
-      if (res.status === 200) {
-        cachedEntries.set(url, mergeEntries(await res.json()));
-      }
-    } catch {
-      // just swallowing here
+      const entries = JSON.parse(decoder.decode(data));
+      cachedEntries.set(url, entries);
+    } catch (e) {
+      console.log("error fetchin static");
+      console.log(e);
     }
   }
 }
