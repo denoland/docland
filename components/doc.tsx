@@ -369,7 +369,7 @@ function SideBarHeader({ children }: { children: Child<string> }) {
     return (
       <div>
         <h2 class={tw`text-gray-900 text-2xl font-bold`}>
-          <a href={href} class={tw`hover:underline`}>{label}</a>
+          <a href={href} class={tw`hover:underline break-all`}>{label}</a>
         </h2>
         {version && (
           <div>
