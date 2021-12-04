@@ -201,7 +201,7 @@ async function process<R extends string>(
       <Helmet>
         <Title item={item} url={url} />
       </Helmet>
-      <DocPage>{item}</DocPage>
+      <DocPage base={ctx.request.url}>{item}</DocPage>
     </App>,
   );
   ctx.response.body = getBody(

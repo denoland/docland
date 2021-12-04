@@ -7,7 +7,8 @@ import type { RouterMiddleware } from "../deps.ts";
 import { sheet } from "../shared.ts";
 import { getBody } from "../util.ts";
 
-function Meta() {
+function Meta({ base }: { base: URL }) {
+  const ogImage = new URL("/static/banner.png", base).toString();
   return (
     <Helmet>
       <title>Deno Doc</title>
@@ -15,10 +16,7 @@ function Meta() {
       <meta name="twitter:site" content="@denoland" />
       <meta name="twitter:creator" content="@denoland" />
       <meta property="og:title" content="Deploy Doc" />
-      <meta
-        name="og:image"
-        content="https://doc-land.deno.dev/static/banner.png"
-      />
+      <meta name="og:image" content={ogImage} />
       <meta
         name="og:image:alt"
         content="a logo of a sauropod in the rain with the text Deno Doc Documentation Generator"
@@ -40,7 +38,7 @@ export const indexGet: RouterMiddleware<"/"> = (ctx) => {
   sheet.reset();
   const page = renderSSR(
     <App>
-      <Meta />
+      <Meta base={ctx.request.url} />
       <SpecifierForm />
     </App>,
   );

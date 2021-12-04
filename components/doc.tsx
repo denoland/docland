@@ -221,7 +221,7 @@ function DocToc({ children }: { children: Child<DocNode[]> }) {
 }
 
 export function DocPage(
-  { children }: { children: Child<string | null | undefined> },
+  { children, base }: { children: Child<string | null | undefined>; base: URL },
 ) {
   const { entries, url, includePrivate } = store.state as StoreState;
   const collection = asCollection(entries, includePrivate);
@@ -262,7 +262,7 @@ export function DocPage(
     }
     return (
       <div class={gtw("content")}>
-        <DocMeta url={url} doc={jsDoc?.doc ?? ""} item={item} />
+        <DocMeta base={base} url={url} doc={jsDoc?.doc ?? ""} item={item} />
         <nav class={tw`p-6 sm:py-12 md:border-r md:border-gray-200`}>
           <SideBarHeader>{url}</SideBarHeader>
           <DocToc>{nodes}</DocToc>
@@ -287,7 +287,7 @@ export function DocPage(
     const jsDoc = entries.find(({ kind }) => kind === "moduleDoc")?.jsDoc;
     return (
       <div class={gtw("content")}>
-        <DocMeta url={url} doc={jsDoc?.doc ?? ""} />
+        <DocMeta base={base} url={url} doc={jsDoc?.doc ?? ""} />
         <nav class={tw`p-6 sm:py-12 md:border-r md:border-gray-200`}>
           <SideBarHeader>{url}</SideBarHeader>
           <ModuleToc library={library}>{collection}</ModuleToc>

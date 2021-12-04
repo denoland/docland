@@ -5,11 +5,16 @@ import { getUrlLabel } from "../shared.ts";
 import { cleanMarkdown } from "../util.ts";
 
 export function DocMeta(
-  { url, doc, item }: { url: string; doc: string; item?: string },
+  { base, url, doc, item }: {
+    base: URL;
+    url: string;
+    doc: string;
+    item?: string;
+  },
 ) {
   const description = cleanMarkdown(doc);
   const href = item ? `${url}${url.endsWith("/") ? "" : "/"}~/${item}` : url;
-  const imageUrl = `https://doc-land.deno.dev/img/${href}`;
+  const imageUrl = new URL(`/img/${href}`, base).toString();
   const title = item
     ? `Deno Doc - ${getUrlLabel(url)} - ${item}`
     : `Deno Doc - ${getUrlLabel(url)}`;
