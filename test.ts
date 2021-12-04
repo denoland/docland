@@ -56,6 +56,11 @@ Deno.test({
     assertEquals(res.headers.get("content-type"), "image/svg+xml");
     await res.arrayBuffer();
 
+    // validate that builtin doc nodes get merged properly
+    res = await fetch(`${server}deno/stable/~/Deno.connect`);
+    assertEquals(res.status, 200);
+    assertStringIncludes(await res.text(), ">Deno.connect<");
+
     teardown();
   },
 });

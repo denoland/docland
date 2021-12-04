@@ -115,7 +115,7 @@ function mergeEntries(entries: DocNode[]) {
     if (node.kind === "namespace") {
       const namespace = namespaces.get(node.name);
       if (namespace) {
-        namespace.namespaceDef.elements.concat(node.namespaceDef.elements);
+        namespace.namespaceDef.elements.push(...node.namespaceDef.elements);
         if (!namespace.jsDoc) {
           namespace.jsDoc = node.jsDoc;
         }
@@ -126,14 +126,14 @@ function mergeEntries(entries: DocNode[]) {
     } else if (node.kind === "interface") {
       const int = interfaces.get(node.name);
       if (int) {
-        int.interfaceDef.callSignatures.concat(
-          node.interfaceDef.callSignatures,
+        int.interfaceDef.callSignatures.push(
+          ...node.interfaceDef.callSignatures,
         );
-        int.interfaceDef.indexSignatures.concat(
-          node.interfaceDef.indexSignatures,
+        int.interfaceDef.indexSignatures.push(
+          ...node.interfaceDef.indexSignatures,
         );
-        int.interfaceDef.methods.concat(node.interfaceDef.methods);
-        int.interfaceDef.properties.concat(node.interfaceDef.properties);
+        int.interfaceDef.methods.push(...node.interfaceDef.methods);
+        int.interfaceDef.properties.push(...node.interfaceDef.properties);
         if (!int.jsDoc) {
           int.jsDoc = node.jsDoc;
         }
@@ -223,7 +223,7 @@ async function maybeCacheStatic(url: string, host: string) {
           import.meta.url,
         ),
       );
-      const entries = JSON.parse(decoder.decode(data));
+      const entries = mergeEntries(JSON.parse(decoder.decode(data)));
       cachedEntries.set(url, entries);
     } catch (e) {
       console.log("error fetchin static");
