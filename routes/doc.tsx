@@ -187,30 +187,6 @@ async function getEntries<R extends string>(
   return entries;
 }
 
-async function process<R extends string>(
-  ctx: RouterContext<R>,
-  url: string,
-  includePrivate: boolean,
-  item?: string | null,
-) {
-  const entries = await getEntries(ctx, url);
-  store.setState({ entries, url, includePrivate });
-  sheet.reset();
-  const page = renderSSR(
-    <App>
-      <Helmet>
-        <Title item={item} url={url} />
-      </Helmet>
-      <DocPage base={ctx.request.url}>{item}</DocPage>
-    </App>,
-  );
-  ctx.response.body = getBody(
-    Helmet.SSR(page),
-    getStyleTag(sheet),
-  );
-  ctx.response.type = "html";
-}
-
 const decoder = new TextDecoder();
 
 async function maybeCacheStatic(url: string, host: string) {
@@ -241,14 +217,33 @@ export const pathGetHead = async <R extends string>(ctx: RouterContext<R>) => {
   ctx.assert(proto && host, Status.BadRequest, "Malformed documentation URL");
   const url = `${proto}/${host}/${path ?? ""}${search}`;
   await maybeCacheStatic(url, host);
-  return process(ctx, url, proto === "deno", item);
+  const entries = await getEntries(ctx, url);
+  store.setState({ entries, url, includePrivate: proto === "deno" });
+  sheet.reset();
+  const page = renderSSR(
+    <App>
+      <Helmet>
+        <Title item={item} url={url} />
+      </Helmet>
+      <DocPage base={ctx.request.url}>{item}</DocPage>
+    </App>,
+  );
+  ctx.response.body = getBody(
+    Helmet.SSR(page),
+    getStyleTag(sheet),
+  );
+  ctx.response.type = "html";
 };
 
 export const docGet = (ctx: RouterContext<"/doc">) => {
   const url = ctx.request.url.searchParams.get("url");
   ctx.assert(url, Status.BadRequest, "The query property `url` is missing.");
   const item = ctx.request.url.searchParams.get("item");
-  return process(ctx, url, false, item);
+  if (item) {
+    ctx.response.redirect(`/${url}/~/${item}`);
+  } else {
+    ctx.response.redirect(`/${url}`);
+  }
 };
 
 export const imgGet = async <R extends string>(ctx: RouterContext<R>) => {
