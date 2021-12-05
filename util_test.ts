@@ -11,7 +11,7 @@ Deno.test({
     );
     assert(actual);
     assertEquals(actual, {
-      registery: "github.com",
+      registry: "github.com",
       org: "denoland",
       package: "deno_std",
       version: "main",
