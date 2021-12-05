@@ -1,3 +1,5 @@
+// Copyright 2021 the Deno authors. All rights reserved. MIT license.
+
 import { removeMarkdown } from "./deps.ts";
 
 export function assert(cond: unknown, msg = "Assertion failed"): asserts cond {
@@ -77,30 +79,50 @@ export function take<T>(value: Child<T>, itemIsArray = false): T {
 /** Patterns of "registries" which will be parsed to be displayed in a more
  * human readable way. */
 const patterns = {
-  "deno.land/x": new URLPattern(
-    "https://deno.land/x/:pkg([^@/]+){@}?:ver?/:mod*",
-  ),
-  "deno.land/std": new URLPattern("https://deno.land/std{@}?:ver?/:mod*"),
-  "nest.land": new URLPattern("https://x.nest.land/:pkg([^@/]+)@:ver/:mod*"),
-  "crux.land": new URLPattern("https://crux.land/:pkg([^@/]+)@:ver"),
-  "github.com": new URLPattern(
-    "https://raw.githubusercontent.com/:org/:pkg/:ver/:mod*",
-  ),
-  "gist.github.com": new URLPattern(
-    "https://gist.githubusercontent.com/:org/:pkg/raw/:ver/:mod*",
-  ),
-  "esm.sh": new URLPattern(
-    "http{s}?://esm.sh/:org(@[^/]+)?/:pkg([^@/]+){@}?:ver?/:mod?",
-  ),
-  "skypack.dev": new URLPattern({
-    protocol: "https",
-    hostname: "cdn.skypack.dev",
-    pathname: "/:org(@[^/]+)?/:pkg([^@/]+){@}?:ver?/:mod?",
-    search: "*",
-  }),
-  "unpkg.com": new URLPattern(
-    "https://unpkg.com/:org(@[^/]+)?/:pkg([^@/]+){@}?:ver?/:mod?",
-  ),
+  "deno.land/x": [
+    new URLPattern(
+      "https://deno.land/x/:pkg([^@/]+){@}?:ver?/:mod*",
+    ),
+  ],
+  "deno.land/std": [new URLPattern("https://deno.land/std{@}?:ver?/:mod*")],
+  "nest.land": [new URLPattern("https://x.nest.land/:pkg([^@/]+)@:ver/:mod*")],
+  "crux.land": [new URLPattern("https://crux.land/:pkg([^@/]+)@:ver")],
+  "github.com": [
+    new URLPattern(
+      "https://raw.githubusercontent.com/:org/:pkg/:ver/:mod*",
+    ),
+    // https://github.com/denoland/deno_std/raw/main/http/mod.ts
+    new URLPattern(
+      "https://github.com/:org/:pkg/raw/:ver/:mod*",
+    ),
+  ],
+  "gist.github.com": [
+    new URLPattern(
+      "https://gist.githubusercontent.com/:org/:pkg/raw/:ver/:mod*",
+    ),
+  ],
+  "esm.sh": [
+    new URLPattern(
+      "http{s}?://esm.sh/:org(@[^/]+)?/:pkg([^@/]+){@}?:ver?/:mod?",
+    ),
+    // https://cdn.esm.sh/v58/firebase@9.4.1/database/dist/database/index.d.ts
+    new URLPattern(
+      "http{s}?://cdn.esm.sh/:regver*/:org(@[^/]+)?/:pkg([^@/]+)@:ver/:mod*",
+    ),
+  ],
+  "skypack.dev": [
+    new URLPattern({
+      protocol: "https",
+      hostname: "cdn.skypack.dev",
+      pathname: "/:org(@[^/]+)?/:pkg([^@/]+){@}?:ver?/:mod?",
+      search: "*",
+    }),
+  ],
+  "unpkg.com": [
+    new URLPattern(
+      "https://unpkg.com/:org(@[^/]+)?/:pkg([^@/]+){@}?:ver?/:mod?",
+    ),
+  ],
 };
 
 interface ParsedURL {
@@ -115,20 +137,22 @@ interface ParsedURL {
  * and returned the parsed structure. */
 export function parseURL(url: string): ParsedURL | undefined {
   for (const [registry, pattern] of Object.entries(patterns)) {
-    const match = pattern.exec(url);
-    if (match) {
-      let { pathname: { groups: { org, pkg, ver, mod } } } = match;
-      if (registry === "gist.github.com") {
-        pkg = pkg.substr(0, 7);
-        ver = ver.substr(0, 7);
+    for (const pat of pattern) {
+      const match = pat.exec(url);
+      if (match) {
+        let { pathname: { groups: { regver, org, pkg, ver, mod } } } = match;
+        if (registry === "gist.github.com") {
+          pkg = pkg.substr(0, 7);
+          ver = ver.substr(0, 7);
+        }
+        return {
+          registry: regver ? `${registry} @ ${regver}` : registry,
+          org: org ? org : undefined,
+          package: pkg ? pkg : undefined,
+          version: ver ? ver : undefined,
+          module: mod ? mod : undefined,
+        };
       }
-      return {
-        registry,
-        org: org ? org : undefined,
-        package: pkg ? pkg : undefined,
-        version: ver ? ver : undefined,
-        module: mod ? mod : undefined,
-      };
     }
   }
 }
