@@ -46,7 +46,7 @@ function ModuleToc(
 ) {
   const collection = take(children);
   const imports = collection.import
-    ? collection.import.map((imp) => <li>{imp.importDef.src}</li>)
+    ? collection.import.map(([, imp]) => <li>{imp.importDef.src}</li>)
     : undefined;
   return (
     <div>
@@ -81,7 +81,7 @@ function DocNodes({ children }: { children: Child<DocNodeCollection> }) {
     <div class={gtw("mainBox")}>
       {collection.moduleDoc && (
         <JsDoc style={largeMarkdownStyles}>
-          {collection.moduleDoc[0].jsDoc}
+          {collection.moduleDoc[0][1].jsDoc}
         </JsDoc>
       )}
       {collection.namespace && (
@@ -225,7 +225,7 @@ export function DocPage(
 ) {
   const state = store.state as StoreState;
   const { entries, url, includePrivate } = state;
-  const collection = asCollection(entries, includePrivate);
+  const collection = asCollection(entries, undefined, includePrivate);
   const library = url.startsWith("deno:");
   const item = take(children);
   if (item) {

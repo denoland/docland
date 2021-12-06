@@ -16,42 +16,45 @@ export function NamespaceDoc(
   const node = take(children);
   const { name, namespaceDef: { elements } } = node;
   const { includePrivate } = store.state as StoreState;
-  const collection = asCollection(elements, includePrivate);
-  const currentPath = [...path, name];
+  const collection = asCollection(
+    elements,
+    [...path, name].join("."),
+    includePrivate,
+  );
   return (
     <div>
       {collection.namespace && (
-        <Section title="Namespace" style="nodeNamespace" path={currentPath}>
+        <Section title="Namespace" style="nodeNamespace">
           {collection.namespace}
         </Section>
       )}
       {collection.class && (
-        <Section title="Classes" style="nodeClass" path={currentPath}>
+        <Section title="Classes" style="nodeClass">
           {collection.class}
         </Section>
       )}
       {collection.enum && (
-        <Section title="Enums" style="nodeEnum" path={currentPath}>
+        <Section title="Enums" style="nodeEnum">
           {collection.enum}
         </Section>
       )}
       {collection.variable && (
-        <Section title="Variables" style="nodeVariable" path={currentPath}>
+        <Section title="Variables" style="nodeVariable">
           {collection.variable}
         </Section>
       )}
       {collection.function && (
-        <Section title="Functions" style="nodeFunction" path={currentPath}>
+        <Section title="Functions" style="nodeFunction">
           {collection.function}
         </Section>
       )}
       {collection.interface && (
-        <Section title="Interfaces" style="nodeInterface" path={currentPath}>
+        <Section title="Interfaces" style="nodeInterface">
           {collection.interface}
         </Section>
       )}
       {collection.typeAlias && (
-        <Section title="Type Aliases" style="nodeTypeAlias" path={currentPath}>
+        <Section title="Type Aliases" style="nodeTypeAlias">
           {collection.typeAlias}
         </Section>
       )}
@@ -64,7 +67,7 @@ export function NamespaceToc(
 ) {
   const { name, namespaceDef: { elements } } = take(children);
   const { includePrivate } = store.state as StoreState;
-  const collection = asCollection(elements, includePrivate);
+  const collection = asCollection(elements, undefined, includePrivate);
   return (
     <div>
       <h3 class={gtw("tocHeader")}>
