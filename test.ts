@@ -59,7 +59,11 @@ Deno.test({
     // validate that builtin doc nodes get merged properly
     res = await fetch(`${server}deno/stable/~/Deno.connect`);
     assertEquals(res.status, 200);
-    assertStringIncludes(await res.text(), ">Deno.connect<");
+    const text = await res.text();
+    assertStringIncludes(text, ">Deno.connect<");
+
+    // validate that namespaced type references are resolved
+    assertStringIncludes(text, `href="/deno/stable/~/Deno.Conn"`);
 
     // doc query URLs are redirected to perm-link
     res = await fetch(

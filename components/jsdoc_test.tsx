@@ -1,4 +1,6 @@
-/* @jsx h */
+// Copyright 2021 the Deno authors. All rights reserved. MIT license.
+
+/** @jsx h */
 import { h, renderSSR } from "../deps.ts";
 import type { JsDocTagDoc } from "../deps.ts";
 import { assertEquals } from "../deps_test.ts";
