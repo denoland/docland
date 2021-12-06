@@ -9,16 +9,18 @@ import {
   twColors,
   virtualSheet,
 } from "./deps.ts";
-import type { DocNode } from "./deps.ts";
+import type { DocNode, DocNodeNamespace } from "./deps.ts";
 
 export const store = new Store({
   entries: [],
+  namespaces: [],
   url: "",
   includePrivate: false,
 });
 
 export interface StoreState {
   entries: DocNode[];
+  namespaces: DocNodeNamespace[];
   url: string;
   includePrivate: boolean;
 }

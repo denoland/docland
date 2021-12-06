@@ -223,7 +223,8 @@ function DocToc({ children }: { children: Child<DocNode[]> }) {
 export function DocPage(
   { children, base }: { children: Child<string | null | undefined>; base: URL },
 ) {
-  const { entries, url, includePrivate } = store.state as StoreState;
+  const state = store.state as StoreState;
+  const { entries, url, includePrivate } = state;
   const collection = asCollection(entries, includePrivate);
   const library = url.startsWith("deno:");
   const item = take(children);
@@ -232,14 +233,18 @@ export function DocPage(
     const name = path.pop()!;
     let { entries, url } = store.state as StoreState;
     if (path && path.length) {
+      const namespaces = [];
       for (const name of path) {
         const namespace = entries.find((n) =>
           n.kind === "namespace" && n.name === name
         ) as DocNodeNamespace | undefined;
         if (namespace) {
+          namespaces.push(namespace);
           entries = namespace.namespaceDef.elements;
         }
       }
+      state.namespaces = namespaces;
+      store.setState(state);
     }
     const nodes = entries.filter((e) => e.name === name && e.kind !== "import");
     if (!nodes.length) {
