@@ -216,6 +216,14 @@ export function InterfaceCodeBlock(
 
 function Methods({ children }: { children: Child<InterfaceMethodDef[]> }) {
   const methods = take(children, true);
+  methods.sort((a, b) => {
+    if (a.name > b.name) {
+      return 1;
+    } else if (a.name < b.name) {
+      return -1;
+    }
+    return 0;
+  });
   const so = getState(STYLE_OVERRIDE);
   return methods.map((
     { name, kind, optional, computed, returnType, typeParams, params },
