@@ -3,7 +3,7 @@ import type { Middleware } from "../deps.ts";
 
 export function createBadgeMW(): Middleware {
   let badge: Uint8Array | undefined;
-  return async function favicon(ctx, next) {
+  return async function badgeMW(ctx, next) {
     if (ctx.request.url.pathname !== "/badge.svg") {
       return next();
     }
