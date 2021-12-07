@@ -86,7 +86,16 @@ function getName(node: DocNode, path?: string[]) {
 }
 
 export function Anchor({ children: name }: { children: string }) {
-  return <a href={`#${name}`} class={gtw("anchor")} aria-label="Anchor">§</a>;
+  return (
+    <a
+      href={`#${name}`}
+      class={gtw("anchor")}
+      aria-label="Anchor"
+      tabIndex={-1}
+    >
+      §
+    </a>
+  );
 }
 
 export function DocTitle(
