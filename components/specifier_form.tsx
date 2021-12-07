@@ -23,21 +23,17 @@ export function SpecifierForm() {
     <main class={gtw("main")}>
       <h1 class={gtw("mainHeader")}>Deno Doc</h1>
       <div
-        class={tw`p-6 md:(col-span-3 p-12)`}
+        class={tw`py-6 md:(col-span-3 py-12)`}
       >
-        <div class={tw`space-y-6`}>
+        <div class={tw`space-y-4`}>
           <p>
-            <a href="/deno/stable">
-              <button class={gtw("formButton")} type="button">
-                Deno CLI APIs (Stable)
-              </button>
+            <a href="/deno/stable" class={gtw("formButton")}>
+              Deno CLI APIs (Stable)
             </a>
           </p>
           <p>
-            <a href="/deno/unstable">
-              <button class={gtw("formButton")} type="button">
-                Deno CLI APIs (<code>--unstable</code>)
-              </button>
+            <a href="/deno/unstable" class={gtw("formButton")}>
+              Deno CLI APIs (<code>--unstable</code>)
             </a>
           </p>
         </div>
@@ -64,7 +60,8 @@ export function SpecifierForm() {
                 <input
                   id="url"
                   name="url"
-                  type="text"
+                  type="url"
+                  required
                   class={tw
                     `w-full outline-none px-6 py-4 bg-white text-gray-800 focus:text-gray-900`}
                   label="URL to Document"
@@ -92,6 +89,8 @@ export function SpecifierForm() {
               {"https://deno.land/std/node/http.ts"}
             </DocLinks>
           </p>
+        </div>
+        <div class={tw`mt-16 space-y-6`}>
           <h2 class={tw`text-3xl font-bold`}>About</h2>
           <p>
             The source for this web application is available at{" "}
