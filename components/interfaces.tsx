@@ -217,12 +217,7 @@ export function InterfaceCodeBlock(
 function Methods({ children }: { children: Child<InterfaceMethodDef[]> }) {
   const methods = take(children, true);
   methods.sort((a, b) => {
-    if (a.name > b.name) {
-      return 1;
-    } else if (a.name < b.name) {
-      return -1;
-    }
-    return 0;
+    return a.name.localeCompare(b.name);
   });
   const so = getState(STYLE_OVERRIDE);
   return methods.map((
@@ -319,6 +314,9 @@ function MethodsDoc(
 
 function Properties({ children }: { children: Child<InterfacePropertyDef[]> }) {
   const props = take(children, true);
+  props.sort((a, b) => {
+    return a.name.localeCompare(b.name);
+  });
   const so = getState(STYLE_OVERRIDE);
   return props.map(({ name, readonly, computed, optional, tsType }) => (
     <div class={gtw("indent", so)}>
