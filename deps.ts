@@ -13,11 +13,11 @@ export * as comrak from "https://deno.land/x/comrak@0.1.1/mod.ts";
 
 // WASM bindings to swc/deno_graph/deno_doc which generates the documentation
 // structures
-export { doc } from "https://raw.githubusercontent.com/denoland/deno_doc/cc14e65aae46c224e3381fc0cb8ad5239b861a6c/mod.ts";
+export { doc } from "https://deno.land/x/deno_doc@v0.22.0/mod.ts";
 export type {
   DocOptions,
   LoadResponse,
-} from "https://raw.githubusercontent.com/denoland/deno_doc/cc14e65aae46c224e3381fc0cb8ad5239b861a6c/mod.ts";
+} from "https://deno.land/x/deno_doc@v0.22.0/mod.ts";
 export type {
   Accessibility,
   ClassConstructorDef,
@@ -88,7 +88,7 @@ export type {
   TsTypeTypePredicateDef,
   TsTypeTypeRefDef,
   TsTypeUnionDef,
-} from "https://raw.githubusercontent.com/denoland/deno_doc/cc14e65aae46c224e3381fc0cb8ad5239b861a6c/lib/types.d.ts";
+} from "https://deno.land/x/deno_doc@v0.22.0/lib/types.d.ts";
 
 // Used when overriding proxies content types when serving up static content
 export { lookup } from "https://deno.land/x/media_types@v2.11.0/mod.ts";
