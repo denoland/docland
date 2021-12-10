@@ -195,6 +195,13 @@ export function SubSectionTitle(
   );
 }
 
+const stableURL = new URLPattern(
+  "https://github.com/denoland/deno/releases/download/:version/lib.deno.d.ts",
+);
+const rawGitHubURL = new URLPattern(
+  "https://raw.githubusercontent.com/:org/:repo/:ver/:path*",
+);
+
 export function DocWithLink(
   { children, location }: {
     children: unknown;
@@ -203,8 +210,20 @@ export function DocWithLink(
 ) {
   let href;
   if (location) {
+    let filename = location.filename;
+    const match = stableURL.exec(filename);
+    if (match) {
+      filename =
+        `https://doc-proxy.deno.dev/builtin/${match.pathname.groups.version}`;
+    } else {
+      const match = rawGitHubURL.exec(filename);
+      if (match) {
+        const { org, repo, ver, path } = match.pathname.groups;
+        filename = `https://github.com/${org}/${repo}/blob/${ver}/${path}`;
+      }
+    }
     try {
-      const url = new URL(location.filename);
+      const url = new URL(filename);
       url.hash = `L${location.line}`;
       href = url.toString();
     } catch {
