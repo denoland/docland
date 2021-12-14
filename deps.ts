@@ -112,14 +112,14 @@ export {
   Router,
   Status,
   STATUS_TEXT,
-} from "https://deno.land/x/oak@v10.0.0/mod.ts";
+} from "https://github.com/oakserver/oak/raw/2e76d128364c5f666873e3676dc94d64fe8e6dd2/mod.ts";
 export type {
   Context,
   Middleware,
   RouteParams,
   RouterContext,
   RouterMiddleware,
-} from "https://deno.land/x/oak@v10.0.0/mod.ts";
+} from "https://github.com/oakserver/oak/raw/2e76d128364c5f666873e3676dc94d64fe8e6dd2/mod.ts";
 
 // resvg WASM bindings that allow conversion of an SVG to a PNG. Open graph and
 // twitter do not support SVGs for card images.
@@ -155,3 +155,5 @@ export {
 } from "https://cdn.skypack.dev/-/twind@v0.16.16-LPGqCzM3XVHFUO0IDjyk/dist=es2020,mode=imports/optimized/twind/sheets.js";
 // @deno-types=https://cdn.skypack.dev/-/twind@v0.16.16-LPGqCzM3XVHFUO0IDjyk/dist=es2020,mode=types/colors/colors.d.ts
 export * as twColors from "https://cdn.skypack.dev/-/twind@v0.16.16-LPGqCzM3XVHFUO0IDjyk/dist=es2020,mode=imports/optimized/twind/colors.js";
+
+export { default as twindLogical } from "https://cdn.skypack.dev/twind-logical?dts";
