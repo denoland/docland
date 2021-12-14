@@ -11,7 +11,7 @@ function DocLinks({ children }: DocLinksProps) {
   const links = children.map((child) => (
     <li>
       <a class={gtw("link")} href={`/${child}`}>
-        <code>{child}</code>
+        <code>{child.replaceAll(/(\/|\?|\.)/g, "$1&#8203;")}</code>
       </a>
     </li>
   ));
@@ -91,7 +91,7 @@ export function SpecifierForm() {
           </p>
         </div>
         <div class={tw`mt-16 space-y-6`}>
-          <h2 class={tw`text-3xl font-bold`}>About</h2>
+          <h2 class={tw`text-2xl lg:text-3xl font-bold`}>About</h2>
           <p>
             The source for this web application is available at{" "}
             <a
@@ -107,7 +107,7 @@ export function SpecifierForm() {
             It can also be{" "}
             <a
               class={tw
-                `transition focus-visible:ring-2 focus-visible:ring-black focus:outline-none my-1 py-2 px-2.5 text-base text-gray-600 border border-gray-300 rounded-xl hover:shadow hidden lg:inline h-full`}
+                `transition focus-visible:ring-2 focus-visible:ring-black focus:outline-none my-1 py-2 px-2.5 text-base text-gray-600 border border-gray-300 rounded-xl hover:shadow h-full`}
               href={`https://dash.deno.com/new?url=${
                 encodeURIComponent(
                   "https://raw.githubusercontent.com/denoland/docland/main/main.ts",

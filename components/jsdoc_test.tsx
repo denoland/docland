@@ -20,7 +20,7 @@ Deno.test({
     };
     const Expected = () => (
       <div>
-        <div class="tw-802k6s">
+        <div class="tw-vt15iu">
           <p>some markdown here</p>
         </div>
         <div class="text-sm mx-4">
@@ -28,7 +28,7 @@ Deno.test({
             <div>
               <span class="italic">@deprecated</span>
             </div>
-            <div class="tw-1faf0jn">
+            <div class="tw-oc8r6b">
               <p>some doc</p>
             </div>
           </div>

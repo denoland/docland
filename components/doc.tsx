@@ -268,7 +268,10 @@ export function DocPage(
     return (
       <div class={gtw("content")}>
         <DocMeta base={base} url={url} doc={jsDoc?.doc ?? ""} item={item} />
-        <nav class={tw`p-6 sm:py-12 md:border-r md:border-gray-200`}>
+        <nav
+          class={tw
+            `p-6 bg-gray-100 border-b border-gray-300 sm:py-12 lg:(bg-transparent border-b-0 border-r border-gray-200)`}
+        >
           <SideBarHeader>{url}</SideBarHeader>
           <DocToc>{nodes}</DocToc>
         </nav>
@@ -330,13 +333,13 @@ function SideBarHeader({ children }: { children: Child<string> }) {
     }
     return (
       <div>
-        <h2 class={tw`text-gray-900 text-2xl font-bold`}>
+        <h2 class={tw`text-gray-900 text-xl lg:text-2xl font-bold`}>
           <a href={href} class={tw`hover:underline`}>
             {title}
           </a>
         </h2>
         {subtitle && (
-          <h3 class={tw`text-gray-900 text-xl font-bold`}>{subtitle}</h3>
+          <h3 class={tw`text-gray-900 lg:text-xl font-bold`}>{subtitle}</h3>
         )}
         <h3 class={tw`text-gray-600 text-sm mt-2`}>Registry</h3>
         <p class={tw`truncate`}>{parsed.registry}</p>
@@ -373,7 +376,7 @@ function SideBarHeader({ children }: { children: Child<string> }) {
     const [label, version] = getLibWithVersion(url);
     return (
       <div>
-        <h2 class={tw`text-gray-900 text-2xl font-bold`}>
+        <h2 class={tw`text-gray-900 text-xl lg:text-2xl font-bold`}>
           <a href={href} class={tw`hover:underline break-all`}>{label}</a>
         </h2>
         {version && (
@@ -385,21 +388,4 @@ function SideBarHeader({ children }: { children: Child<string> }) {
       </div>
     );
   }
-}
-
-function SideBar(
-  { children, item, url }: {
-    children: Child<DocNodeCollection>;
-    item?: string | null;
-    url: string;
-  },
-) {
-  const collection = take(children);
-  const library = url.startsWith("deno:");
-  return (
-    <nav class={tw`p-6 sm:py-12 md:border-r md:border-gray-200`}>
-      <SideBarHeader>{url}</SideBarHeader>
-      {item ?? <ModuleToc library={library}>{collection}</ModuleToc>}
-    </nav>
-  );
 }
