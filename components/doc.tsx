@@ -29,15 +29,6 @@ import { gtw, largeMarkdownStyles, largeTagStyles } from "./styles.ts";
 import { TypeAliasCodeBlock, TypeAliasDoc, TypeAliasToc } from "./types.tsx";
 import { VariableCodeBlock } from "./variables.tsx";
 
-function assertAll<N extends DocNode>(
-  nodes: DocNode[],
-  kind: DocNode["kind"],
-): asserts nodes is N[] {
-  if (!nodes.every((n) => n.kind === kind)) {
-    throw new Error(`Not every node of kind "${kind}".`);
-  }
-}
-
 function ModuleToc(
   { children, library = false }: {
     children: Child<DocNodeCollection>;
@@ -125,10 +116,6 @@ function DocNodes({ children }: { children: Child<DocNodeCollection> }) {
 
 function CodeBlock({ children }: { children: Child<DocNode[]> }) {
   const nodes = take(children);
-  if (nodes[0].kind === "function") {
-    assertAll<DocNodeFunction>(nodes, "function");
-    return <FnCodeBlock>{nodes}</FnCodeBlock>;
-  }
   const elements = [];
   for (const node of nodes) {
     switch (node.kind) {
@@ -148,6 +135,12 @@ function CodeBlock({ children }: { children: Child<DocNode[]> }) {
         elements.push(<VariableCodeBlock>{node}</VariableCodeBlock>);
     }
   }
+  const fnNodes = nodes.filter(({ kind }) =>
+    kind === "function"
+  ) as DocNodeFunction[];
+  if (fnNodes.length) {
+    elements.push(<FnCodeBlock>{fnNodes}</FnCodeBlock>);
+  }
   return elements;
 }
 
@@ -155,10 +148,6 @@ function Doc(
   { children, path }: { children: Child<DocNode[]>; path: string[] },
 ) {
   const nodes = take(children);
-  if (nodes[0].kind === "function") {
-    assertAll<DocNodeFunction>(nodes, "function");
-    return <FnDoc>{nodes}</FnDoc>;
-  }
   const elements = [];
   for (const node of nodes) {
     switch (node.kind) {
@@ -178,6 +167,12 @@ function Doc(
         elements.push(<TypeAliasDoc>{node}</TypeAliasDoc>);
         break;
     }
+  }
+  const fnNodes = nodes.filter(({ kind }) =>
+    kind === "function"
+  ) as DocNodeFunction[];
+  if (fnNodes.length) {
+    elements.push(<FnDoc>{fnNodes}</FnDoc>);
   }
   return elements;
 }
@@ -268,10 +263,7 @@ export function DocPage(
     return (
       <div class={gtw("content")}>
         <DocMeta base={base} url={url} doc={jsDoc?.doc ?? ""} item={item} />
-        <nav
-          class={tw
-            `p-6 bg-gray-100 border-b border-gray-300 sm:py-12 lg:(bg-transparent border-b-0 border-r border-gray-200) dark:(bg-gray-900 border-gray-800 lg:border-gray-700)`}
-        >
+        <nav class={gtw("leftNav")}>
           <SideBarHeader>{url}</SideBarHeader>
           <DocToc>{nodes}</DocToc>
         </nav>
@@ -296,10 +288,7 @@ export function DocPage(
     return (
       <div class={gtw("content")}>
         <DocMeta base={base} url={url} doc={jsDoc?.doc ?? ""} />
-        <nav
-          class={tw
-            `p-6 sm:py-12 md:(border-r border-gray-200) dark:(md:border-gray-800)`}
-        >
+        <nav class={gtw("leftNav")}>
           <SideBarHeader>{url}</SideBarHeader>
           <ModuleToc library={library}>{collection}</ModuleToc>
         </nav>

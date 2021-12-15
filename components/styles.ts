@@ -65,6 +65,8 @@ const baseStyles = {
   indent: apply`ml-4`,
   insideButton: apply
     `transition inline-block focus-visible:ring-2 focus-visible:ring-black focus:outline-none py-2.5 px-6 text-base text-gray(600 dark:200) font-medium rounded-lg hover:shadow-lg bg-cyan(100 dark:700)`,
+  leftNav: apply
+    `p-6 bg-gray-100 border-b border-gray-300 sm:py-12 lg:(bg-transparent border-b-0 border-r border-gray-200) dark:(bg-gray-900 border-gray-800 lg:border-gray-700)`,
   link: apply`hover:text-blue-800`,
   list: apply`ml-4 list-disc list-inside`,
   main: apply`max-w-screen-sm mx-auto mt-10 px-4 sm:px-6 md:(px-8 mt-20)`,
