@@ -270,7 +270,7 @@ export function DocPage(
         <DocMeta base={base} url={url} doc={jsDoc?.doc ?? ""} item={item} />
         <nav
           class={tw
-            `p-6 bg-gray-100 border-b border-gray-300 sm:py-12 lg:(bg-transparent border-b-0 border-r border-gray-200)`}
+            `p-6 bg-gray-100 border-b border-gray-300 sm:py-12 lg:(bg-transparent border-b-0 border-r border-gray-200) dark:(bg-gray-900 border-gray-800 lg:border-gray-700)`}
         >
           <SideBarHeader>{url}</SideBarHeader>
           <DocToc>{nodes}</DocToc>
@@ -296,7 +296,10 @@ export function DocPage(
     return (
       <div class={gtw("content")}>
         <DocMeta base={base} url={url} doc={jsDoc?.doc ?? ""} />
-        <nav class={tw`p-6 sm:py-12 md:border-r md:border-gray-200`}>
+        <nav
+          class={tw
+            `p-6 sm:py-12 md:(border-r border-gray-200) dark:(md:border-gray-800)`}
+        >
           <SideBarHeader>{url}</SideBarHeader>
           <ModuleToc library={library}>{collection}</ModuleToc>
         </nav>
@@ -339,30 +342,42 @@ function SideBarHeader({ children }: { children: Child<string> }) {
           </a>
         </h2>
         {subtitle && (
-          <h3 class={tw`text-gray-900 lg:text-xl font-bold`}>{subtitle}</h3>
+          <h3 class={tw`text-gray-900 dark:text-gray-50 lg:text-xl font-bold`}>
+            {subtitle}
+          </h3>
         )}
-        <h3 class={tw`text-gray-600 text-sm mt-2`}>Registry</h3>
+        <h3 class={tw`text-gray-600 dark:text-gray-400 text-sm mt-2`}>
+          Registry
+        </h3>
         <p class={tw`truncate`}>{parsed.registry}</p>
         {parsed.org && (
           <div>
-            <h3 class={tw`text-gray-600 text-sm mt-2`}>Organization</h3>
+            <h3 class={tw`text-gray-600 dark:text-gray-400 text-sm mt-2`}>
+              Organization
+            </h3>
             <p class={tw`truncate`}>{parsed.org}</p>
           </div>
         )}
         {parsed.package && (
           <div>
-            <h3 class={tw`text-gray-600 text-sm mt-2`}>Package</h3>
+            <h3 class={tw`text-gray-600 dark:text-gray-400 text-sm mt-2`}>
+              Package
+            </h3>
             <p class={tw`truncate`}>{parsed.package}</p>
           </div>
         )}
         {module && (
           <div>
-            <h3 class={tw`text-gray-600 text-sm mt-2`}>Module</h3>
+            <h3 class={tw`text-gray-600 dark:text-gray-400 text-sm mt-2`}>
+              Module
+            </h3>
             <p class={tw`truncate`}>{module}</p>
           </div>
         )}
         <div>
-          <h3 class={tw`text-gray-600 text-sm mt-2`}>Source</h3>
+          <h3 class={tw`text-gray-600 dark:text-gray-400 text-sm mt-2`}>
+            Source
+          </h3>
           <p class={tw`truncate`}>
             <a href={url} target="_blank" rel="noopener" class={tw`truncate`}>
               <IconLink />
@@ -376,12 +391,17 @@ function SideBarHeader({ children }: { children: Child<string> }) {
     const [label, version] = getLibWithVersion(url);
     return (
       <div>
-        <h2 class={tw`text-gray-900 text-xl lg:text-2xl font-bold`}>
+        <h2
+          class={tw
+            `text-gray-900 dark:text-gray-50 text-xl lg:text-2xl font-bold`}
+        >
           <a href={href} class={tw`hover:underline break-all`}>{label}</a>
         </h2>
         {version && (
           <div>
-            <h3 class={tw`text-gray-600 text-sm mt-2`}>Version</h3>
+            <h3 class={tw`text-gray-600 dark:text-gray-400 text-sm mt-2`}>
+              Version
+            </h3>
             <p class={tw`truncate`}>{version}</p>
           </div>
         )}
