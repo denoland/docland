@@ -41,21 +41,21 @@ export function SpecifierForm() {
         <div>
           <form
             class={tw
-              `relative text-gray-500 focus-within:text-gray-700 sm:col-span-6`}
+              `relative text-gray(500 focus-within:700 dark:focus-within:(300)) sm:col-span-6`}
             action="/doc"
             method="get"
           >
             <label
               for="url"
               class={tw
-                `absolute z-10 ml-4 mt-0.5 px-1.5 tracking-wider bg-white text-gray-400 font-medium text-sm transition`}
+                `absolute z-10 ml-4 mt-0.5 px-1.5 tracking-wider bg(white dark:gray-800) text-gray-400 font-medium text-sm transition`}
             >
               URL to Document
             </label>
             <div class={tw`pt-3 w-full`}>
               <div
                 class={tw
-                  `relative border border-gray-300 focus-within:border-gray-500 rounded-xl overflow-hidden transition flex`}
+                  `relative border border-gray(300 focus-within:500 dark:(600 focus-within:400)) rounded-xl overflow-hidden transition flex`}
               >
                 <input
                   id="url"
@@ -63,7 +63,7 @@ export function SpecifierForm() {
                   type="url"
                   required
                   class={tw
-                    `w-full outline-none px-6 py-4 bg-white text-gray-800 focus:text-gray-900`}
+                    `w-full outline-none px-6 py-4 bg(white dark:gray-800) text-gray(800 focus:900 dark:(100 focus:50))`}
                   label="URL to Document"
                 />
               </div>
@@ -107,7 +107,7 @@ export function SpecifierForm() {
             It can also be{" "}
             <a
               class={tw
-                `transition focus-visible:ring-2 focus-visible:ring-black focus:outline-none my-1 py-2 px-2.5 text-base text-gray-600 border border-gray-300 rounded-xl hover:shadow h-full`}
+                `transition focus-visible:ring-2 focus-visible:ring-black focus:outline-none my-1 py-2 px-2.5 text-base text-gray(600 dark:200) border border-gray-300 rounded-xl hover:shadow h-full`}
               href={`https://dash.deno.com/new?url=${
                 encodeURIComponent(
                   "https://raw.githubusercontent.com/denoland/docland/main/main.ts",

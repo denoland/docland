@@ -260,7 +260,12 @@ export function Tag(
   return (
     <span>
       {" "}
-      <span class={tw`bg-${color}-100 text-${color}-800 ${gtw("tag", style)}`}>
+      <span
+        class={tw
+          `bg-${color}-100 text-${color}-800 dark:(bg-${color}-800 text-${color}-100) ${
+            gtw("tag", style)
+          }`}
+      >
         {children}
       </span>
     </span>

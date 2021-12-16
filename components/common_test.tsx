@@ -61,7 +61,7 @@ Deno.test({
         <a
           href={href}
           target="_blank"
-          class="pl-2 break-words text-gray-600 hover:text-gray-800 hover:underline"
+          class="pl-2 break-words text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 hover:underline"
         >
           [src]
         </a>
