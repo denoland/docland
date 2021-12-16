@@ -38,6 +38,19 @@ const smallCode = css({
     `font-mono text-xs p-2 my-2 rounded-lg overflow-x-auto bg-gray-100 dark:bg-gray-800`,
 });
 
+/** Styles that get applied to code blocks that come from markdown. */
+const syntaxHighlighting = css({
+  ".code-comment": apply`text-gray(500 dark:400)`,
+  ".code-function": apply`text-green(700 dark:300)`,
+  ".code-literal": apply`text-cyan(600 dark:400)`,
+  ".code-keyword, .code-operator, .code-variable.code-language": apply
+    `text-purple(800 dark:300)`,
+  ".code-number, .code-doctag": apply`text-indigo(600 dark:400)`,
+  ".code-regexp": apply`text-red(700 dark:300)`,
+  ".code-string": apply`text-yellow(500 dark:200)`,
+  ".code-type, .code-built_in": apply`text-cyan(600 dark:400) italic`,
+});
+
 const none = apply``;
 
 const baseStyles = {
@@ -101,9 +114,9 @@ export const codeBlockStyles = {
   boolean: apply`text-cyan-600 dark:text-cyan-400`,
   classMethod: apply`text-green-700 dark:text-green-300`,
   fnName: apply`text-green-700 dark:text-green-300`,
-  keyword: apply`text-purple-800 dark:text-purple-200`,
+  keyword: apply`text-purple-800 dark:text-purple-300`,
   numberLiteral: apply`text-indigo-600 dark:text-indigo-400`,
-  stringLiteral: apply`text-yellow-400 dark:text-yellow-300`,
+  stringLiteral: apply`text-yellow-500 dark:text-yellow-200`,
   typeKeyword: apply`text-cyan-600 dark:text-cyan-400 italic`,
   typeParam: apply`text-blue-600 dark:text-blue-400`,
 } as const;
