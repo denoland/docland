@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --config deno.jsonc --allow-read=. --allow-net --allow-env
+#!/usr/bin/env -S deno run --config deno.jsonc --import-map import-map.json --allow-read=. --allow-net --allow-env
 
 // Copyright 2021 the Deno authors. All rights reserved. MIT license.
 
