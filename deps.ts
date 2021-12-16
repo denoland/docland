@@ -6,18 +6,18 @@
 import type {} from "./types.d.ts";
 
 // std library colors are used in logging to the console
-export * as colors from "https://deno.land/std@0.114.0/fmt/colors.ts";
+export * as colors from "https://deno.land/std@0.118.0/fmt/colors.ts";
 
 // WASM bindings to the comrak markdown rendering library
 export * as comrak from "https://deno.land/x/comrak@0.1.1/mod.ts";
 
 // WASM bindings to swc/deno_graph/deno_doc which generates the documentation
 // structures
-export { doc } from "https://deno.land/x/deno_doc@v0.22.0/mod.ts";
+export { doc } from "https://deno.land/x/deno_doc@v0.23.0/mod.ts";
 export type {
   DocOptions,
   LoadResponse,
-} from "https://deno.land/x/deno_doc@v0.22.0/mod.ts";
+} from "https://deno.land/x/deno_doc@v0.23.0/mod.ts";
 export type {
   Accessibility,
   ClassConstructorDef,
@@ -88,7 +88,13 @@ export type {
   TsTypeTypePredicateDef,
   TsTypeTypeRefDef,
   TsTypeUnionDef,
-} from "https://deno.land/x/deno_doc@v0.22.0/lib/types.d.ts";
+} from "https://deno.land/x/deno_doc@v0.23.0/lib/types.d.ts";
+
+// Used to convert lowlight trees to HTML
+export { toHtml } from "https://esm.sh/hast-util-to-html@8.0.3?pin=v58";
+
+// Used to do SSR of code block highlignting
+export { lowlight } from "https://esm.sh/lowlight@2.4.1?pin=v58";
 
 // Used when overriding proxies content types when serving up static content
 export { lookup } from "https://deno.land/x/media_types@v2.11.0/mod.ts";
@@ -129,7 +135,7 @@ export { render } from "https://deno.land/x/resvg_wasm@0.1.0/mod.ts";
 export * as htmlEntities from "https://cdn.skypack.dev/html-entities@2.3.2?dts";
 
 // Used to strip markdown when adding to a card image.
-export { default as removeMarkdown } from "https://cdn.skypack.dev/remove-markdown?dts";
+export { default as removeMarkdown } from "https://cdn.skypack.dev/remove-markdown@v0.3.0?dts";
 
 // twind provides server side rendered CSS leveraging tailwind functional
 // classes.
@@ -154,5 +160,3 @@ export {
 } from "https://cdn.skypack.dev/-/twind@v0.16.16-LPGqCzM3XVHFUO0IDjyk/dist=es2020,mode=imports/optimized/twind/sheets.js";
 // @deno-types=https://cdn.skypack.dev/-/twind@v0.16.16-LPGqCzM3XVHFUO0IDjyk/dist=es2020,mode=types/colors/colors.d.ts
 export * as twColors from "https://cdn.skypack.dev/-/twind@v0.16.16-LPGqCzM3XVHFUO0IDjyk/dist=es2020,mode=imports/optimized/twind/colors.js";
-
-export { default as twindLogical } from "https://cdn.skypack.dev/twind-logical?dts";
