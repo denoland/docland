@@ -96,9 +96,9 @@ Deno.test({
           <meta property="og:type" content="article" />
           <meta name="description" content="" />
         </Helmet>
-        <nav class="tw-o1b8m0">
+        <nav class="tw-19rse9f">
           <div>
-            <h2 class="text-gray-900 text-xl lg:text-2xl font-bold">
+            <h2 class="text-gray-900 dark:text-gray-50 text-xl lg:text-2xl font-bold">
               <a
                 href="/https://example.com/mod.ts"
                 class="hover:underline break-all"
@@ -109,15 +109,15 @@ Deno.test({
           </div>
         </nav>
         <article class="tw-baauk4">
-          <h1 class="tw-1nlj3ml">fn</h1>
-          <div class="tw-1n6blsc">
+          <h1 class="tw-1rzgsiv">fn</h1>
+          <div class="tw-1nkr705">
             <div>
-              <span class="tw-1dr8lyv">function{" "}</span>
-              <span class="tw-8crpne">fn</span>();
+              <span class="tw-1yu54ni">function{" "}</span>
+              <span class="tw-z19beg">fn</span>();
             </div>
             <div>
-              <span class="tw-1dr8lyv">function{" "}</span>
-              <span class="tw-8crpne">fn</span>();
+              <span class="tw-1yu54ni">function{" "}</span>
+              <span class="tw-z19beg">fn</span>();
             </div>
           </div>
           <div></div>
@@ -125,7 +125,7 @@ Deno.test({
             <div class="tw-vfhdfy group" id="overload_0">
               <a
                 href="#overload_0"
-                class="tw-gvg2xr"
+                class="tw-xn3ar9"
                 aria-label="Anchor"
                 tabIndex={-1}
               >
@@ -137,7 +137,7 @@ Deno.test({
                   <a
                     href="https://example.com/mod.ts#L1"
                     target="_blank"
-                    class="pl-2 break-words text-gray-600 hover:text-gray-800 hover:underline"
+                    class="pl-2 break-words text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 hover:underline"
                   >
                     [src]
                   </a>
@@ -147,7 +147,7 @@ Deno.test({
             <div class="tw-vfhdfy group" id="overload_1">
               <a
                 href="#overload_1"
-                class="tw-gvg2xr"
+                class="tw-xn3ar9"
                 aria-label="Anchor"
                 tabIndex={-1}
               >
@@ -159,7 +159,7 @@ Deno.test({
                   <a
                     href="https://example.com/mod.ts#L2"
                     target="_blank"
-                    class="pl-2 break-words text-gray-600 hover:text-gray-800 hover:underline"
+                    class="pl-2 break-words text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 hover:underline"
                   >
                     [src]
                   </a>
