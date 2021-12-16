@@ -109,14 +109,14 @@ Deno.test({
           </div>
         </nav>
         <article class="tw-baauk4">
-          <h1 class="tw-1rzgsiv">fn</h1>
+          <h1 class="tw-d0anel">fn</h1>
           <div class="tw-1nkr705">
             <div>
-              <span class="tw-1yu54ni">function{" "}</span>
+              <span class="tw-18hyoot">function{" "}</span>
               <span class="tw-z19beg">fn</span>();
             </div>
             <div>
-              <span class="tw-1yu54ni">function{" "}</span>
+              <span class="tw-18hyoot">function{" "}</span>
               <span class="tw-z19beg">fn</span>();
             </div>
           </div>
