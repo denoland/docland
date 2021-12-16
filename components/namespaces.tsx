@@ -66,6 +66,9 @@ export function NamespaceToc(
   { children }: { children: Child<DocNodeNamespace> },
 ) {
   const { name, namespaceDef: { elements } } = take(children);
+  if (!elements.length) {
+    return;
+  }
   const { includePrivate } = store.state as StoreState;
   const collection = asCollection(elements, undefined, includePrivate);
   return (

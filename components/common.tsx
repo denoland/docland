@@ -70,6 +70,9 @@ function append(
 ) {
   for (const entry of entries) {
     if (includePrivate || entry.declarationKind !== "private") {
+      if (entry.kind === "namespace" && !entry.namespaceDef.elements.length) {
+        continue;
+      }
       const docNodes: [string, DocNode][] = collection[entry.kind] ??
         (collection[entry.kind] = []);
       const label = path ? `${path}.${entry.name}` : entry.name;
