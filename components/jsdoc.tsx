@@ -1,6 +1,6 @@
 // Copyright 2021 the Deno authors. All rights reserved. MIT license.
 /** @jsx h */
-import { comrak, h, tw } from "../deps.ts";
+import { comrak, h, htmlEntities, lowlight, toHtml, tw } from "../deps.ts";
 import type {
   Accessibility,
   JsDoc as JsDocNode,
@@ -12,7 +12,7 @@ import type {
   ParamDef,
   TsTypeParamDef,
 } from "../deps.ts";
-import { take } from "../util.ts";
+import { assert, take } from "../util.ts";
 import type { Child } from "../util.ts";
 import { gtw, tagMarkdownStyles } from "./styles.ts";
 import type { StyleOverride } from "./styles.ts";
@@ -215,6 +215,25 @@ function JsDocTag({ children }: { children: Child<JsDocTagNode> }) {
   }
 }
 
+const CODE_BLOCK_RE =
+  /<pre><code\sclass="language-([^"]+)">([^<]+)<\/code><\/pre>/m;
+
+/** Syntax highlight code blocks in an HTML string. */
+function syntaxHighlight(html: string): string {
+  let match;
+  while ((match = CODE_BLOCK_RE.exec(html))) {
+    const [text, lang, code] = match;
+    const tree = lowlight.highlight(lang, htmlEntities.decode(code), {
+      prefix: "code-",
+    });
+    assert(match.index);
+    html = `${html.slice(0, match.index)}<pre><code>${
+      toHtml(tree)
+    }</code></pre>${html.slice(match.index + text.length)}`;
+  }
+  return html;
+}
+
 export function Markdown(
   { children, style }: {
     children: Child<string | undefined>;
@@ -225,7 +244,7 @@ export function Markdown(
   return md
     ? (
       <div class={gtw("markdown", style)}>
-        {comrak.markdownToHTML(md, {
+        {syntaxHighlight(comrak.markdownToHTML(md, {
           extension: {
             autolink: true,
             descriptionLists: true,
@@ -233,7 +252,7 @@ export function Markdown(
             table: true,
             tagfilter: true,
           },
-        })}
+        }))}
       </div>
     )
     : undefined;
@@ -261,10 +280,9 @@ export function Tag(
     <span>
       {" "}
       <span
-        class={tw
-          `bg-${color}-100 text-${color}-800 dark:(bg-${color}-800 text-${color}-100) ${
-            gtw("tag", style)
-          }`}
+        class={tw`bg-${color}(100 dark:800) text-${color}(800 dark:100) ${
+          gtw("tag", style)
+        }`}
       >
         {children}
       </span>

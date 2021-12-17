@@ -7,7 +7,6 @@ import {
   setup,
   Store,
   twColors,
-  twindLogical,
   virtualSheet,
 } from "./deps.ts";
 import type { DocNode, DocNodeNamespace } from "./deps.ts";
@@ -69,10 +68,6 @@ setup({
         "monospace",
       ],
     },
-  },
-  plugins: {
-    // deno-lint-ignore no-explicit-any
-    ...(twindLogical as any),
   },
 });
 
