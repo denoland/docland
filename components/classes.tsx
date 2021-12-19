@@ -1,11 +1,10 @@
 // Copyright 2021 the Deno authors. All rights reserved. MIT license.
 /** @jsx h */
-import { h, tw } from "../deps.ts";
+import { h } from "../deps.ts";
 import type {
   ClassConstructorDef,
   ClassMethodDef,
   ClassPropertyDef,
-  DocNode,
   DocNodeClass,
   Location,
   TsTypeDef,
@@ -13,6 +12,7 @@ import type {
 import { getState, setState, STYLE_OVERRIDE } from "../shared.ts";
 import { assert, take } from "../util.ts";
 import type { Child } from "../util.ts";
+import { Decorators, DecoratorsDoc, DecoratorsSubDoc } from "./decorators.tsx";
 import {
   Anchor,
   DocWithLink,
@@ -173,6 +173,7 @@ export function ClassCodeBlock(
   const {
     name,
     classDef: {
+      decorators,
       isAbstract,
       typeParams,
       extends: ext,
@@ -190,6 +191,7 @@ export function ClassCodeBlock(
   const keyword = gtw("keyword", codeBlockStyles);
   const codeBlock = (
     <div class={gtw("code")}>
+      {decorators && <Decorators>{decorators}</Decorators>}
       <span class={keyword}>
         {isAbstract ? "abstract " : ""}class
       </span>{" "}
@@ -297,7 +299,14 @@ function ClassMethod(
     accessibility,
     isAbstract,
     isStatic,
-    functionDef: { isAsync, isGenerator, typeParams, params, returnType },
+    functionDef: {
+      isAsync,
+      isGenerator,
+      typeParams,
+      params,
+      returnType,
+      decorators,
+    },
     kind,
     name,
     optional,
@@ -306,6 +315,7 @@ function ClassMethod(
   const keyword = gtw("keyword", so);
   return (
     <div>
+      {decorators && <Decorators>{decorators}</Decorators>}
       {isStatic || accessibility || isAbstract
         ? (
           <span class={keyword}>
@@ -341,6 +351,7 @@ function ClassMethod(
           : <TypeDef inline>{returnType}</TypeDef>
         </span>
       )};
+      {decorators && <div>&nbsp;</div>}
     </div>
   );
 }
@@ -361,7 +372,7 @@ function ClassMethodDoc(
           accessibility,
           optional,
           isAbstract,
-          functionDef: { typeParams, params, returnType },
+          functionDef: { typeParams, params, returnType, decorators },
         },
       ) => {
         const tags = [];
@@ -395,6 +406,9 @@ function ClassMethodDoc(
             >
               {jsDoc}
             </JsDoc>
+            {decorators && (
+              <DecoratorsSubDoc id={name}>{decorators}</DecoratorsSubDoc>
+            )}
           </div>
         );
       })}
@@ -412,11 +426,13 @@ function ClassProperty(
     readonly,
     name,
     optional,
+    decorators,
     tsType,
   } = take(children);
   const so = getState(STYLE_OVERRIDE);
   return (
     <div>
+      {decorators && <Decorators>{decorators}</Decorators>}
       {isStatic || accessibility || isAbstract || readonly
         ? (
           <span class={gtw("keyword", so)}>
@@ -436,6 +452,7 @@ function ClassProperty(
           </span>
         )
         : ";"}
+      {decorators && <div>&nbsp;</div>}
     </div>
   );
 }
@@ -448,6 +465,7 @@ function ClassPropertyDoc(
     name,
     tsType,
     jsDoc,
+    decorators,
     accessibility,
     isAbstract,
     optional,
@@ -481,6 +499,9 @@ function ClassPropertyDoc(
           )}
         </DocWithLink>
         <JsDoc style={largeMarkdownStyles}>{jsDoc}</JsDoc>
+        {decorators && (
+          <DecoratorsSubDoc id={name}>{decorators}</DecoratorsSubDoc>
+        )}
       </div>
     </div>
   );
@@ -646,6 +667,7 @@ export function ClassDoc({ children }: { children: Child<DocNodeClass> }) {
     name,
     classDef: {
       constructors,
+      decorators,
       indexSignatures,
       extends: ext,
       implements: impl,
@@ -657,6 +679,7 @@ export function ClassDoc({ children }: { children: Child<DocNodeClass> }) {
   const items = getClassItems(node);
   return (
     <div class={gtw("docItems")}>
+      {decorators && <DecoratorsDoc>{decorators}</DecoratorsDoc>}
       <TypeParamsDoc location={location}>{typeParams}</TypeParamsDoc>
       <ExtendsDoc typeArgs={superTypeParams} location={location}>
         {ext}
@@ -675,6 +698,7 @@ export function ClassToc({ children }: { children: Child<DocNodeClass> }) {
     name,
     classDef: {
       constructors,
+      decorators,
       indexSignatures,
       typeParams,
       extends: ext,
@@ -690,6 +714,7 @@ export function ClassToc({ children }: { children: Child<DocNodeClass> }) {
     <div>
       <h3 class={gtw("tocHeader")}>{name}</h3>
       <ul>
+        {decorators ? <TocLink>Decorators</TocLink> : undefined}
         {typeParams.length ? <TocLink>Type Parameters</TocLink> : undefined}
         {ext && <TocLink>Extends</TocLink>}
         {impl.length ? <TocLink>Implements</TocLink> : undefined}

@@ -24,6 +24,7 @@ export type {
   ClassIndexSignatureDef,
   ClassMethodDef,
   ClassPropertyDef,
+  DecoratorDef,
   DocNode,
   DocNodeClass,
   DocNodeEnum,

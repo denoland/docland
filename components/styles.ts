@@ -63,6 +63,7 @@ const baseStyles = {
   code: apply
     `font-mono my-4 p-3 rounded-lg bg-gray-50 dark:bg-gray-800 overflow-x-auto`,
   content: apply`max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-4`,
+  decorator: none,
   docEntry: apply`relative px-2`,
   docItem: apply`group relative py-2 px-1`,
   docItems: apply`mt-4`,
@@ -109,6 +110,7 @@ const baseStyles = {
 export const codeBlockStyles = {
   boolean: apply`text-cyan(600 dark:400)`,
   classMethod: apply`text-green(700 dark:300)`,
+  decorator: apply`text-green(600 dark:400) italic`,
   fnName: apply`text-green(700 dark:300)`,
   keyword: apply`text-purple(800 dark:300)`,
   numberLiteral: apply`text-indigo(600 dark:400)`,
