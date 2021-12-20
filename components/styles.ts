@@ -73,7 +73,7 @@ const baseStyles = {
   error: apply
     `bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mt-6 dark:(border-red-700 text-red-500)`,
   formButton: apply
-    `transition inline-block focus-visible:ring-2 focus-visible:ring-black focus:outline-none py-2.5 px-6 text-base text-gray(600 dark:200) font-medium rounded-lg hover:shadow-lg w-full bg-cyan(100 dark:700)`,
+    `transition inline-block focus-visible:ring-2 focus-visible:ring-black focus:outline-none py-2.5 px-6 text-base text-gray(600 dark:100) font-medium rounded-lg hover:shadow-lg w-full bg-cyan(100 dark:700)`,
   fnName: none,
   keyword: none,
   indent: apply`ml-4`,
@@ -82,7 +82,7 @@ const baseStyles = {
   leftNav: apply
     `p-6 bg-gray-100 border-b border-gray-300 sm:py-12 lg:(bg-transparent border-b-0 border-r border-gray-200) dark:(bg-gray-900 border-gray-800 lg:border-gray-700)`,
   link: apply`hover:text-blue(800 dark:300)`,
-  list: apply`ml-4 list-disc list-inside`,
+  list: apply`ml-4 list-none space-y-2.5 lg:(list-disc list-inside space-y-0)`,
   main: apply`max-w-screen-sm mx-auto mt-10 px-4 sm:px-6 md:(px-8 mt-20)`,
   mainBox: apply`p-6 md:(col-span-3 p-12)`,
   mainHeader: apply`text-3xl font-bold lg:text-5xl`,

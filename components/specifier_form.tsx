@@ -48,7 +48,7 @@ export function SpecifierForm() {
             <label
               for="url"
               class={tw
-                `absolute z-10 ml-4 mt-0.5 px-1.5 tracking-wider bg(white dark:gray-800) text-gray-400 font-medium text-sm transition`}
+                `absolute z-10 ml-4 mt-0.5 px-1.5 tracking-wider bg(white dark:gray-800) text-gray-400 font-medium text-sm transition rounded-t-md`}
             >
               URL to Document
             </label>
@@ -114,6 +114,7 @@ export function SpecifierForm() {
                 )
               }`}
               target="_blank"
+              rel="noopener"
             >
               Deployed...
             </a>{" "}
