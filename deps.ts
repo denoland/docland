@@ -119,14 +119,14 @@ export {
   Router,
   Status,
   STATUS_TEXT,
-} from "https://github.com/oakserver/oak/raw/2e76d128364c5f666873e3676dc94d64fe8e6dd2/mod.ts";
+} from "https://deno.land/x/oak@v10.1.0/mod.ts";
 export type {
   Context,
   Middleware,
   RouteParams,
   RouterContext,
   RouterMiddleware,
-} from "https://github.com/oakserver/oak/raw/2e76d128364c5f666873e3676dc94d64fe8e6dd2/mod.ts";
+} from "https://deno.land/x/oak@v10.1.0/mod.ts";
 
 // resvg WASM bindings that allow conversion of an SVG to a PNG. Open graph and
 // twitter do not support SVGs for card images.
