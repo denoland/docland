@@ -16,6 +16,59 @@ const router = new Router();
 // The index, renders "specifier_form"
 router.get("/", indexGet);
 
+router.get("/manifest.json", (ctx) => {
+  ctx.response.body = {
+    "short_name": "Deno Doc",
+    "name": "Deno Doc: Documentation Generator",
+    "icons": [
+      {
+        "src": "/static/logo-vector.svg",
+        "type": "image/svg+xml",
+        "sizes": "512x512",
+      },
+      {
+        "src": "/static/logo-192.png",
+        "type": "image/png",
+        "sizes": "192x192",
+      },
+      {
+        "src": "/static/logo-512.png",
+        "type": "image/png",
+        "sizes": "512x512",
+      },
+      {
+        "src": "/static/maskable_icon.png",
+        "type": "image/png",
+        "sizes": "1024x1024",
+        "purpose": "any maskable",
+      },
+    ],
+    "start_url": "/",
+    "background_color": "#f9fafb",
+    "display": "minimal-ui",
+    "scope": "/",
+    "theme_color": "#cffafe",
+    "description": "Documentation generation website for Deno",
+    "screenshots": [
+      {
+        "src": "/static/screenshot_1.png",
+        "type": "image/png",
+        "sizes": "540x720",
+      },
+      {
+        "src": "/static/screenshot_2.png",
+        "type": "image/png",
+        "sizes": "540x720",
+      },
+    ],
+  };
+  ctx.response.type = "json";
+  ctx.response.headers.set(
+    "expires",
+    new Date(Date.now() + 86_400).toUTCString(),
+  );
+});
+
 // Serves up the static content
 router.get(
   "/static/:path*",
