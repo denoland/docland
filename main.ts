@@ -74,8 +74,19 @@ router.get(
   "/static/:path*",
   async (ctx) => {
     const url = new URL(`./static/${ctx.params.path}`, import.meta.url);
+    try {
+      await Deno.stat(url);
+    } catch (err) {
+      if (err instanceof Deno.errors.NotFound) {
+        ctx.response.status = 404;
+        ctx.response.body = "Not Found";
+        return;
+      }
+      throw err;
+    }
+    const resp = await fetch(url);
     ctx.response.type = lookup(url.toString());
-    ctx.response.body = await Deno.readFile(url);
+    ctx.response.body = resp.body;
     ctx.response.headers.set(
       "expires",
       new Date(Date.now() + 86_400).toUTCString(),
