@@ -79,7 +79,7 @@ Deno.test({
     )
       .replaceAll("\n", "");
     let expected = renderSSR(
-      <Expected href="https://doc-proxy.deno.dev/builtin/v1.0.0#L0">
+      <Expected href="/raw/deno/stable/v1.0.0">
         test
       </Expected>,
     ).replaceAll(

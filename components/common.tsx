@@ -213,24 +213,23 @@ export function DocWithLink(
 ) {
   let href;
   if (location) {
-    let filename = location.filename;
-    const match = stableURL.exec(filename);
+    const match = stableURL.exec(location.filename);
     if (match) {
-      filename =
-        `https://doc-proxy.deno.dev/builtin/${match.pathname.groups.version}`;
+      href = `/raw/deno/stable/${match.pathname.groups.version}`;
     } else {
+      let filename = location.filename;
       const match = rawGitHubURL.exec(filename);
       if (match) {
         const { org, repo, ver, path } = match.pathname.groups;
         filename = `https://github.com/${org}/${repo}/blob/${ver}/${path}`;
       }
-    }
-    try {
-      const url = new URL(filename);
-      url.hash = `L${location.line}`;
-      href = url.toString();
-    } catch {
-      // we just swallow here
+      try {
+        const url = new URL(filename);
+        url.hash = `L${location.line}`;
+        href = url.toString();
+      } catch {
+        // we just swallow here
+      }
     }
   }
   return (
