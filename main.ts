@@ -10,6 +10,7 @@ import { createFaviconMW } from "./middleware/favicon.ts";
 import { logging, timing } from "./middleware/logging.ts";
 import { docGet, imgGet, pathGetHead } from "./routes/doc.tsx";
 import { indexGet } from "./routes/index.tsx";
+import { getRaw } from "./routes/raw.ts";
 
 const router = new Router();
 
@@ -111,6 +112,9 @@ router.get(
       `/${ctx.params.proto}://${ctx.params.host}/${ctx.params.path}`,
     ),
 );
+
+// Proxy raw GitHub deno lib files
+router.get("/raw/deno/stable/:version", getRaw);
 
 // The main documentation routes
 router.get("/:proto(http:/|https:/)/:host/:path*/~/:item+", pathGetHead);
