@@ -13,11 +13,11 @@ export * as comrak from "https://deno.land/x/comrak@0.1.1/mod.ts";
 
 // WASM bindings to swc/deno_graph/deno_doc which generates the documentation
 // structures
-export { doc } from "https://deno.land/x/deno_doc@v0.23.0/mod.ts";
+export { doc } from "https://deno.land/x/deno_doc@v0.24.0/mod.ts";
 export type {
   DocOptions,
   LoadResponse,
-} from "https://deno.land/x/deno_doc@v0.23.0/mod.ts";
+} from "https://deno.land/x/deno_doc@v0.24.0/mod.ts";
 export type {
   Accessibility,
   ClassConstructorDef,
@@ -89,7 +89,7 @@ export type {
   TsTypeTypePredicateDef,
   TsTypeTypeRefDef,
   TsTypeUnionDef,
-} from "https://deno.land/x/deno_doc@v0.23.0/lib/types.d.ts";
+} from "https://deno.land/x/deno_doc@v0.24.0/lib/types.d.ts";
 
 // Used to convert lowlight trees to HTML
 export { toHtml } from "https://esm.sh/hast-util-to-html@8.0.3?pin=v58";
