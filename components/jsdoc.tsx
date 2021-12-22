@@ -116,6 +116,7 @@ function hasDoc(tag: JsDocTagNode) {
     case "callback":
     case "deprecated":
     case "enum":
+    case "example":
     case "extends":
     case "param":
     case "property":
@@ -138,15 +139,18 @@ export function isDeprecated(jsDoc?: JsDocNode): boolean {
 }
 
 /** A component which renders a JSDoc. */
-export function JsDoc({ children, style, tags, tagsWithDoc }: DocParams) {
+export function JsDoc({ children, style, tags = [], tagsWithDoc }: DocParams) {
   const jsDoc = take(children);
   if (!jsDoc) {
     return;
   }
   const docTags = [];
-  if (jsDoc.tags && tags) {
+  if (jsDoc.tags) {
     for (const tag of jsDoc.tags) {
-      if (tags.includes(tag.kind) && !(tagsWithDoc && !hasDoc(tag))) {
+      if (
+        (tags.includes(tag.kind) || tag.kind === "example") &&
+        !(tagsWithDoc && !hasDoc(tag))
+      ) {
         docTags.push(<JsDocTag>{tag}</JsDocTag>);
       }
     }
@@ -200,6 +204,19 @@ function JsDocTag({ children }: { children: Child<JsDocTagNode> }) {
           <Markdown style={tagMarkdownStyles}>{tag.doc}</Markdown>
         </div>
       );
+    case "example": {
+      const doc = tag.doc && !tag.doc.includes("```")
+        ? `\`\`\`ts\n${tag.doc}${tag.doc.endsWith("\n") ? "" : "\n"}\`\`\``
+        : tag.doc;
+      return (
+        <div>
+          <div>
+            <span class={tw`italic`}>@{tag.kind}</span>
+          </div>
+          <Markdown style={tagMarkdownStyles}>{doc}</Markdown>
+        </div>
+      );
+    }
     case "extends":
     case "this":
     case "type":
@@ -226,7 +243,7 @@ function syntaxHighlight(html: string): string {
     const tree = lowlight.highlight(lang, htmlEntities.decode(code), {
       prefix: "code-",
     });
-    assert(match.index);
+    assert(match.index != null);
     html = `${html.slice(0, match.index)}<pre><code>${
       toHtml(tree)
     }</code></pre>${html.slice(match.index + text.length)}`;
