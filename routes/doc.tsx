@@ -59,6 +59,44 @@ function checkCache() {
 
 let lastLoad = Date.now();
 
+async function checkRedirect(specifier: string): Promise<string | undefined> {
+  if (!specifier.startsWith("http")) {
+    return undefined;
+  }
+  const cached = cachedResources.get(specifier);
+  let finalSpecifier = specifier;
+  if (cached) {
+    finalSpecifier = cached.specifier;
+  } else {
+    try {
+      const res = await fetch(specifier, { redirect: "follow" });
+      if (res.status !== 200) {
+        // ensure that resournces are not leaked
+        await res.arrayBuffer();
+      }
+      const content = await res.text();
+      const headers: Record<string, string> = {};
+      for (const [key, value] of res.headers) {
+        headers[key.toLowerCase()] = value;
+      }
+      const loadResponse = {
+        specifier: res.url,
+        headers,
+        content,
+      };
+      cachedResources.set(specifier, loadResponse);
+      cachedSpecifiers.add(specifier);
+      cacheSize += content.length;
+      queueMicrotask(checkCache);
+      lastLoad = Date.now();
+      finalSpecifier = res.url;
+    } catch {
+      // just swallow errors
+    }
+  }
+  return specifier === finalSpecifier ? undefined : finalSpecifier;
+}
+
 async function load(
   specifier: string,
 ): Promise<LoadResponse | undefined> {
@@ -216,6 +254,12 @@ export const pathGetHead = async <R extends string>(ctx: RouterContext<R>) => {
   }
   ctx.assert(proto && host, Status.BadRequest, "Malformed documentation URL");
   const url = `${proto}/${host}/${path ?? ""}${search}`;
+  const maybeRedirect = await checkRedirect(url);
+  if (maybeRedirect) {
+    return ctx.response.redirect(
+      item ? `/${maybeRedirect}/~/${item}` : `/${maybeRedirect}`,
+    );
+  }
   await maybeCacheStatic(url, host);
   const entries = await getEntries(ctx, url);
   store.setState({ entries, url, includePrivate: proto === "deno" });

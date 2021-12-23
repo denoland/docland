@@ -2,6 +2,7 @@
 
 import { assertEquals, assertStringIncludes } from "./deps_test.ts";
 import { app } from "./main.ts";
+import { assert } from "./util.ts";
 
 let start: Promise<string> | undefined;
 let close: AbortController | undefined;
@@ -65,14 +66,15 @@ Deno.test({
     // validate that namespaced type references are resolved
     assertStringIncludes(text, `href="/deno/stable/~/Deno.Conn"`);
 
-    // doc query URLs are redirected to perm-link
+    // doc query URLs are redirected to perm-link of the redirected URL
     res = await fetch(
       `${server}doc?url=https%3A%2F%2Fdeno.land%2Fstd%2Ftesting%2Fasserts.ts`,
     );
     assertEquals(res.status, 200);
-    assertEquals(
-      res.url,
-      "http://0.0.0.0:5000/https://deno.land/std/testing/asserts.ts",
+    assert(
+      res.url.match(
+        /http:\/{2}(0\.){3}0:5000\/https:\/{2}deno\.land\/std@\d+\.\d+\.\d+\/testing\/asserts\.ts/,
+      ),
     );
     await res.text();
 
