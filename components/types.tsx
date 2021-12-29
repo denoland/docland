@@ -396,13 +396,15 @@ function TypeDefMapped(
   { children, inline, terminate }: TypeDefProps<TsTypeMappedDef>,
 ) {
   const {
-    mapped: { readonly, typeParam, nameType, optional, tsType },
-  } = take(children);
+    mappedType: { readonly, typeParam, nameType, optional, tsType },
+    // TODO(@kitsonk) remove, see: https://github.com/denoland/deno_doc/issues/226
+    // deno-lint-ignore no-explicit-any
+  } = take(children) as any;
   const so = getState(STYLE_OVERRIDE);
   return (
     <span>
       <MappedReadOnly>{readonly}</MappedReadOnly>
-      [<TypeParam>{typeParam}</TypeParam>
+      [<TypeParam constraint="in">{typeParam}</TypeParam>
       {nameType && (
         <span>
           <span class={gtw("keyword", so)}>in keyof{" "}</span>
@@ -725,7 +727,10 @@ function TypeRefLink({ children }: { children: Child<string> }) {
 }
 
 function TypeParam(
-  { children }: { children: Child<TsTypeParamDef> },
+  { children, constraint = "extends" }: {
+    children: Child<TsTypeParamDef>;
+    constraint?: string;
+  },
 ) {
   const param = take(children);
   const so = getState(STYLE_OVERRIDE);
@@ -735,7 +740,7 @@ function TypeParam(
       <span class={gtw("typeParam", so)}>{param.name}</span>
       {param.constraint && (
         <span>
-          <span class={keyword}>{" "}extends{" "}</span>
+          <span class={keyword}>{` ${constraint} `}</span>
           <TypeDef>{param.constraint}</TypeDef>
         </span>
       )}
