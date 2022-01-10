@@ -7,6 +7,7 @@ import { createBadgeMW } from "./middleware/badge.ts";
 import { handleNotFound } from "./middleware/notFound.tsx";
 import { handleErrors } from "./middleware/errors.tsx";
 import { createFaviconMW } from "./middleware/favicon.ts";
+import { ga } from "./middleware/ga.ts";
 import { logging, timing } from "./middleware/logging.ts";
 import { docGet, imgGet, pathGetHead } from "./routes/doc.tsx";
 import { indexGet } from "./routes/index.tsx";
@@ -138,6 +139,7 @@ router.get("/img/:proto(deno)/:host/~/:item+", imgGet);
 export const app = new Application();
 
 // Some general processing
+app.use(ga);
 app.use(logging);
 app.use(timing);
 app.use(createFaviconMW("https://deno.land/favicon.ico"));
