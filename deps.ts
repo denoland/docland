@@ -92,7 +92,7 @@ export type {
 } from "https://deno.land/x/deno_doc@v0.24.0/lib/types.d.ts";
 
 // Used to report measurments to Google Analytics
-export { createReportMiddleware } from "https://deno.land/x/g_a@0.1.0/mod.ts";
+export { createReportMiddleware } from "https://deno.land/x/g_a@0.1.2/mod.ts";
 
 // Used to convert lowlight trees to HTML
 export { toHtml } from "https://esm.sh/hast-util-to-html@8.0.3?pin=v58";
