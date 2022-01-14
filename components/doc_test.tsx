@@ -63,13 +63,13 @@ Deno.test({
     const Expected = () => (
       <div class="tw-j2pie2">
         <Helmet>
-          <title>Deno Doc - example.com/mod.ts - fn</title>
+          <title>example.com/mod.ts – fn | Deno Doc</title>
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:site" content="@denoland" />
           <meta name="twitter:creator" content="@denoland" />
           <meta
             name="twitter:title"
-            content="Deno Doc - example.com/mod.ts - fn"
+            content="example.com/mod.ts – fn | Deno Doc"
           />
           <meta
             name="twitter:image"
@@ -82,7 +82,7 @@ Deno.test({
           <meta name="twitter:description" content="" />
           <meta
             property="og:title"
-            content="Deno Doc - example.com/mod.ts - fn"
+            content="example.com/mod.ts – fn | Deno Doc"
           />
           <meta
             property="og:image"

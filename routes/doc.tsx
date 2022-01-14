@@ -75,6 +75,7 @@ async function checkRedirect(specifier: string): Promise<string | undefined> {
         await res.arrayBuffer();
       }
       const content = await res.text();
+      const xTypeScriptTypes = res.headers.get("x-typescript-types");
       const headers: Record<string, string> = {};
       for (const [key, value] of res.headers) {
         headers[key.toLowerCase()] = value;
@@ -89,7 +90,9 @@ async function checkRedirect(specifier: string): Promise<string | undefined> {
       cacheSize += content.length;
       queueMicrotask(checkCache);
       lastLoad = Date.now();
-      finalSpecifier = res.url;
+      finalSpecifier = xTypeScriptTypes
+        ? new URL(xTypeScriptTypes, res.url).toString()
+        : res.url;
     } catch {
       // just swallow errors
     }
@@ -186,10 +189,6 @@ function mergeEntries(entries: DocNode[]) {
   return merged;
 }
 
-function Title({ item, url }: { item?: string | null; url: string }) {
-  return <title>Deno Doc - {item ? `${url} — ${item}` : url}</title>;
-}
-
 async function getEntries<R extends string>(
   ctx: RouterContext<R>,
   url: string,
@@ -266,9 +265,6 @@ export const pathGetHead = async <R extends string>(ctx: RouterContext<R>) => {
   sheet.reset();
   const page = renderSSR(
     <App>
-      <Helmet>
-        <Title item={item} url={url} />
-      </Helmet>
       <DocPage base={ctx.request.url}>{item}</DocPage>
     </App>,
   );

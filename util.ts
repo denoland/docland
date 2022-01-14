@@ -117,6 +117,10 @@ const patterns = {
       pathname: "/:org(@[^/]+)?/:pkg([^@/]+){@}?:ver?/:mod?",
       search: "*",
     }),
+    // https://cdn.skypack.dev/-/@firebase/firestore@v3.4.3-A3UEhS17OZ2Vgra7HCZF/dist=es2019,mode=types/dist/index.d.ts
+    new URLPattern(
+      "https://cdn.skypack.dev/-/:org(@[^/]+)?/:pkg([^@/]+)@:ver([^-]+):hash/:path*",
+    ),
   ],
   "unpkg.com": [
     new URLPattern(
@@ -142,8 +146,8 @@ export function parseURL(url: string): ParsedURL | undefined {
       if (match) {
         let { pathname: { groups: { regver, org, pkg, ver, mod } } } = match;
         if (registry === "gist.github.com") {
-          pkg = pkg.substr(0, 7);
-          ver = ver.substr(0, 7);
+          pkg = pkg.substring(0, 7);
+          ver = ver.substring(0, 7);
         }
         return {
           registry: regver ? `${registry} @ ${regver}` : registry,
