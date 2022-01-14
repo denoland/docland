@@ -2,7 +2,7 @@
 /** @jsx h */
 import { h, Helmet } from "../deps.ts";
 import { getUrlLabel } from "../shared.ts";
-import { cleanMarkdown } from "../util.ts";
+import { cleanMarkdown, parseURL } from "../util.ts";
 
 export function DocMeta(
   { base, url, doc, item }: {
@@ -15,9 +15,30 @@ export function DocMeta(
   const description = cleanMarkdown(doc);
   const href = item ? `${url}${url.endsWith("/") ? "" : "/"}~/${item}` : url;
   const imageUrl = new URL(`/img/${href}`, base).toString();
-  const title = item
-    ? `Deno Doc - ${getUrlLabel(url)} - ${item}`
-    : `Deno Doc - ${getUrlLabel(url)}`;
+  const parsed = parseURL(url);
+  let title;
+  if (parsed) {
+    const { module, org, package: pkg, version, registry } = parsed;
+    const orgPkg = org ? `${org}/${pkg}` : pkg;
+    const parts = [];
+    if (module) {
+      parts.push(module);
+    }
+    if (orgPkg) {
+      parts.push(orgPkg);
+    } else if (registry === "deno.land/std") {
+      parts.push("std");
+    }
+    if (version) {
+      parts.push(`@${version}`);
+    }
+    parts.push(registry);
+    title = `${parts.join(" – ")} | Deno Doc`;
+  } else {
+    title = item
+      ? `${getUrlLabel(url)} – ${item} | Deno Doc`
+      : `${getUrlLabel(url)} | Deno Doc`;
+  }
   return (
     <Helmet>
       <title>{title}</title>

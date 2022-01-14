@@ -219,14 +219,13 @@ export function DocPage(
   { children, base }: { children: Child<string | null | undefined>; base: URL },
 ) {
   const state = store.state as StoreState;
-  const { entries, url, includePrivate } = state;
+  let { entries, url, includePrivate } = state;
   const collection = asCollection(entries, undefined, includePrivate);
   const library = url.startsWith("deno:");
   const item = take(children);
   if (item) {
     const path = item.split(".");
     const name = path.pop()!;
-    let { entries, url } = store.state as StoreState;
     if (path && path.length) {
       const namespaces = [];
       for (const name of path) {
@@ -308,19 +307,20 @@ function SideBarHeader({ children }: { children: Child<string> }) {
       : undefined;
     let title = module;
     let subtitle;
-    if (parsed.org) {
+    const { org, package: pkg, registry, version } = parsed;
+    if (org) {
       if (module) {
-        subtitle = `${parsed.org}/${parsed.package}`;
+        subtitle = `${org}/${pkg}`;
       } else {
-        title = `${parsed.org}/${parsed.package}`;
+        title = `${org}/${pkg}`;
       }
-    } else if (parsed.package) {
+    } else if (pkg) {
       if (module) {
-        subtitle = parsed.package;
+        subtitle = pkg;
       } else {
-        title = parsed.package;
+        title = pkg;
       }
-    } else if (parsed.registry === "deno.land/std") {
+    } else if (registry === "deno.land/std") {
       subtitle = "std";
     }
     return (
@@ -338,21 +338,21 @@ function SideBarHeader({ children }: { children: Child<string> }) {
         <h3 class={tw`text-gray-600 dark:text-gray-400 text-sm mt-2`}>
           Registry
         </h3>
-        <p class={tw`truncate`}>{parsed.registry}</p>
-        {parsed.org && (
+        <p class={tw`truncate`}>{registry}</p>
+        {org && (
           <div>
             <h3 class={tw`text-gray-600 dark:text-gray-400 text-sm mt-2`}>
               Organization
             </h3>
-            <p class={tw`truncate`}>{parsed.org}</p>
+            <p class={tw`truncate`}>{org}</p>
           </div>
         )}
-        {parsed.package && (
+        {pkg && (
           <div>
             <h3 class={tw`text-gray-600 dark:text-gray-400 text-sm mt-2`}>
               Package
             </h3>
-            <p class={tw`truncate`}>{parsed.package}</p>
+            <p class={tw`truncate`}>{pkg}</p>
           </div>
         )}
         {module && (
@@ -361,6 +361,14 @@ function SideBarHeader({ children }: { children: Child<string> }) {
               Module
             </h3>
             <p class={tw`truncate`}>{module}</p>
+          </div>
+        )}
+        {version && (
+          <div>
+            <h3 class={tw`text-gray-600 dark:text-gray-400 text-sm mt-2`}>
+              Version
+            </h3>
+            <p class={tw`truncate`}>{version}</p>
           </div>
         )}
         <div>

@@ -48,7 +48,7 @@ Deno.test({
     assertEquals(res.status, 200);
     assertStringIncludes(
       await res.text(),
-      "<title>Deno Doc - deno/stable/</title>",
+      "<title>Deno CLI APIs | Deno Doc</title>",
     );
 
     // validate that badge.svg is available
