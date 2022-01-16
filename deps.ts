@@ -6,18 +6,18 @@
 import type {} from "./types.d.ts";
 
 // std library colors are used in logging to the console
-export * as colors from "https://deno.land/std@0.120.0/fmt/colors.ts";
+export * as colors from "https://deno.land/std@0.121.0/fmt/colors.ts";
 
 // WASM bindings to the comrak markdown rendering library
 export * as comrak from "https://deno.land/x/comrak@0.1.1/mod.ts";
 
 // WASM bindings to swc/deno_graph/deno_doc which generates the documentation
 // structures
-export { doc } from "https://deno.land/x/deno_doc@v0.26.0/mod.ts";
+export { doc } from "https://deno.land/x/deno_doc@v0.26.1/mod.ts";
 export type {
   DocOptions,
   LoadResponse,
-} from "https://deno.land/x/deno_doc@v0.26.0/mod.ts";
+} from "https://deno.land/x/deno_doc@v0.26.1/mod.ts";
 export type {
   Accessibility,
   ClassConstructorDef,
@@ -89,7 +89,7 @@ export type {
   TsTypeTypePredicateDef,
   TsTypeTypeRefDef,
   TsTypeUnionDef,
-} from "https://deno.land/x/deno_doc@v0.26.0/lib/types.d.ts";
+} from "https://deno.land/x/deno_doc@v0.26.1/lib/types.d.ts";
 
 // Used to report measurments to Google Analytics
 export { createReportMiddleware } from "https://deno.land/x/g_a@0.1.2/mod.ts";
