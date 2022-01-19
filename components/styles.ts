@@ -53,7 +53,11 @@ const syntaxHighlighting = css({
 
 const markdownStyles = css({
   a: apply`underline`,
+  hr: apply`m-2 border-gray(500 dark:400)`,
   ol: apply`list-decimal lg:list-inside`,
+  p: apply`my-1`,
+  table: apply`table-auto`,
+  th: apply`font-bold text-center`,
   ul: apply`lg:(list-disc list-inside)`,
 });
 
@@ -64,6 +68,7 @@ const markdownSmallStyles = css({
   h4: apply`font-italic py-2`,
   h5: apply`py-2`,
   h6: apply`py-2`,
+  td: apply`p-1.5 border border(solid gray(500 dark:400))`,
 });
 
 const markdownLargeStyles = css({
@@ -73,6 +78,7 @@ const markdownLargeStyles = css({
   h4: apply`font-semibold md:(font-bold) lg:(text-lg font-normal)`,
   h5: apply`font-italic md:(font-semibold) lg:(font-bold)`,
   h6: apply`md:(font-italic) lg:(font-semitbold)`,
+  td: apply`p-2 border border(solid gray(500 dark:400))`,
 });
 
 const none = apply``;
@@ -111,7 +117,7 @@ const baseStyles = {
   mainBox: apply`p-6 md:(col-span-3 p-12)`,
   mainHeader: apply`text-3xl font-bold lg:text-5xl`,
   markdown: apply
-    `ml-4 mr-2 py-2 text-sm ${smallCode} ${markdownStyles} ${markdownSmallStyles} ${syntaxHighlighting}`,
+    `ml-4 mr-2 py-2 text-sm text-justify ${smallCode} ${markdownStyles} ${markdownSmallStyles} ${syntaxHighlighting}`,
   numberLiteral: none,
   nodeClass: apply`text-green(800 dark:400) mx-2 font-bold truncate`,
   nodeEnum: apply`text-green(700 dark:500) mx-2 font-bold truncate`,
@@ -146,7 +152,7 @@ export const codeBlockStyles = {
 
 export const largeMarkdownStyles = {
   markdown: apply
-    `p-4 flex flex-col space-y-4 ${markdownStyles} ${markdownLargeStyles} ${code} ${syntaxHighlighting}`,
+    `p-4 flex flex-col space-y-4 text-justify ${markdownStyles} ${markdownLargeStyles} ${code} ${syntaxHighlighting}`,
 } as const;
 
 export const largeTagStyles = {
@@ -156,7 +162,7 @@ export const largeTagStyles = {
 
 export const tagMarkdownStyles = {
   markdown: apply
-    `p-1.5 mx-2.5 flex flex-col ${markdownStyles} ${markdownSmallStyles} ${smallCode} ${syntaxHighlighting}`,
+    `p-1.5 mx-2.5 flex flex-col text-justify ${markdownStyles} ${markdownSmallStyles} ${smallCode} ${syntaxHighlighting}`,
 } as const;
 
 function getStyle(

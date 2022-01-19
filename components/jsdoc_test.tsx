@@ -20,7 +20,7 @@ Deno.test({
     };
     const Expected = () => (
       <div>
-        <div class="tw-av9i5b">
+        <div class="tw-15havrn">
           <p>some markdown here</p>
         </div>
         <div class="text-sm mx-4">
@@ -28,7 +28,7 @@ Deno.test({
             <div>
               <span class="italic">@deprecated</span>
             </div>
-            <div class="tw-l2v1xe">
+            <div class="tw-a6shyc">
               <p>some doc</p>
             </div>
           </div>
@@ -58,7 +58,7 @@ Deno.test({
     };
     const Expected = () => (
       <div>
-        <div class="tw-av9i5b">
+        <div class="tw-15havrn">
           <p>some markdown here</p>
         </div>
         <div class="text-sm mx-4">
@@ -66,7 +66,7 @@ Deno.test({
             <div>
               <span class="italic">@example</span>
             </div>
-            <div class="tw-l2v1xe">
+            <div class="tw-a6shyc">
               <pre>
                 <code>
                   <span class="code-keyword">const</span> a ={" "}
@@ -79,7 +79,7 @@ Deno.test({
             <div>
               <span class="italic">@example</span>
             </div>
-            <div class="tw-l2v1xe">
+            <div class="tw-a6shyc">
               <pre>
                 <code>
                   <span class="code-keyword">const</span> b ={" "}
