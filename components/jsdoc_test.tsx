@@ -159,7 +159,7 @@ Deno.test({
     };
     store.setState(state);
     const Expected = () => (
-      <div class="tw-av9i5b">
+      <div class="tw-15havrn">
         <p>
           Some block of test with{" "}
           <a href="/https://deno.land/x/example/mod.ts/~/A.C#C">C.C</a> and{" "}
