@@ -264,7 +264,7 @@ function isLink(link: string): boolean {
   return /^\.{0,2}\//.test(link) || /^[A-Za-z]+:\S/.test(link);
 }
 
-/** Parse out at replace `@link` tags in JSDoc to a link if possible. */
+/** Parse out and replace `@link` tags in JSDoc to a link if possible. */
 function parseLinks(markdown: string): string {
   let match;
   const { url, entries, namespaces } = store.state as StoreState;
