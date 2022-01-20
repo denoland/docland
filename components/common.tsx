@@ -98,6 +98,40 @@ function byName(a: [string, DocNode], b: [string, DocNode]) {
   return a[0].localeCompare(b[0]);
 }
 
+/** Given a name and the current state, attempt to calculate a link to another
+ * doc node. If it cannot be resolved, `undefined` is returned. */
+export function getLink(
+  name: string,
+  url: string,
+  entries: DocNode[],
+  namespaces: DocNodeNamespace[] = [],
+): string | undefined {
+  const ns = [...namespaces];
+  const [item, ...path] = name.split(".");
+  const anchor = path.join("_");
+  let link;
+  let namespace;
+  let namespacePath;
+  while ((namespace = ns.pop())) {
+    link = namespace.namespaceDef.elements.find((e) => e.name === item);
+    if (link) {
+      namespacePath = [...ns.map((n) => n.name), namespace.name].join(".");
+      break;
+    }
+  }
+  if (!link) {
+    link = entries.find((e) => e.name === item);
+    if (!link) {
+      return undefined;
+    }
+  }
+  const ref = (link.kind === "import" ? link.importDef.src : url);
+  const refItem = namespacePath ? `${namespacePath}.${link.name}` : link.name;
+  return `/${ref}${ref.endsWith("/") ? "" : "/"}~/${refItem}${
+    anchor && `#${anchor}`
+  }`;
+}
+
 function getName(node: DocNode, path?: string[]) {
   return path ? [...path, node.name].join(".") : node.name;
 }

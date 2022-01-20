@@ -77,7 +77,7 @@ const markdownLargeStyles = css({
   h3: apply`font-bold md:(text-lg font-normal) lg:(text-xl font-normal)`,
   h4: apply`font-semibold md:(font-bold) lg:(text-lg font-normal)`,
   h5: apply`font-italic md:(font-semibold) lg:(font-bold)`,
-  h6: apply`md:(font-italic) lg:(font-semitbold)`,
+  h6: apply`md:(font-italic) lg:(font-semibold)`,
   td: apply`p-2 border border(solid gray(500 dark:400))`,
 });
 
