@@ -41,6 +41,7 @@ import type { Child } from "../util.ts";
 import {
   Anchor,
   DocWithLink,
+  getLink,
   SectionTitle,
   SubSectionTitle,
   TocLink,
@@ -698,30 +699,10 @@ function TypeDefUnion(
 function TypeRefLink({ children }: { children: Child<string> }) {
   const name = take(children);
   const { entries, url, namespaces } = store.state as StoreState;
-  const [item, ...path] = name.split(".");
-  const anchor = path.join("_");
-  let link;
-  const ns = [...namespaces ?? []];
-  let namespace;
-  let namespacePath;
-  while ((namespace = ns.pop())) {
-    link = namespace.namespaceDef.elements.find((e) => e.name === item);
-    if (link) {
-      namespacePath = [...ns.map((n) => n.name), namespace.name].join(".");
-      break;
-    }
+  const href = getLink(name, url, entries, namespaces);
+  if (!href) {
+    return name;
   }
-  if (!link) {
-    link = entries.find((e) => e.name === item);
-    if (!link) {
-      return name;
-    }
-  }
-  const ref = (link.kind === "import" ? link.importDef.src : url);
-  const refItem = namespacePath ? `${namespacePath}.${link.name}` : link.name;
-  const href = `/${ref}${ref.endsWith("/") ? "" : "/"}~/${refItem}${
-    anchor && `#${anchor}`
-  }`;
   const so = getState(STYLE_OVERRIDE);
   return <a href={href} class={gtw("typeLink", so)}>{name}</a>;
 }
