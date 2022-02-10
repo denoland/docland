@@ -1,6 +1,6 @@
 // Copyright 2021 the Deno authors. All rights reserved. MIT license.
 /** @jsx h */
-import { comrak, h, htmlEntities, lowlight, toHtml, tw } from "../deps.ts";
+import { comrak, h, tw } from "../deps.ts";
 import { store } from "../shared.ts";
 import type { StoreState } from "../shared.ts";
 import type {
@@ -14,9 +14,9 @@ import type {
   ParamDef,
   TsTypeParamDef,
 } from "../deps.ts";
-import { assert, take } from "../util.ts";
+import { take } from "../util.ts";
 import type { Child } from "../util.ts";
-import { getLink } from "./common.tsx";
+import { getLink, syntaxHighlight } from "./common.tsx";
 import { gtw, tagMarkdownStyles } from "./styles.ts";
 import type { StyleOverride } from "./styles.ts";
 
@@ -233,25 +233,6 @@ function JsDocTag({ children }: { children: Child<JsDocTagNode> }) {
         </div>
       );
   }
-}
-
-const CODE_BLOCK_RE =
-  /<pre><code\sclass="language-([^"]+)">([^<]+)<\/code><\/pre>/m;
-
-/** Syntax highlight code blocks in an HTML string. */
-function syntaxHighlight(html: string): string {
-  let match;
-  while ((match = CODE_BLOCK_RE.exec(html))) {
-    const [text, lang, code] = match;
-    const tree = lowlight.highlight(lang, htmlEntities.decode(code), {
-      prefix: "code-",
-    });
-    assert(match.index != null);
-    html = `${html.slice(0, match.index)}<pre><code>${
-      toHtml(tree)
-    }</code></pre>${html.slice(match.index + text.length)}`;
-  }
-  return html;
 }
 
 /** Matches `{@link ...}`, `{@linkcode ...}, and `{@linkplain ...}` structures

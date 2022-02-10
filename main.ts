@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --config deno.jsonc --import-map import-map.json --allow-read=. --allow-net --allow-env --allow-hrtime
+#!/usr/bin/env -S deno run --import-map import-map.json --allow-read=. --allow-net --allow-env --allow-hrtime
 
 // Copyright 2021 the Deno authors. All rights reserved. MIT license.
 

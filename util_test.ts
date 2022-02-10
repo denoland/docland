@@ -1,7 +1,7 @@
 // Copyright 2021 the Deno authors. All rights reserved. MIT license.
 
 import { assertEquals } from "./deps_test.ts";
-import { assert, parseURL } from "./util.ts";
+import { assert, camelize, parseURL } from "./util.ts";
 
 Deno.test({
   name: "parseURL() - github raw URLs",
@@ -34,5 +34,14 @@ Deno.test({
       version: "9.4.1",
       module: "database/dist/database/index.d.ts",
     });
+  },
+});
+
+Deno.test({
+  name: "camelize",
+  fn() {
+    assertEquals(camelize("deno"), "deno");
+    assertEquals(camelize("deno_doc"), "denoDoc");
+    assertEquals(camelize("deno-graph"), "denoGraph");
   },
 });

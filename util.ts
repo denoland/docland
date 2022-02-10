@@ -161,6 +161,15 @@ export function parseURL(url: string): ParsedURL | undefined {
   }
 }
 
+/** Convert a string into a camelCased string. */
+export function camelize(str: string): string {
+  return str.split(/[\s_\-]+/).map((word, index) =>
+    index === 0
+      ? word.toLowerCase()
+      : `${word.charAt(0).toUpperCase()}${word.slice(1).toLowerCase()}`
+  ).join("");
+}
+
 /** Clean up markdown text, converting it into something that can be displayed
  * just as "normal" text. */
 export function cleanMarkdown(markdown: string): string {

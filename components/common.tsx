@@ -1,6 +1,6 @@
 // Copyright 2021 the Deno authors. All rights reserved. MIT license.
 /** @jsx h */
-import { h, tw } from "../deps.ts";
+import { h, htmlEntities, lowlight, toHtml, tw } from "../deps.ts";
 import type {
   DocNode,
   DocNodeClass,
@@ -14,7 +14,7 @@ import type {
   DocNodeVariable,
   Location,
 } from "../deps.ts";
-import { take } from "../util.ts";
+import { assert, take } from "../util.ts";
 import type { Child } from "../util.ts";
 import { store } from "../shared.ts";
 import type { StoreState } from "../shared.ts";
@@ -134,6 +134,25 @@ export function getLink(
 
 function getName(node: DocNode, path?: string[]) {
   return path ? [...path, node.name].join(".") : node.name;
+}
+
+const CODE_BLOCK_RE =
+  /<pre><code\sclass="language-([^"]+)">([^<]+)<\/code><\/pre>/m;
+
+/** Syntax highlight code blocks in an HTML string. */
+export function syntaxHighlight(html: string): string {
+  let match;
+  while ((match = CODE_BLOCK_RE.exec(html))) {
+    const [text, lang, code] = match;
+    const tree = lowlight.highlight(lang, htmlEntities.decode(code), {
+      prefix: "code-",
+    });
+    assert(match.index != null);
+    html = `${html.slice(0, match.index)}<pre><code>${
+      toHtml(tree)
+    }</code></pre>${html.slice(match.index + text.length)}`;
+  }
+  return html;
 }
 
 export function Anchor({ children: name }: { children: string }) {
