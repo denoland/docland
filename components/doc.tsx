@@ -414,15 +414,25 @@ function SideBarHeader({ children }: { children: Child<string> }) {
   }
 }
 
+declare global {
+  interface HTMLAttributes<RefType extends EventTarget = EventTarget>
+    extends ClassAttributes<RefType> {
+    onClick?: string;
+  }
+}
+
 export function Usage({ children }: { children: Child<string> }) {
   const url = take(children);
   const parsed = parseURL(url);
   const importSymbol = camelize(parsed?.package ?? "mod");
+  const importStatement = `import * as ${importSymbol} from "${url}";\n`;
   return (
     <div>
       <h2 class={gtw("section")}>Usage</h2>
       <div class={gtw("markdown", largeMarkdownStyles)}>
         <pre>
+          {`<button class="${tw
+            `float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray(500 dark:300) border border-gray(300 dark:500) rounded hover:shadow`}" type="button" onclick="copyImportStatement()">Copy</button>`}
           <code>
             <span class="code-keyword">import</span> *{" "}
             <span class="code-keyword">as</span> {importSymbol}{" "}
@@ -431,6 +441,11 @@ export function Usage({ children }: { children: Child<string> }) {
           </code>
         </pre>
       </div>
+      <script>
+        {`function copyImportStatement() {
+          navigator.clipboard.writeText(\`${importStatement}\`);
+        }`}
+      </script>
     </div>
   );
 }
