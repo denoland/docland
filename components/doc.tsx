@@ -3,7 +3,7 @@
 import { h, tw } from "../deps.ts";
 import type { DocNode, DocNodeFunction, DocNodeNamespace } from "../deps.ts";
 import { getLibWithVersion, store, StoreState } from "../shared.ts";
-import { parseURL, take } from "../util.ts";
+import { camelize, parseURL, take } from "../util.ts";
 import type { Child } from "../util.ts";
 import { ClassCodeBlock, ClassDoc, ClassToc } from "./classes.tsx";
 import {
@@ -66,10 +66,17 @@ function ModuleToc(
   );
 }
 
-function DocNodes({ children }: { children: Child<DocNodeCollection> }) {
+function DocNodes(
+  { children, url, library }: {
+    children: Child<DocNodeCollection>;
+    library: boolean;
+    url: string;
+  },
+) {
   const collection = take(children);
   return (
     <div class={gtw("mainBox")}>
+      {(url.endsWith(".d.ts") || library) ? undefined : <Usage>{url}</Usage>}
       {collection.moduleDoc && (
         <JsDoc style={largeMarkdownStyles}>
           {collection.moduleDoc[0][1].jsDoc}
@@ -221,7 +228,7 @@ export function DocPage(
   const state = store.state as StoreState;
   let { entries, url, includePrivate } = state;
   const collection = asCollection(entries, undefined, includePrivate);
-  const library = url.startsWith("deno:");
+  const library = url.startsWith("deno/");
   const item = take(children);
   if (item) {
     const path = item.split(".");
@@ -291,7 +298,7 @@ export function DocPage(
           <SideBarHeader>{url}</SideBarHeader>
           <ModuleToc library={library}>{collection}</ModuleToc>
         </nav>
-        <DocNodes>{collection}</DocNodes>
+        <DocNodes url={url} library={library}>{collection}</DocNodes>
       </div>
     );
   }
@@ -405,4 +412,25 @@ function SideBarHeader({ children }: { children: Child<string> }) {
       </div>
     );
   }
+}
+
+export function Usage({ children }: { children: Child<string> }) {
+  const url = take(children);
+  const parsed = parseURL(url);
+  const importSymbol = camelize(parsed?.package ?? "mod");
+  return (
+    <div>
+      <h2 class={gtw("section")}>Usage</h2>
+      <div class={gtw("markdown", largeMarkdownStyles)}>
+        <pre>
+          <code>
+            <span class="code-keyword">import</span> *{" "}
+            <span class="code-keyword">as</span> {importSymbol}{" "}
+            <span class="code-keyword">from</span>{" "}
+            <span class="code-string">"{url}"</span>;
+          </code>
+        </pre>
+      </div>
+    </div>
+  );
 }

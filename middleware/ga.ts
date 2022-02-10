@@ -22,4 +22,5 @@ export function metaData(ctx: Context) {
   return { documentTitle };
 }
 
-export const ga = createReportMiddleware({ filter, metaData });
+// deno-lint-ignore no-explicit-any
+export const ga: any = createReportMiddleware({ filter, metaData } as any);

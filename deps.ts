@@ -6,18 +6,18 @@
 import type {} from "./types.d.ts";
 
 // std library colors are used in logging to the console
-export * as colors from "https://deno.land/std@0.121.0/fmt/colors.ts";
+export * as colors from "https://deno.land/std@0.125.0/fmt/colors.ts";
 
 // WASM bindings to the comrak markdown rendering library
 export * as comrak from "https://deno.land/x/comrak@0.1.1/mod.ts";
 
 // WASM bindings to swc/deno_graph/deno_doc which generates the documentation
 // structures
-export { doc } from "https://deno.land/x/deno_doc@v0.26.1/mod.ts";
+export { doc } from "https://deno.land/x/deno_doc@v0.29.0/mod.ts";
 export type {
   DocOptions,
   LoadResponse,
-} from "https://deno.land/x/deno_doc@v0.26.1/mod.ts";
+} from "https://deno.land/x/deno_doc@v0.29.0/mod.ts";
 export type {
   Accessibility,
   ClassConstructorDef,
@@ -89,7 +89,7 @@ export type {
   TsTypeTypePredicateDef,
   TsTypeTypeRefDef,
   TsTypeUnionDef,
-} from "https://deno.land/x/deno_doc@v0.26.1/lib/types.d.ts";
+} from "https://deno.land/x/deno_doc@v0.29.0/lib/types.d.ts";
 
 // Used to report measurments to Google Analytics
 export { createReportMiddleware } from "https://deno.land/x/g_a@0.1.2/mod.ts";
@@ -97,11 +97,11 @@ export { createReportMiddleware } from "https://deno.land/x/g_a@0.1.2/mod.ts";
 // Used to convert lowlight trees to HTML
 export { toHtml } from "https://esm.sh/hast-util-to-html@8.0.3?pin=v58";
 
-// Used to do SSR of code block highlignting
+// Used to do SSR of code block highlighting
 export { lowlight } from "https://esm.sh/lowlight@2.4.1?pin=v58";
 
 // Used when overriding proxies content types when serving up static content
-export { lookup } from "https://deno.land/x/media_types@v2.11.0/mod.ts";
+export { lookup } from "https://deno.land/x/media_types@v2.12.1/mod.ts";
 
 // Importing the parts of NanoJSX which we are using in the application.
 // TODO(@kitsonk) isolate issues with > 0.0.21 and raise with NanoJSX
@@ -122,14 +122,14 @@ export {
   Router,
   Status,
   STATUS_TEXT,
-} from "https://deno.land/x/oak@v10.1.0/mod.ts";
+} from "https://deno.land/x/oak@v10.2.0/mod.ts";
 export type {
   Context,
   Middleware,
   RouteParams,
   RouterContext,
   RouterMiddleware,
-} from "https://deno.land/x/oak@v10.1.0/mod.ts";
+} from "https://deno.land/x/oak@v10.2.0/mod.ts";
 
 // resvg WASM bindings that allow conversion of an SVG to a PNG. Open graph and
 // twitter do not support SVGs for card images.

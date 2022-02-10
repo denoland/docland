@@ -6,7 +6,7 @@ import { assertEquals } from "../deps_test.ts";
 import { sheet, store } from "../shared.ts";
 import type { StoreState } from "../shared.ts";
 
-import { DocPage } from "./doc.tsx";
+import { DocPage, Usage } from "./doc.tsx";
 
 Deno.test({
   name: "DocPage - functions with other",
@@ -173,6 +173,35 @@ Deno.test({
     sheet.reset();
     const base = new URL("https://example.com/mod.ts");
     const actual = renderSSR(<DocPage base={base}>fn</DocPage>)
+      .replaceAll("\n", "");
+    const expected = renderSSR(<Expected />).replaceAll("\n", "");
+    assertEquals(actual, expected);
+  },
+});
+
+Deno.test({
+  name: "Usage component",
+  fn() {
+    const Expected = () => (
+      <div>
+        <h2 class="tw-17gss7d">Usage</h2>
+        <div class="tw-1esk77l">
+          <pre>
+            <code>
+              <span class="code-keyword">import</span> *{" "}
+              <span class="code-keyword">as</span> examplePackage{" "}
+              <span class="code-keyword">from</span>{" "}
+              <span class="code-string">
+                "https://deno.land/x/example_package/mod.ts"
+              </span>;
+            </code>
+          </pre>
+        </div>
+      </div>
+    );
+    const actual = renderSSR(
+      <Usage>https://deno.land/x/example_package/mod.ts</Usage>,
+    )
       .replaceAll("\n", "");
     const expected = renderSSR(<Expected />).replaceAll("\n", "");
     assertEquals(actual, expected);
