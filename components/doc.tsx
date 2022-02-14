@@ -1,6 +1,7 @@
 // Copyright 2021 the Deno authors. All rights reserved. MIT license.
 /** @jsx h */
-import { h, tw } from "../deps.ts";
+/** @jsxFrag Fragment */
+import { Fragment, h, tw } from "../deps.ts";
 import type { DocNode, DocNodeFunction, DocNodeNamespace } from "../deps.ts";
 import { getLibWithVersion, store, StoreState } from "../shared.ts";
 import { camelize, parseURL, take } from "../util.ts";
@@ -28,6 +29,13 @@ import { NamespaceDoc, NamespaceToc } from "./namespaces.tsx";
 import { gtw, largeMarkdownStyles, largeTagStyles } from "./styles.ts";
 import { TypeAliasCodeBlock, TypeAliasDoc, TypeAliasToc } from "./types.tsx";
 import { VariableCodeBlock } from "./variables.tsx";
+
+/** For a given set of nodes, do they only contain type only nodes. */
+function isTypeOnly(nodes: DocNode[]): boolean {
+  return nodes.every((node) =>
+    node.kind === "interface" || node.kind === "typeAlias"
+  );
+}
 
 function ModuleToc(
   { children, library = false }: {
@@ -275,6 +283,9 @@ export function DocPage(
         </nav>
         <article class={gtw("mainBox")}>
           <h1 class={gtw("docTitle")}>{item}</h1>
+          {(url.endsWith(".d.ts") || library)
+            ? undefined
+            : <Usage item={item} isType={isTypeOnly(nodes)}>{url}</Usage>}
           {isAbstract(nodes[0])
             ? <Tag style={largeTagStyles} color="yellow">abstract</Tag>
             : undefined}
@@ -421,23 +432,103 @@ declare global {
   }
 }
 
-export function Usage({ children }: { children: Child<string> }) {
-  const url = take(children);
+interface ParsedUsage {
+  /** The symbol that the item should be imported as. If `usageSymbol` and
+   * `localVar` is defined, then the item is a named import, otherwise it is
+   * a namespace import. */
+  importSymbol: string;
+  /** The undecorated code of the generated import statement to import and use
+   * the item. */
+  importStatement: string;
+  /** The local variable that the `usageSymbol` should be destructured out of.
+   */
+  localVar?: string;
+  /** The symbol that should be destructured from the `localVar` which will be
+   * bound to the item's value. */
+  usageSymbol?: string;
+}
+
+/** Given the URL and optional item and is type flag, provide back a parsed
+ * version of the usage of an item for rendering. */
+export function parseUsage(
+  url: string,
+  item: string | undefined,
+  isType: boolean | undefined,
+): ParsedUsage {
   const parsed = parseURL(url);
-  const importSymbol = camelize(parsed?.package ?? "mod");
-  const importStatement = `import * as ${importSymbol} from "${url}";\n`;
+  const itemParts = item?.split(".");
+  // when the imported symbol is a namespace import, we try to guess at an
+  // intelligent camelized name for the import based on the package name.  If
+  // it is a named import, we simply import the symbol itself.
+  const importSymbol = itemParts
+    ? itemParts[0]
+    : camelize(parsed?.package ?? "mod");
+  // when using a symbol from an imported namespace exported from a module, we
+  // need to create the local symbol, which we identify here.
+  const usageSymbol = itemParts && itemParts.length > 1
+    ? itemParts.pop()
+    : undefined;
+  // if it is namespaces within namespaces, we simply re-join them together
+  // instead of trying to figure out some sort of nested restructuring
+  const localVar = itemParts?.join(".");
+  // we create an import statement which is used to populate the copy paste
+  // snippet of code.
+  let importStatement = item
+    ? `import ${isType ? "type " : ""}{ ${importSymbol} } from "${url}";\n`
+    : `import * as ${importSymbol} from "${url}";\n`;
+  // if we are using a symbol off a imported namespace, we need to destructure
+  // it to a local variable.
+  if (usageSymbol) {
+    importStatement += `\nconst { ${usageSymbol} } = ${localVar};\n`;
+  }
+  return { importSymbol, usageSymbol, localVar, importStatement };
+}
+
+export function Usage(
+  { children, item, isType }: {
+    children: Child<string>;
+    item?: string;
+    isType?: boolean;
+  },
+) {
+  const url = take(children);
+  const {
+    importSymbol,
+    usageSymbol,
+    localVar,
+    importStatement,
+  } = parseUsage(url, item, isType);
   return (
     <div>
-      <h2 class={gtw("section")}>Usage</h2>
+      {item ? undefined : <h2 class={gtw("section")}>Usage</h2>}
       <div class={gtw("markdown", largeMarkdownStyles)}>
         <pre>
           {`<button class="${tw
             `float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray(500 dark:300) border border-gray(300 dark:500) rounded hover:shadow`}" type="button" onclick="copyImportStatement()">Copy</button>`}
           <code>
-            <span class="code-keyword">import</span> *{" "}
-            <span class="code-keyword">as</span> {importSymbol}{" "}
-            <span class="code-keyword">from</span>{" "}
-            <span class="code-string">"{url}"</span>;
+            <span class="code-keyword">import</span> {item
+              ? (
+                <>
+                  {isType
+                    ? <span class="code-keyword">type{" "}</span>
+                    : undefined}&#123; {importSymbol} &#125;
+                </>
+              )
+              : (
+                <>
+                  * <span class="code-keyword">as</span> {importSymbol}
+                </>
+              )} <span class="code-keyword">from</span>{" "}
+            <span class="code-string">"{url}"</span>;{usageSymbol
+              ? (
+                <>
+                  {" \n\n"}
+                  <span class="code-keyword">const</span> &#123; {usageSymbol}
+                  {" "}
+                  &#125; = {localVar};
+                </>
+              )
+              : undefined}
           </code>
         </pre>
       </div>
