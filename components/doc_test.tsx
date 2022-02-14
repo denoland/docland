@@ -6,7 +6,7 @@ import { assertEquals } from "../deps_test.ts";
 import { sheet, store } from "../shared.ts";
 import type { StoreState } from "../shared.ts";
 
-import { DocPage, Usage } from "./doc.tsx";
+import { DocPage, parseUsage, Usage } from "./doc.tsx";
 
 Deno.test({
   name: "DocPage - functions with other",
@@ -339,5 +339,67 @@ Deno.test({
       .replaceAll("\n", "");
     const expected = renderSSR(<Expected />).replaceAll("\n", "");
     assertEquals(actual, expected);
+  },
+});
+
+Deno.test({
+  name: "parseUsage()",
+  fn() {
+    assertEquals(
+      parseUsage(
+        "https://deno.land/x/example_package/mod.ts",
+        undefined,
+        undefined,
+      ),
+      {
+        importStatement:
+          `import * as examplePackage from "https://deno.land/x/example_package/mod.ts";\n`,
+        importSymbol: "examplePackage",
+        localVar: undefined,
+        usageSymbol: undefined,
+      },
+    );
+    assertEquals(
+      parseUsage(
+        "https://deno.land/x/example_package/mod.ts",
+        "a",
+        undefined,
+      ),
+      {
+        importStatement:
+          `import { a } from "https://deno.land/x/example_package/mod.ts";\n`,
+        importSymbol: "a",
+        localVar: "a",
+        usageSymbol: undefined,
+      },
+    );
+    assertEquals(
+      parseUsage(
+        "https://deno.land/x/example_package/mod.ts",
+        "a.b",
+        undefined,
+      ),
+      {
+        importStatement:
+          `import { a } from "https://deno.land/x/example_package/mod.ts";\n\nconst { b } = a;\n`,
+        importSymbol: "a",
+        localVar: "a",
+        usageSymbol: "b",
+      },
+    );
+    assertEquals(
+      parseUsage(
+        "https://deno.land/x/example_package/mod.ts",
+        "a.b.c",
+        undefined,
+      ),
+      {
+        importStatement:
+          `import { a } from "https://deno.land/x/example_package/mod.ts";\n\nconst { c } = a.b;\n`,
+        importSymbol: "a",
+        localVar: "a.b",
+        usageSymbol: "c",
+      },
+    );
   },
 });

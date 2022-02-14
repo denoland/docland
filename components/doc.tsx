@@ -432,14 +432,29 @@ declare global {
   }
 }
 
-export function Usage(
-  { children, item, isType }: {
-    children: Child<string>;
-    item?: string;
-    isType?: boolean;
-  },
-) {
-  const url = take(children);
+interface ParsedUsage {
+  /** The symbol that the item should be imported as. If `usageSymbol` and
+   * `localVar` is defined, then the item is a named import, otherwise it is
+   * a namespace import. */
+  importSymbol: string;
+  /** The undecorated code of the generated import statement to import and use
+   * the item. */
+  importStatement: string;
+  /** The local variable that the `usageSymbol` should be destructured out of.
+   */
+  localVar?: string;
+  /** The symbol that should be destructured from the `localVar` which will be
+   * bound to the item's value. */
+  usageSymbol?: string;
+}
+
+/** Given the URL and optional item and is type flag, provide back a parsed
+ * version of the usage of an item for rendering. */
+export function parseUsage(
+  url: string,
+  item: string | undefined,
+  isType: boolean | undefined,
+): ParsedUsage {
   const parsed = parseURL(url);
   const itemParts = item?.split(".");
   // when the imported symbol is a namespace import, we try to guess at an
@@ -466,6 +481,23 @@ export function Usage(
   if (usageSymbol) {
     importStatement += `\nconst { ${usageSymbol} } = ${localVar};\n`;
   }
+  return { importSymbol, usageSymbol, localVar, importStatement };
+}
+
+export function Usage(
+  { children, item, isType }: {
+    children: Child<string>;
+    item?: string;
+    isType?: boolean;
+  },
+) {
+  const url = take(children);
+  const {
+    importSymbol,
+    usageSymbol,
+    localVar,
+    importStatement,
+  } = parseUsage(url, item, isType);
   return (
     <div>
       {item ? undefined : <h2 class={gtw("section")}>Usage</h2>}
