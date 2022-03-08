@@ -14,6 +14,7 @@ Deno.test({
     const load = (specifier: string) =>
       Promise.resolve({
         specifier,
+        kind: "module" as const,
         content: `export namespace A {
         export var a: string;
       }
@@ -33,6 +34,7 @@ Deno.test({
     const load = (specifier: string) =>
       Promise.resolve({
         specifier,
+        kind: "module" as const,
         content: `export namespace A {
         export var a: string;
 
