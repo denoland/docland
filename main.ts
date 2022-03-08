@@ -18,6 +18,17 @@ const router = new Router();
 // The index, renders "specifier_form"
 router.get("/", indexGet);
 
+router.get("/robots.txt", (ctx) => {
+  ctx.response.body = `User-agent: *
+Disallow: /static/
+`;
+  ctx.response.type = "text";
+  ctx.response.headers.set(
+    "expires",
+    new Date(Date.now() + 86_400).toUTCString(),
+  );
+});
+
 router.get("/manifest.json", (ctx) => {
   ctx.response.body = {
     "short_name": "Deno Doc",
