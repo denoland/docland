@@ -38,6 +38,7 @@ function checkCache() {
     for (const specifier of cachedSpecifiers) {
       const loadResponse = cachedResources.get(specifier);
       assert(loadResponse);
+      assert(loadResponse.kind === "module");
       toEvict.push(specifier);
       cacheSize -= loadResponse.content.length;
       if (cacheSize <= MAX_CACHE_SIZE) {
@@ -80,12 +81,12 @@ async function checkRedirect(specifier: string): Promise<string | undefined> {
       for (const [key, value] of res.headers) {
         headers[key.toLowerCase()] = value;
       }
-      const loadResponse = {
+      cachedResources.set(specifier, {
         specifier: res.url,
+        kind: "module",
         headers,
         content,
-      };
-      cachedResources.set(specifier, loadResponse);
+      });
       cachedSpecifiers.add(specifier);
       cacheSize += content.length;
       queueMicrotask(checkCache);
@@ -129,6 +130,7 @@ async function load(
           headers[key.toLowerCase()] = value;
         }
         const loadResponse: LoadResponse = {
+          kind: "module",
           specifier: response.url,
           headers,
           content,
