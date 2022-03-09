@@ -82,6 +82,34 @@ router.get("/manifest.json", (ctx) => {
   );
 });
 
+router.get("/sw.js", (ctx) => {
+  ctx.response.body = `
+  self.addEventListener("install", (evt) => {
+    evt.waitUntil(
+      caches.open("docland").then((cache) => {
+        return cache.addAll([
+          "/",
+          "/deno/stable",
+        ]);
+      }),
+    );
+  });
+  
+  self.addEventListener("fetch", (evt) => {
+    evt.respondWith(
+      caches.match(evt.request).then((response) => {
+        return response ?? fetch(evt.request);
+      }),
+    );
+  });
+`;
+  ctx.response.type = "application/javascript";
+  ctx.response.headers.set(
+    "expires",
+    new Date(Date.now() + 86_400).toUTCString(),
+  );
+});
+
 // Serves up the static content
 router.get(
   "/static/:path*",

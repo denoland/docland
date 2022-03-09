@@ -50,6 +50,9 @@ function Footer() {
           Companies interested in Deno
         </FooterLink>
       </nav>
+      <script>
+        {`if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js");`}
+      </script>
     </footer>
   );
 }
