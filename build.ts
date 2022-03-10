@@ -96,6 +96,7 @@ for (const { tag, specifier, contentType } of denoLibs) {
             "content-type": contentType,
           },
           content: await res.text(),
+          kind: "module",
         };
       }
     },
@@ -142,6 +143,7 @@ for (const { tag } of denoUnstableLibs) {
               "content-type": "application/typescript",
             },
             content: await res.text(),
+            kind: "module",
           };
         }
       },
@@ -194,6 +196,7 @@ const builtInDoc = await doc(
             "content-type": "application/typescript",
           },
           content: await res.text(),
+          kind: "module",
         };
       }
     },
