@@ -43,6 +43,8 @@ interface DocParams {
   tags?: JsDocTagKind[];
   /** Only print tags that actually have some doc associated with them. */
   tagsWithDoc?: boolean;
+  /** An optional ID for the div containing the documentation in the JSDoc. */
+  id?: string;
 }
 
 await comrak.init();
@@ -142,7 +144,7 @@ export function isDeprecated(jsDoc?: JsDocNode): boolean {
 }
 
 /** A component which renders a JSDoc. */
-export function JsDoc({ children, style, tags = [], tagsWithDoc }: DocParams) {
+export function JsDoc({ children, style, tags = [], tagsWithDoc, id }: DocParams) {
   const jsDoc = take(children);
   if (!jsDoc) {
     return;
@@ -160,7 +162,7 @@ export function JsDoc({ children, style, tags = [], tagsWithDoc }: DocParams) {
   }
   return (
     <div>
-      <Markdown style={style}>{jsDoc.doc}</Markdown>
+      <Markdown style={style} id={id}>{jsDoc.doc}</Markdown>
       {docTags.length
         ? <div class={tw`text-sm mx-4`}>{docTags}</div>
         : undefined}
@@ -293,15 +295,16 @@ function parseLinks(markdown: string): string {
 }
 
 export function Markdown(
-  { children, style }: {
+  { children, style, id }: {
     children: Child<string | undefined>;
     style?: StyleOverride;
+    id?: string;
   },
 ) {
   const md = take(children);
   return md
     ? (
-      <div class={gtw("markdown", style)}>
+      <div class={gtw("markdown", style)} id={id}>
         {syntaxHighlight(comrak.markdownToHTML(parseLinks(md), {
           extension: {
             autolink: true,
