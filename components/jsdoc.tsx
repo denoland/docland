@@ -144,7 +144,9 @@ export function isDeprecated(jsDoc?: JsDocNode): boolean {
 }
 
 /** A component which renders a JSDoc. */
-export function JsDoc({ children, style, tags = [], tagsWithDoc, id }: DocParams) {
+export function JsDoc(
+  { children, style, tags = [], tagsWithDoc, id }: DocParams,
+) {
   const jsDoc = take(children);
   if (!jsDoc) {
     return;
