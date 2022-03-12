@@ -7,5 +7,9 @@
       "dom.iterable",
       "dom.asynciterable"
     ]
+  },
+  "tasks": {
+    "build": "deno run --import-map import-map.json --allow-read=. --allow-write=./static --allow-net build.ts",
+    "dev": "deno run --allow-read=. --allow-net --allow-env main.ts"
   }
 }
