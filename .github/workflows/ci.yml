@@ -34,3 +34,6 @@ jobs:
 
       - name: 🧪  test
         run: deno test --allow-read --allow-net --allow-env --allow-hrtime --import-map import-map.json
+
+      - name: 🧪  test build
+        run: ./build.ts
