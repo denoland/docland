@@ -292,7 +292,12 @@ export function DocPage(
           {isDeprecated(jsDoc)
             ? <Tag style={largeTagStyles} color="gray">deprecated</Tag>
             : undefined}
-          <JsDoc style={largeMarkdownStyles} tags={["deprecated"]} tagsWithDoc>
+          <JsDoc
+            style={largeMarkdownStyles}
+            tags={["deprecated"]}
+            tagsWithDoc
+            id="mainDoc"
+          >
             {jsDoc}
           </JsDoc>
           <CodeBlock>{nodes}</CodeBlock>
