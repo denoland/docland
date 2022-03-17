@@ -64,7 +64,7 @@ Deno.test({
     assertStringIncludes(text, ">Deno.connect<");
 
     // validate that namespaced type references are resolved
-    assertStringIncludes(text, `href="/deno/stable/~/Deno.Conn"`);
+    assertStringIncludes(text, `href="/deno/stable/~/Deno.ConnectOptions"`);
 
     // doc query URLs are redirected to perm-link of the redirected URL
     res = await fetch(
