@@ -31,16 +31,10 @@ When a documentation page is requested, the following occurs at a high level:
 
 ## Starting
 
-To run the server locally, execute the `main.ts`. If supported in your shell:
+To run the server locally:
 
 ```
-> ./main.ts
-```
-
-Or manually on the command line:
-
-```
-> deno run --config deno.jsonc --allow-read=. --allow-net --allow-env main.ts
+> deno task dev
 ```
 
 The server will start listening on port `8080`, which will be logged to the
@@ -54,16 +48,10 @@ In order to speed up displaying the _built-in_ documentation, there is a build
 script. This will fetch all the releases from GitHub for the Deno CLI and
 rebuild the latest release, plus build any missing versions.
 
-To execute the build script, and supported in your shell:
+To execute the build script:
 
 ```
-> ./build.ts
-```
-
-Or manually on the command line:
-
-```
-> deno run --config deno.jsonc --allow-read=. --allow-write=./static --allow-net build.ts
+> deno task build
 ```
 
 ## Contributing
