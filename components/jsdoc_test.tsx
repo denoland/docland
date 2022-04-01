@@ -71,7 +71,10 @@ Deno.test({
               <pre>
                 <code>
                   <span class="code-keyword">const</span> a ={" "}
-                  <span class="code-string">"a"</span>;
+                  <span
+                    class="code-string"
+                    innerHTML={{ __dangerousHtml: `"a"` }}
+                  />;
                 </code>
               </pre>
             </div>
@@ -84,7 +87,10 @@ Deno.test({
               <pre>
                 <code>
                   <span class="code-keyword">const</span> b ={" "}
-                  <span class="code-string">"b"</span>;
+                  <span
+                    class="code-string"
+                    innerHTML={{ __dangerousHtml: `"b"` }}
+                  />;
                 </code>
               </pre>
             </div>

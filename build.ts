@@ -1,11 +1,9 @@
-#!/usr/bin/env -S deno run --config deno.jsonc --import-map import-map.json --allow-read=. --allow-write=./static --allow-net
-
 // Copyright 2021 the Deno authors. All rights reserved. MIT license.
 
 // This is the build script for deploy_doc, which generates JSON files in the
 // `/static` directory.
 
-import { default as semver } from "https://cdn.skypack.dev/semver@7.3.5";
+import { default as semver } from "https://esm.sh/semver@7.3.5?pin=v74";
 import { colors, doc } from "./deps.ts";
 
 await Deno.permissions.request({ name: "read", path: "." });

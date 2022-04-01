@@ -27,13 +27,13 @@ jobs:
           deno-version: 1.x
 
       - name: 💄  format
-        run: deno fmt --check --ignore=static
+        run: deno fmt --check
 
       - name: 💄  lint
         run: deno lint
 
       - name: 🧪  test
-        run: deno test --allow-read --allow-net --allow-env --allow-hrtime --import-map import-map.json
+        run: deno task test
 
       - name: 🧪  test build
-        run: ./build.ts
+        run: deno task build
