@@ -40,8 +40,8 @@ export function humanSize(bytes: number, si = true, dp = 1) {
 export function getBody(
   { body, head, footer }: {
     body: string;
-    head: HTMLElement[];
-    footer: HTMLElement[];
+    head: string[];
+    footer: string[];
   },
   styles: string,
 ): string {

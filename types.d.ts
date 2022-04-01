@@ -5,8 +5,6 @@ export {};
 declare global {
   // deno-lint-ignore no-var
   var isSSR: boolean | undefined;
-  // deno-lint-ignore no-explicit-any no-var
-  var _nano: any;
 
   // deno-lint-ignore no-explicit-any
   type Key = string | number | any;
@@ -99,6 +97,7 @@ declare global {
     high?: number;
     href?: string;
     hrefLang?: string;
+    innerHTML?: { __dangerousHtml: string };
     for?: string;
     htmlFor?: string;
     httpEquiv?: string;
@@ -132,6 +131,7 @@ declare global {
     nomodule?: boolean;
     nonce?: string;
     noValidate?: boolean;
+    onclick?: string;
     open?: boolean;
     optimum?: number;
     pattern?: string;

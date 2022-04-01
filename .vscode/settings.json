@@ -1,11 +1,10 @@
 {
   "deno.enable": true,
   "deno.lint": true,
-  "deno.config": "deno.jsonc",
-  "deno.importMap": "import-map.json",
-  "deno.codeLens.testArgs": [
-    "--allow-all",
-    "--config",
-    "deno.jsonc"
+  "deno.testing.args": [
+    "--allow-read=.",
+    "--allow-net",
+    "--allow-env",
+    "--allow-hrtime"
   ]
 }

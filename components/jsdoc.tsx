@@ -306,16 +306,23 @@ export function Markdown(
   const md = take(children);
   return md
     ? (
-      <div class={gtw("markdown", style)} id={id}>
-        {syntaxHighlight(comrak.markdownToHTML(parseLinks(md), {
-          extension: {
-            autolink: true,
-            descriptionLists: true,
-            strikethrough: true,
-            table: true,
-            tagfilter: true,
-          },
-        }))}
+      <div
+        class={gtw("markdown", style)}
+        id={id}
+        innerHTML={{
+          __dangerousHtml: syntaxHighlight(
+            comrak.markdownToHTML(parseLinks(md), {
+              extension: {
+                autolink: true,
+                descriptionLists: true,
+                strikethrough: true,
+                table: true,
+                tagfilter: true,
+              },
+            }),
+          ),
+        }}
+      >
       </div>
     )
     : undefined;

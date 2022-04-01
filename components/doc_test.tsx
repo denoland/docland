@@ -113,7 +113,13 @@ Deno.test({
           <div>
             <div class="tw-1esk77l">
               <pre>
-                {`<button class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow" type="button" onclick="copyImportStatement()">Copy</button>`}
+                <button
+                  class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"
+                  type="button"
+                  onclick="copyImportStatement()"
+                >
+                  Copy
+                </button>
                 <code>
                   <span class="code-keyword">import</span> &#123; fn &#125;{" "}
                   <span class="code-keyword">from</span>{" "}
@@ -121,7 +127,9 @@ Deno.test({
                 </code>
               </pre>
             </div>
-            {`<script>function copyImportStatement() {          navigator.clipboard.writeText(\`import { fn } from "https://example.com/mod.ts";\`);        }</script>`}
+            <script>
+              {`function copyImportStatement() {          navigator.clipboard.writeText(\`import { fn } from "https://example.com/mod.ts";\`);        }`}
+            </script>
           </div>
           <div class="tw-1nkr705">
             <div>
@@ -200,7 +208,13 @@ Deno.test({
         <h2 class="tw-17gss7d">Usage</h2>
         <div class="tw-1esk77l">
           <pre>
-            {`<button class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow" type="button" onclick="copyImportStatement()">Copy</button>`}
+            <button
+              class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"
+              type="button"
+              onclick="copyImportStatement()"
+            >
+              Copy
+            </button>
             <code>
               <span class="code-keyword">import</span> *{" "}
               <span class="code-keyword">as</span> examplePackage{" "}
@@ -211,7 +225,9 @@ Deno.test({
             </code>
           </pre>
         </div>
-        {`<script>function copyImportStatement() {          navigator.clipboard.writeText(\`import * as examplePackage from "https://deno.land/x/example_package/mod.ts";\`);        }</script>`}
+        <script>
+          {`function copyImportStatement() {          navigator.clipboard.writeText(\`import * as examplePackage from "https://deno.land/x/example_package/mod.ts";\`);        }`}
+        </script>
       </div>
     );
     const actual = renderSSR(
@@ -230,7 +246,13 @@ Deno.test({
       <div>
         <div class="tw-1esk77l">
           <pre>
-            {`<button class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow" type="button" onclick="copyImportStatement()">Copy</button>`}
+            <button
+              class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"
+              type="button"
+              onclick="copyImportStatement()"
+            >
+              Copy
+            </button>
             <code>
               <span class="code-keyword">import</span> &#123; a &#125;{" "}
               <span class="code-keyword">from</span>{" "}
@@ -240,7 +262,9 @@ Deno.test({
             </code>
           </pre>
         </div>
-        {`<script>function copyImportStatement() {          navigator.clipboard.writeText(\`import { a } from "https://deno.land/x/example_package/mod.ts";\`);        }</script>`}
+        <script>
+          {`function copyImportStatement() {          navigator.clipboard.writeText(\`import { a } from "https://deno.land/x/example_package/mod.ts";\`);        }`}
+        </script>
       </div>
     );
     const actual = renderSSR(
@@ -259,7 +283,13 @@ Deno.test({
       <div>
         <div class="tw-1esk77l">
           <pre>
-            {`<button class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow" type="button" onclick="copyImportStatement()">Copy</button>`}
+            <button
+              class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"
+              type="button"
+              onclick="copyImportStatement()"
+            >
+              Copy
+            </button>
             <code>
               <span class="code-keyword">import</span>{" "}
               <span class="code-keyword">type{" "}</span>&#123; A &#125;{" "}
@@ -270,7 +300,9 @@ Deno.test({
             </code>
           </pre>
         </div>
-        {`<script>function copyImportStatement() {          navigator.clipboard.writeText(\`import type { A } from "https://deno.land/x/example_package/mod.ts";\`);        }</script>`}
+        <script>
+          {`function copyImportStatement() {          navigator.clipboard.writeText(\`import type { A } from "https://deno.land/x/example_package/mod.ts";\`);        }`}
+        </script>
       </div>
     );
     const actual = renderSSR(
@@ -289,7 +321,13 @@ Deno.test({
       <div>
         <div class="tw-1esk77l">
           <pre>
-            {`<button class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow" type="button" onclick="copyImportStatement()">Copy</button>`}
+            <button
+              class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"
+              type="button"
+              onclick="copyImportStatement()"
+            >
+              Copy
+            </button>
             <code>
               <span class="code-keyword">import</span> &#123; a &#125;{" "}
               <span class="code-keyword">from</span>{" "}
@@ -300,7 +338,9 @@ Deno.test({
             </code>
           </pre>
         </div>
-        {`<script>function copyImportStatement() {          navigator.clipboard.writeText(\`import { a } from "https://deno.land/x/example_package/mod.ts";const { b } = a;\`);        }</script>`}
+        <script>
+          {`function copyImportStatement() {          navigator.clipboard.writeText(\`import { a } from "https://deno.land/x/example_package/mod.ts";const { b } = a;\`);        }`}
+        </script>
       </div>
     );
     const actual = renderSSR(
@@ -319,7 +359,13 @@ Deno.test({
       <div>
         <div class="tw-1esk77l">
           <pre>
-            {`<button class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow" type="button" onclick="copyImportStatement()">Copy</button>`}
+            <button
+              class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"
+              type="button"
+              onclick="copyImportStatement()"
+            >
+              Copy
+            </button>
             <code>
               <span class="code-keyword">import</span> &#123; a &#125;{" "}
               <span class="code-keyword">from</span>{" "}
@@ -330,7 +376,9 @@ Deno.test({
             </code>
           </pre>
         </div>
-        {`<script>function copyImportStatement() {          navigator.clipboard.writeText(\`import { a } from "https://deno.land/x/example_package/mod.ts";const { c } = a.b;\`);        }</script>`}
+        <script>
+          {`function copyImportStatement() {          navigator.clipboard.writeText(\`import { a } from "https://deno.land/x/example_package/mod.ts";const { c } = a.b;\`);        }`}
+        </script>
       </div>
     );
     const actual = renderSSR(

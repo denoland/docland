@@ -8,8 +8,16 @@
       "dom.asynciterable"
     ]
   },
+  "fmt": {
+    "files": {
+      "exclude": [
+        "static"
+      ]
+    }
+  },
   "tasks": {
-    "build": "deno run --import-map import-map.json --allow-read=. --allow-write=./static --allow-net build.ts",
-    "dev": "deno run --allow-read=. --allow-net --allow-env main.ts"
+    "build": "deno run --allow-read=. --allow-write=./static --allow-net build.ts",
+    "dev": "deno run --allow-read=. --allow-net --allow-env --allow-hrtime main.ts",
+    "test": "deno test --allow-read=. --allow-net --allow-env --allow-hrtime"
   }
 }

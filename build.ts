@@ -5,8 +5,21 @@
 // This is the build script for deploy_doc, which generates JSON files in the
 // `/static` directory.
 
-import { default as semver } from "https://cdn.skypack.dev/semver@7.3.5";
+import { default as semver } from "https://esm.sh/semver@7.3.5?pin=v74";
 import { colors, doc } from "./deps.ts";
+
+declare global {
+  // this works around a type issue with semver types that accesses a namespace
+  // that cannot be resolved
+  // deno-lint-ignore no-explicit-any no-var
+  var identifiers: any;
+
+  // this works around an issue where the built in dom lib does not include
+  // AbortSignal.reason, but some of the std libs used by esm.sh reference it.
+  interface AbortSignal {
+    reason: unknown;
+  }
+}
 
 await Deno.permissions.request({ name: "read", path: "." });
 await Deno.permissions.request({ name: "write", path: "./static" });
