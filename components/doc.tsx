@@ -383,7 +383,7 @@ function SideBarHeader({ children }: { children: Child<string> }) {
             <h3 class={tw`text-gray-600 dark:text-gray-400 text-sm mt-2`}>
               Module
             </h3>
-            <p class={tw`truncate`}>{module}</p>
+            <p class={tw`truncate`} innerHTML={{ __dangerousHtml: module }} />
           </div>
         )}
         {version && (
