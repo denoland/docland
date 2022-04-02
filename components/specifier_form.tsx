@@ -11,7 +11,11 @@ function DocLinks({ children }: DocLinksProps) {
   const links = children.map((child) => (
     <li>
       <a class={gtw("link")} href={`/${child}`}>
-        <code>{child.replaceAll(/(\/|\?|\.)/g, "$1&#8203;")}</code>
+        <code
+          innerHTML={{
+            __dangerousHtml: child.replaceAll(/(\/|\?|\.)/g, "$1&#8203;"),
+          }}
+        />
       </a>
     </li>
   ));
@@ -83,7 +87,7 @@ export function SpecifierForm() {
               {"https://deno.land/x/oak/mod.ts"}
               {"https://deno.land/x/redis/mod.ts"}
               {"https://deno.land/x/amqp/mod.ts"}
-              {"https://cdn.skypack.dev/@firebase/firestore?dts"}
+              {"https://esm.sh/@firebase/firestore"}
               {"https://esm.sh/preact"}
               {"https://deno.land/std/archive/tar.ts"}
               {"https://deno.land/std/node/http.ts"}
