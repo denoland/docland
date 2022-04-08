@@ -40,6 +40,11 @@ export function SpecifierForm() {
               Deno CLI APIs (<code>--unstable</code>)
             </a>
           </p>
+          <p>
+            <a href="/https://deno.land/std/" class={gtw("formButton")}>
+              Deno <code>std</code> library
+            </a>
+          </p>
         </div>
         <div class={tw`text-center my-6`}>or view documentation for</div>
         <div>
@@ -83,14 +88,13 @@ export function SpecifierForm() {
           <p>
             Some samples of documentation:
             <DocLinks>
-              {"https://deno.land/std/fs/mod.ts"}
               {"https://deno.land/x/oak/mod.ts"}
+              {"https://deno.land/x/deno_dom/"}
               {"https://deno.land/x/redis/mod.ts"}
               {"https://deno.land/x/amqp/mod.ts"}
               {"https://esm.sh/@firebase/firestore"}
               {"https://esm.sh/preact"}
-              {"https://deno.land/std/archive/tar.ts"}
-              {"https://deno.land/std/node/http.ts"}
+              {"https://deno.land/x/nano_jsx/"}
             </DocLinks>
           </p>
         </div>
