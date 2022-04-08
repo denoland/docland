@@ -451,27 +451,27 @@ export async function getStaticIndex(
   version: string,
 ): Promise<IndexStructure | undefined> {
   const key = `${pkg}_${version}`;
-  if (cachedIndexes.has(key)) {
-    return cachedIndexes.get(key);
+  if (!cachedIndexes.has(key)) {
+    try {
+      const data = await Deno.readFile(
+        new URL(`./static/${key}.json`, import.meta.url),
+      );
+      const index = JSON.parse(decoder.decode(data), (key, value) => {
+        if (
+          typeof value === "object" &&
+          (key === "structure" || key === "entries")
+        ) {
+          return new SerializeMap(Object.entries(value));
+        } else {
+          return value;
+        }
+      }) as IndexStructure;
+      cachedIndexes.set(key, index);
+    } catch {
+      // just swallow errors here
+    }
   }
-  try {
-    const data = await Deno.readFile(
-      new URL(`./static/${key}.json`, import.meta.url),
-    );
-    const index = JSON.parse(decoder.decode(data), (key, value) => {
-      if (
-        typeof value === "object" && (key === "structure" || key === "entries")
-      ) {
-        return new SerializeMap(Object.entries(value));
-      } else {
-        return value;
-      }
-    }) as IndexStructure;
-    cachedIndexes.set(pkg, index);
-    return index;
-  } catch {
-    // just swallow errors here
-  }
+  return cachedIndexes.get(key);
 }
 
 function mergeEntries(entries: DocNode[]) {
