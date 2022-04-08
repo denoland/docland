@@ -36,6 +36,123 @@ function DenoLogo() {
   );
 }
 
+export function IndexCard(
+  { url, description = "" }: { url: string; description?: string },
+) {
+  const lines = wrap(
+    htmlEntities.encode(description).split("\n\n").map((l) =>
+      l.replaceAll("\n", " ")
+    )
+      .join(
+        "\n\n",
+      ),
+  ).split("\n").slice(0, 7);
+  const parsed = parseURL(url);
+  let title;
+  let subtitle;
+  let link;
+  if (parsed) {
+    link = url;
+    title = parsed.module;
+    if (parsed.org) {
+      if (title) {
+        subtitle = `${parsed.org}/${parsed.package}`;
+      } else {
+        title = `${parsed.org}/${parsed.package}`;
+      }
+    } else if (parsed.package) {
+      if (title) {
+        subtitle = parsed.package;
+      } else {
+        title = parsed.package;
+      }
+    } else if (parsed.registry === "deno.land/std") {
+      subtitle = "std";
+    }
+  } else {
+    [title, subtitle] = getLibWithVersion(url);
+  }
+  return (
+    <svg
+      width="1200px"
+      height="630px"
+      viewBox="0 0 1200 630"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <title>module card</title>
+      <g
+        id="module-card"
+        stroke="none"
+        stroke-width="1"
+        fill="none"
+        fill-rule="evenodd"
+      >
+        <rect fill="#FFFFFF" x="0" y="0" width="1200" height="630"></rect>
+        <DenoLogo />
+        <text
+          id="title"
+          font-family="Inter-Bold, Inter, sans-serif"
+          font-size="88"
+          font-weight="bold"
+          fill="#111827"
+        >
+          <tspan x="60" y="131">{title}</tspan>
+        </text>
+        <text
+          id="subtitle"
+          font-family="Inter-Bold, Inter, sans-serif"
+          font-size="68"
+          font-weight="bold"
+          fill="#111827"
+        >
+          <tspan x="60" y="197">{subtitle}</tspan>
+        </text>
+        <text
+          id="https://deno.land/x/"
+          font-family="Inter-Regular, Inter, sans-serif"
+          font-size="48"
+          font-weight="normal"
+          fill="#111827"
+        >
+          <tspan x="60" y="260">{link}</tspan>
+        </text>
+        {description.length
+          ? (
+            <line
+              x1="59.5"
+              y1="291.5"
+              x2="1149.5"
+              y2="291.5"
+              id="Line"
+              stroke="#111827"
+              stroke-width="5"
+              stroke-linecap="square"
+            >
+            </line>
+          )
+          : undefined}
+        <text
+          id="module_description"
+          fill-rule="nonzero"
+          font-family="JetBrains Mono, monospace"
+          font-size="32"
+          font-weight="normal"
+          fill="#111827"
+        >
+          <tspan x="60" y="346">{lines[0]}</tspan>
+          <tspan x="60" y="385">{lines[1]}</tspan>
+          <tspan x="60" y="424">{lines[2]}</tspan>
+          <tspan x="60" y="463">{lines[3]}</tspan>
+          <tspan x="60" y="502">{lines[4]}</tspan>
+          <tspan x="60" y="541">{lines[5]}</tspan>
+          <tspan x="60" y="580">{lines[6]}</tspan>
+        </text>
+      </g>
+    </svg>
+  );
+}
+
 export function ModuleCard({ url, doc }: { url: string; doc: string }) {
   const lines = wrap(
     htmlEntities.encode(removeMarkdown(doc)).split("\n\n").map((l) =>

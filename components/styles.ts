@@ -110,7 +110,7 @@ const baseStyles = {
   insideButton: apply
     `transition inline-block focus-visible:ring-2 focus-visible:ring-black focus:outline-none py-2.5 px-6 text-base text-gray(600 dark:200) font-medium rounded-lg hover:shadow-lg bg-cyan(100 dark:700)`,
   leftNav: apply
-    `p-6 bg-gray-100 border-b border-gray-300 sm:py-12 lg:(bg-transparent border-b-0 border-r border-gray-200) dark:(bg-gray-900 border-gray-800 lg:border-gray-700)`,
+    `p-6 bg-gray-100 border-b border-gray-300 sm:py-12 lg:(bg-transparent border(b-0 r gray(200 dark:800))) dark:(bg-gray-900 lg:border-gray-700)`,
   link: apply`hover:text-blue(800 dark:300)`,
   list: apply`ml-4 list-none space-y-2.5 lg:(list-disc list-inside space-y-0)`,
   main: apply`max-w-screen-sm mx-auto mt-10 px-4 sm:px-6 md:(px-8 mt-20)`,
@@ -118,6 +118,12 @@ const baseStyles = {
   mainHeader: apply`text-3xl font-bold lg:text-5xl`,
   markdown: apply
     `ml-4 mr-2 py-2 text-sm text-justify ${smallCode} ${markdownStyles} ${markdownSmallStyles} ${syntaxHighlighting}`,
+  markdownSummary: apply`text-gray(600 dark:400) ${
+    css({
+      "p": apply`inline-block`,
+      "a": apply`text-blue(700 dark:400) hover:underline`,
+    })
+  }`,
   numberLiteral: none,
   nodeClass: apply`text-green(800 dark:400) mx-2 font-bold truncate`,
   nodeEnum: apply`text-green(700 dark:500) mx-2 font-bold truncate`,
@@ -126,7 +132,7 @@ const baseStyles = {
   nodeTypeAlias: apply`text-yellow(700 dark:500) mx-2 font-bold truncate`,
   nodeVariable: apply`text-blue(700 dark:500) mx-2 font-bold truncate`,
   nodeNamespace: apply`text-yellow(800 dark:400) mx-2 font-bold truncate`,
-  section: apply`text-2xl border-b border-gray(400 dark:600) p-2 mt-1 mb-3`,
+  section: apply`text-2xl border(b gray(400 dark:600)) p-2 mt-1 mb-3`,
   subSection: apply`text-xl p-2 mx-2.5 mt-1 mb-2.5`,
   stringLiteral: none,
   tag: apply

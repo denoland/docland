@@ -96,7 +96,7 @@ Deno.test({
           <meta property="og:type" content="article" />
           <meta name="description" content="" />
         </Helmet>
-        <nav class="tw-19rse9f">
+        <nav class="tw-1rrmr5m">
           <div>
             <h2 class="text-gray-900 dark:text-gray-50 text-xl lg:text-2xl font-bold">
               <a

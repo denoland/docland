@@ -1,253 +1,142 @@
-// Copyright 2021 the Deno authors. All rights reserved. MIT license.
+// Copyright 2021-2022 the Deno authors. All rights reserved. MIT license.
 /** @jsx h */
 import { App } from "../components/app.tsx";
-import { ModuleCard, SymbolCard } from "../components/img.tsx";
+import { IndexCard, ModuleCard, SymbolCard } from "../components/img.tsx";
+import { IndexPage } from "../components/indexPage.tsx";
 import { DocPage } from "../components/doc.tsx";
 import {
-  colors,
-  doc,
+  type DocNodeNamespace,
   getStyleTag,
   h,
   Helmet,
   render,
   renderSSR,
+  type RouterContext,
+  type RouterMiddleware,
   Status,
 } from "../deps.ts";
-import type {
-  DocNode,
-  DocNodeInterface,
-  DocNodeNamespace,
-  LoadResponse,
-  RouterContext,
-} from "../deps.ts";
+import {
+  checkRedirect,
+  getEntries,
+  getIndexStructure,
+  getLatest,
+  getPackageDescription,
+  getStaticIndex,
+  maybeCacheStatic,
+} from "../docs.ts";
 import { sheet, store } from "../shared.ts";
-import { assert, getBody } from "../util.ts";
+import { getBody } from "../util.ts";
 
-const MAX_CACHE_SIZE = parseInt(Deno.env.get("MAX_CACHE_SIZE") ?? "", 10) ||
-  25_000_000;
-const cachedSpecifiers = new Set<string>();
-const cachedResources = new Map<string, LoadResponse>();
-const cachedEntries = new Map<string, DocNode[]>();
-let cacheSize = 0;
+type DocRoutes =
+  | "/:proto(http:/|https:/)/:host/:path*/~/:item+"
+  | "/:proto(http:/|https:/)/:host/:path*"
+  | "/:proto(deno)/:host"
+  | "/:proto(deno)/:host/~/:item+";
 
-console.log(`${colors.yellow("MAX_CACHE_SIZE")}: ${MAX_CACHE_SIZE}`);
+type ImgRoutes =
+  | "/img/:proto(http:/|https:/)/:host/:path*/~/:item+"
+  | "/img/:proto(http:/|https:/)/:host/:path*"
+  | "/img/:proto(deno)/:host"
+  | "/img/:proto(deno)/:host/~/:item+";
 
-function checkCache() {
-  if (cacheSize > MAX_CACHE_SIZE) {
-    const toEvict: string[] = [];
-    for (const specifier of cachedSpecifiers) {
-      const loadResponse = cachedResources.get(specifier);
-      assert(loadResponse);
-      assert(loadResponse.kind === "module");
-      toEvict.push(specifier);
-      cacheSize -= loadResponse.content.length;
-      if (cacheSize <= MAX_CACHE_SIZE) {
-        break;
+const RE_STD = /^std(?:@?([^/]+))?/;
+const RE_X_PKG = /^x\/([a-zA-Z_]{3,})(?:@?([^/]+))?/;
+
+function isPackageHost(host: string): boolean {
+  return host.toLowerCase() === "deno.land";
+}
+
+export const packageGetHead: RouterMiddleware<DocRoutes> = async (
+  ctx,
+  next,
+) => {
+  let { proto, host, item, path } = ctx.params;
+  let { search } = ctx.request.url;
+  if (search.includes("/~/")) {
+    [search, item] = search.split("/~/");
+  }
+  if (!isPackageHost(host) || item || !path) {
+    // it can't be an index of a package, just processes other middleware
+    return next();
+  }
+  const url = `${proto}/${host}/${path ?? ""}${search}`;
+  let pkg;
+  let version;
+  const maybeMatchStd = path.match(RE_STD);
+  const maybeMatchX = path.match(RE_X_PKG);
+  if (maybeMatchStd) {
+    pkg = "std";
+    [, version] = maybeMatchStd;
+    path = path.slice(maybeMatchStd[0].length);
+    if (!version) {
+      const latest = await getLatest(pkg);
+      if (!latest) {
+        return next();
       }
+      return ctx.response.redirect(
+        `/${proto}/${host}/std@${latest}${path}${search}`,
+      );
     }
-    console.log(
-      ` ${colors.yellow("evicting")}: ${
-        colors.bold(`${toEvict.length} specifiers`)
-      } from cache`,
+  } else if (maybeMatchX) {
+    [, pkg, version] = maybeMatchX;
+    path = path.slice(maybeMatchX[0].length);
+    if (!version) {
+      const latest = await getLatest(pkg);
+      if (!latest) {
+        return next();
+      }
+      return ctx.response.redirect(
+        `/${proto}/${host}/x/${pkg}@${latest}${path}${search}`,
+      );
+    }
+  }
+  if (!pkg || !version) {
+    // it is a badly formed URL, which will be caught in other middleware
+    return next();
+  }
+  path = path || "/";
+
+  const indexStructure = pkg === "std"
+    ? await getStaticIndex("std", version)
+    : await getIndexStructure(
+      proto,
+      host,
+      pkg,
+      version,
+      path,
     );
-    for (const evict of toEvict) {
-      cachedResources.delete(evict);
-      cachedSpecifiers.delete(evict);
-      cachedEntries.delete(evict);
-    }
-  }
-}
-
-let lastLoad = Date.now();
-
-async function checkRedirect(specifier: string): Promise<string | undefined> {
-  if (!specifier.startsWith("http")) {
-    return undefined;
-  }
-  const cached = cachedResources.get(specifier);
-  let finalSpecifier = specifier;
-  if (cached) {
-    finalSpecifier = cached.specifier;
+  if (indexStructure && !indexStructure.entries.has(path)) {
+    sheet.reset();
+    const base = pkg === "std"
+      ? `/${proto}/${host}/std@${version}`
+      : `/${proto}/${host}/x/${pkg}@${version}`;
+    const description = await getPackageDescription(pkg);
+    const page = renderSSR(
+      <App>
+        <IndexPage
+          requestUrl={ctx.request.url}
+          url={url}
+          base={base}
+          path={path}
+          description={description}
+        >
+          {indexStructure}
+        </IndexPage>
+      </App>,
+    );
+    ctx.response.body = getBody(
+      Helmet.SSR(page),
+      getStyleTag(sheet),
+    );
+    ctx.response.type = "html";
   } else {
-    try {
-      const res = await fetch(specifier, { redirect: "follow" });
-      if (res.status !== 200) {
-        // ensure that resournces are not leaked
-        await res.arrayBuffer();
-      }
-      const content = await res.text();
-      const xTypeScriptTypes = res.headers.get("x-typescript-types");
-      const headers: Record<string, string> = {};
-      for (const [key, value] of res.headers) {
-        headers[key.toLowerCase()] = value;
-      }
-      cachedResources.set(specifier, {
-        specifier: res.url,
-        kind: "module",
-        headers,
-        content,
-      });
-      cachedSpecifiers.add(specifier);
-      cacheSize += content.length;
-      queueMicrotask(checkCache);
-      lastLoad = Date.now();
-      finalSpecifier = xTypeScriptTypes
-        ? new URL(xTypeScriptTypes, res.url).toString()
-        : res.url;
-    } catch {
-      // just swallow errors
-    }
+    return next();
   }
-  return specifier === finalSpecifier ? undefined : finalSpecifier;
-}
+};
 
-async function load(
-  specifier: string,
-): Promise<LoadResponse | undefined> {
-  const url = new URL(specifier);
-  try {
-    switch (url.protocol) {
-      case "file:": {
-        console.error(`local specifier requested: ${specifier}`);
-        return undefined;
-      }
-      case "http:":
-      case "https:": {
-        if (cachedResources.has(specifier)) {
-          cachedSpecifiers.delete(specifier);
-          cachedSpecifiers.add(specifier);
-          return cachedResources.get(specifier);
-        }
-        const response = await fetch(String(url), { redirect: "follow" });
-        if (response.status !== 200) {
-          // ensure that resources are not leaked
-          await response.arrayBuffer();
-          return undefined;
-        }
-        const content = await response.text();
-        const headers: Record<string, string> = {};
-        for (const [key, value] of response.headers) {
-          headers[key.toLowerCase()] = value;
-        }
-        const loadResponse: LoadResponse = {
-          kind: "module",
-          specifier: response.url,
-          headers,
-          content,
-        };
-        cachedResources.set(specifier, loadResponse);
-        cachedSpecifiers.add(specifier);
-        cacheSize += content.length;
-        queueMicrotask(checkCache);
-        lastLoad = Date.now();
-        return loadResponse;
-      }
-      default:
-        return undefined;
-    }
-  } catch {
-    return undefined;
-  }
-}
-
-function mergeEntries(entries: DocNode[]) {
-  const merged: DocNode[] = [];
-  const namespaces = new Map<string, DocNodeNamespace>();
-  const interfaces = new Map<string, DocNodeInterface>();
-  for (const node of entries) {
-    if (node.kind === "namespace") {
-      const namespace = namespaces.get(node.name);
-      if (namespace) {
-        namespace.namespaceDef.elements.push(...node.namespaceDef.elements);
-        if (!namespace.jsDoc) {
-          namespace.jsDoc = node.jsDoc;
-        }
-      } else {
-        namespaces.set(node.name, node);
-        merged.push(node);
-      }
-    } else if (node.kind === "interface") {
-      const int = interfaces.get(node.name);
-      if (int) {
-        int.interfaceDef.callSignatures.push(
-          ...node.interfaceDef.callSignatures,
-        );
-        int.interfaceDef.indexSignatures.push(
-          ...node.interfaceDef.indexSignatures,
-        );
-        int.interfaceDef.methods.push(...node.interfaceDef.methods);
-        int.interfaceDef.properties.push(...node.interfaceDef.properties);
-        if (!int.jsDoc) {
-          int.jsDoc = node.jsDoc;
-        }
-      } else {
-        interfaces.set(node.name, node);
-        merged.push(node);
-      }
-    } else {
-      merged.push(node);
-    }
-  }
-  return merged;
-}
-
-async function getEntries<R extends string>(
+export const pathGetHead = async <R extends DocRoutes>(
   ctx: RouterContext<R>,
-  url: string,
-): Promise<DocNode[]> {
-  let entries = cachedEntries.get(url);
-  if (!entries) {
-    try {
-      const start = Date.now();
-      entries = await doc(url, { load });
-      const end = Date.now();
-      console.log(
-        ` ${colors.yellow("graph time")}: ${
-          colors.bold(`${lastLoad - start}ms`)
-        }`,
-      );
-      console.log(
-        ` ${colors.yellow("doc time")}: ${colors.bold(`${end - lastLoad}ms`)}`,
-      );
-      entries = mergeEntries(entries);
-      cachedEntries.set(url, entries);
-    } catch (e) {
-      if (e instanceof Error) {
-        if (e.message.includes("Unable to load specifier")) {
-          ctx.throw(Status.NotFound, `The module "${url}" cannot be found.`);
-        } else {
-          ctx.throw(Status.BadRequest, `Bad request: ${e.message}`);
-        }
-      } else {
-        ctx.throw(Status.InternalServerError, "Unexpected object.");
-      }
-    }
-  }
-  return entries;
-}
-
-const decoder = new TextDecoder();
-
-async function maybeCacheStatic(url: string, host: string) {
-  if (url.startsWith("deno") && !cachedEntries.has(url)) {
-    try {
-      const [lib, version] = host.split("@");
-      const data = await Deno.readFile(
-        new URL(
-          `../static/${lib}${version ? `_${version}` : ""}.json`,
-          import.meta.url,
-        ),
-      );
-      const entries = mergeEntries(JSON.parse(decoder.decode(data)));
-      cachedEntries.set(url, entries);
-    } catch (e) {
-      console.log("error fetchin static");
-      console.log(e);
-    }
-  }
-}
-
-export const pathGetHead = async <R extends string>(ctx: RouterContext<R>) => {
+) => {
   let { proto, host, item, path } = ctx.params;
   let { search } = ctx.request.url;
   if (search.includes("/~/")) {
@@ -262,7 +151,7 @@ export const pathGetHead = async <R extends string>(ctx: RouterContext<R>) => {
     );
   }
   await maybeCacheStatic(url, host);
-  const entries = await getEntries(ctx, url);
+  const entries = await getEntries(url);
   store.setState({ entries, url, includePrivate: proto === "deno" });
   sheet.reset();
   const page = renderSSR(
@@ -297,7 +186,7 @@ export const imgGet = async <R extends string>(ctx: RouterContext<R>) => {
   ctx.assert(proto && host, Status.BadRequest, "Malformed documentation URL");
   const url = `${proto}/${host}/${path ?? ""}${search}`;
   await maybeCacheStatic(url, host);
-  let entries = await getEntries(ctx, url);
+  let entries = await getEntries(url);
   if (item) {
     const path = item.split(".");
     const name = path.pop()!;
@@ -332,5 +221,74 @@ export const imgGet = async <R extends string>(ctx: RouterContext<R>) => {
     const img = renderSSR(<ModuleCard url={url} doc={jsDoc?.doc ?? ""} />);
     ctx.response.body = render(`<?xml version="1.0" encoding="UTF-8"?>${img}`);
     ctx.response.type = "png";
+  }
+};
+
+export const imgPackageGet: RouterMiddleware<ImgRoutes> = async (
+  ctx,
+  next,
+) => {
+  let { proto, host, item, path } = ctx.params;
+  let { search } = ctx.request.url;
+  if (search.includes("/~/")) {
+    [search, item] = search.split("/~/");
+  }
+  if (!isPackageHost(host) || item || !path) {
+    // it can't be an index of a package, just processes other middleware
+    return next();
+  }
+  const url = `${proto}/${host}/${path ?? ""}${search}`;
+  let pkg;
+  let version;
+  const maybeMatchStd = path.match(RE_STD);
+  const maybeMatchX = path.match(RE_X_PKG);
+  if (maybeMatchStd) {
+    pkg = "std";
+    [, version] = maybeMatchStd;
+    path = path.slice(maybeMatchStd[0].length);
+    if (!version) {
+      const latest = await getLatest(pkg);
+      if (!latest) {
+        return next();
+      }
+      return ctx.response.redirect(
+        `/${proto}/${host}/std@${latest}${path}${search}`,
+      );
+    }
+  } else if (maybeMatchX) {
+    [, pkg, version] = maybeMatchX;
+    path = path.slice(maybeMatchX[0].length);
+    if (!version) {
+      const latest = await getLatest(pkg);
+      if (!latest) {
+        return next();
+      }
+      return ctx.response.redirect(
+        `/${proto}/${host}/x/${pkg}@${latest}${path}${search}`,
+      );
+    }
+  }
+  if (!pkg || !version) {
+    // it is a badly formed URL, which will be caught in other middleware
+    return next();
+  }
+  path = path || "/";
+
+  const indexStructure = pkg === "std"
+    ? await getStaticIndex("std", version)
+    : await getIndexStructure(
+      proto,
+      host,
+      pkg,
+      version,
+      path,
+    );
+  if (indexStructure && !indexStructure.entries.has(path)) {
+    const description = await getPackageDescription(pkg);
+    const img = renderSSR(<IndexCard url={url} description={description} />);
+    ctx.response.body = render(`<?xml version="1.0" encoding="UTF-8"?>${img}`);
+    ctx.response.type = "png";
+  } else {
+    return next();
   }
 };

@@ -18,7 +18,8 @@ import type {
 import { take } from "../util.ts";
 import type { Child } from "../util.ts";
 import { Anchor, DocWithLink, SubSectionTitle } from "./common.tsx";
-import { getParamDoc, Markdown, Tag } from "./jsdoc.tsx";
+import { getParamDoc, Tag } from "./jsdoc.tsx";
+import { MarkdownBlock } from "./markdown.tsx";
 import { gtw, largeMarkdownStyles } from "./styles.ts";
 import { TypeDef } from "./types.tsx";
 
@@ -236,7 +237,9 @@ export function ParamsSubDoc(
             <Param inline>{param}</Param>
             {isOptional(param) ? <Tag color="cyan">optional</Tag> : undefined}
           </DocWithLink>
-          {doc && <Markdown style={largeMarkdownStyles}>{doc}</Markdown>}
+          {doc && (
+            <MarkdownBlock style={largeMarkdownStyles}>{doc}</MarkdownBlock>
+          )}
         </div>
       </div>
     );
