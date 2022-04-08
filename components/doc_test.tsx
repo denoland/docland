@@ -113,13 +113,12 @@ Deno.test({
           <div>
             <div class="tw-1esk77l">
               <pre>
-                <button
-                  class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"
-                  type="button"
-                  onclick="copyImportStatement()"
-                >
-                  Copy
-                </button>
+                <span
+                  innerHTML={{
+                    __dangerousHtml:
+                      `<button                class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"                type="button" onclick="copyImportStatement()">Copy</button>`,
+                  }}
+                />
                 <code>
                   <span class="code-keyword">import</span> &#123; fn &#125;{" "}
                   <span class="code-keyword">from</span>{" "}
@@ -208,13 +207,12 @@ Deno.test({
         <h2 class="tw-17gss7d">Usage</h2>
         <div class="tw-1esk77l">
           <pre>
-            <button
-              class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"
-              type="button"
-              onclick="copyImportStatement()"
-            >
-              Copy
-            </button>
+            <span
+              innerHTML={{
+                __dangerousHtml:
+                  `<button                class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"                type="button" onclick="copyImportStatement()">Copy</button>`,
+              }}
+            />
             <code>
               <span class="code-keyword">import</span> *{" "}
               <span class="code-keyword">as</span> examplePackage{" "}
@@ -246,13 +244,12 @@ Deno.test({
       <div>
         <div class="tw-1esk77l">
           <pre>
-            <button
-              class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"
-              type="button"
-              onclick="copyImportStatement()"
-            >
-              Copy
-            </button>
+            <span
+              innerHTML={{
+                __dangerousHtml:
+                  `<button                class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"                type="button" onclick="copyImportStatement()">Copy</button>`,
+              }}
+            />
             <code>
               <span class="code-keyword">import</span> &#123; a &#125;{" "}
               <span class="code-keyword">from</span>{" "}
@@ -283,13 +280,12 @@ Deno.test({
       <div>
         <div class="tw-1esk77l">
           <pre>
-            <button
-              class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"
-              type="button"
-              onclick="copyImportStatement()"
-            >
-              Copy
-            </button>
+            <span
+              innerHTML={{
+                __dangerousHtml:
+                  `<button                class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"                type="button" onclick="copyImportStatement()">Copy</button>`,
+              }}
+            />
             <code>
               <span class="code-keyword">import</span>{" "}
               <span class="code-keyword">type{" "}</span>&#123; A &#125;{" "}
@@ -321,13 +317,12 @@ Deno.test({
       <div>
         <div class="tw-1esk77l">
           <pre>
-            <button
-              class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"
-              type="button"
-              onclick="copyImportStatement()"
-            >
-              Copy
-            </button>
+            <span
+              innerHTML={{
+                __dangerousHtml:
+                  `<button                class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"                type="button" onclick="copyImportStatement()">Copy</button>`,
+              }}
+            />
             <code>
               <span class="code-keyword">import</span> &#123; a &#125;{" "}
               <span class="code-keyword">from</span>{" "}
@@ -359,13 +354,12 @@ Deno.test({
       <div>
         <div class="tw-1esk77l">
           <pre>
-            <button
-              class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"
-              type="button"
-              onclick="copyImportStatement()"
-            >
-              Copy
-            </button>
+            <span
+              innerHTML={{
+                __dangerousHtml:
+                  `<button                class="float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-500 rounded hover:shadow"                type="button" onclick="copyImportStatement()">Copy</button>`,
+              }}
+            />
             <code>
               <span class="code-keyword">import</span> &#123; a &#125;{" "}
               <span class="code-keyword">from</span>{" "}

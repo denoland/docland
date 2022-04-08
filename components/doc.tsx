@@ -508,14 +508,15 @@ export function Usage(
       {item ? undefined : <h2 class={gtw("section")}>Usage</h2>}
       <div class={gtw("markdown", largeMarkdownStyles)}>
         <pre>
-          <button
-            class={tw
-              `float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray(500 dark:300) border border-gray(300 dark:500) rounded hover:shadow`}
-            type="button"
-            onclick="copyImportStatement()"
+          <span
+            innerHTML={{
+              __dangerousHtml: `<button
+                class="${tw
+                `float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray(500 dark:300) border border-gray(300 dark:500) rounded hover:shadow`}"
+                type="button" onclick="copyImportStatement()">Copy</button>`,
+            }}
           >
-            Copy
-          </button>
+          </span>
           <code>
             <span class="code-keyword">import</span> {item
               ? (
