@@ -452,8 +452,9 @@ function TypeDefPredicate({ children }: TypeDefProps<TsTypeTypePredicateDef>) {
       {asserts
         ? <span class={gtw("keyword", so)}>asserts{" "}</span>
         : undefined}
-      {param.type === "this" ? <span class={gtw("typeKeyword", so)}>this</span>
-      : param.name}
+      {param.type === "this"
+        ? <span class={gtw("typeKeyword", so)}>this</span>
+        : param.name}
       {type && (
         <span>
           {" is "}

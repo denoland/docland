@@ -340,7 +340,8 @@ function ClassMethod(
         : undefined}
       <span
         class={kind === "method" && !name.startsWith("[")
-          ? gtw("classMethod", so) : undefined}
+          ? gtw("classMethod", so)
+          : undefined}
       >
         {name}
       </span>

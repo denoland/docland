@@ -229,8 +229,9 @@ function Methods({ children }: { children: Child<InterfaceMethodDef[]> }) {
         : kind === "setter"
         ? <span class={gtw("keyword", so)}>set{" "}</span>
         : undefined}
-      {name === "new" ? <span class={gtw("keyword", so)}>{name}{" "}</span>
-      : computed
+      {name === "new"
+        ? <span class={gtw("keyword", so)}>{name}{" "}</span>
+        : computed
         ? `[${name}]`
         : name}
       {optional ? "?" : undefined}
