@@ -66,7 +66,7 @@ const S3_BUCKET =
   "http://deno-registry2-prod-storagebucket-b3a31d16.s3-website-us-east-1.amazonaws.com/";
 const DENO_API = "https://api.deno.land/modules/";
 
-class SerializeMap<V> extends Map<string, V> {
+export class SerializeMap<V> extends Map<string, V> {
   toJSON(): Record<string, V> {
     return Object.fromEntries(this.entries());
   }
