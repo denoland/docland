@@ -1,6 +1,6 @@
 // Copyright 2022 the Deno authors. All rights reserved. MIT license.
 /** @jsx h */
-import { comrak, h } from "../deps.ts";
+import { comrak, type DocNode, h } from "../deps.ts";
 import { store, type StoreState } from "../shared.ts";
 import { type Child, take } from "../util.ts";
 import { getLink, syntaxHighlight } from "./common.tsx";
@@ -22,6 +22,14 @@ const MARKDOWN_OPTIONS: comrak.ComrakOptions = {
     tagfilter: true,
   },
 };
+
+/** Give a doc node, get only the first paragraph of the JSDoc. */
+export function getDocSummary(docNode: DocNode) {
+  if (docNode.jsDoc?.doc) {
+    const [summary] = docNode.jsDoc.doc.split("\n\n");
+    return summary;
+  }
+}
 
 /** Determines if the value looks like a relative or absolute path, or is
  * a URI with a protocol. */
