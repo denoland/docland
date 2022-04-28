@@ -2,19 +2,13 @@
 /** @jsx h */
 /** @jsxFrag Fragment */
 
-import {
-  apply,
-  css,
-  type DocNode,
-  type DocNodeKind,
-  Fragment,
-  h,
-  tw,
-} from "../deps.ts";
+import { apply, css, type DocNode, Fragment, h, tw } from "../deps.ts";
 import { type IndexStructure } from "../docs.ts";
 import { store, type StoreState } from "../shared.ts";
 import { type Child, take } from "../util.ts";
-import { MarkdownSummary } from "./markdown.tsx";
+import { isAbstract } from "./common.tsx";
+import { isDeprecated, Tag } from "./jsdoc.tsx";
+import { getDocSummary, MarkdownSummary } from "./markdown.tsx";
 import { IndexMeta } from "./meta.tsx";
 import { SideBarHeader } from "./sidebar.tsx";
 import { gtw } from "./styles.ts";
@@ -23,13 +17,6 @@ const panel = css({
   "& > input:checked ~ table": apply`hidden`,
   "& > input:checked ~ label > img": apply`rotate-0`,
 });
-
-function getDocSummary(docNode: DocNode) {
-  if (docNode.jsDoc?.doc) {
-    const [summary] = docNode.jsDoc.doc.split("\n\n");
-    return summary;
-  }
-}
 
 function getModuleSummary(
   mod: string,
@@ -46,17 +33,17 @@ function getModuleSummary(
 }
 
 function ExportSymbol(
-  { children, base, name, kind }: {
+  { children, base, name, node }: {
     children: Child<string | undefined>;
     base: string;
     name: string;
-    kind: DocNodeKind;
+    node: DocNode;
   },
 ) {
   const summary = take(children);
   const href = `${base}/~/${name}`;
   let linkClass;
-  switch (kind) {
+  switch (node.kind) {
     case "class":
       linkClass = tw`text-green(800 dark:400) font-bold hover:underline`;
       break;
@@ -85,6 +72,10 @@ function ExportSymbol(
     <tr>
       <td class={tw`py-1 px-2 align-top`}>
         <a href={href} class={linkClass}>{name}</a>
+        {isAbstract(node) ? <Tag color="yellow">abstract</Tag> : undefined}
+        {isDeprecated(node.jsDoc)
+          ? <Tag color="gray">deprecated</Tag>
+          : undefined}
       </td>
       <td class={tw`py-1 px-2 align-top`}>
         <MarkdownSummary>{summary}</MarkdownSummary>
@@ -101,7 +92,7 @@ function Mod(
   },
 ) {
   const entries = take(children, true);
-  const nodeMap = new Map<string, { kind: DocNodeKind; summary?: string }>();
+  const nodeMap = new Map<string, { node: DocNode; summary?: string }>();
   let modSummary;
   for (const node of entries) {
     if (node.declarationKind === "export") {
@@ -115,16 +106,16 @@ function Mod(
           }
         } else {
           nodeMap.set(node.name, {
-            kind: node.kind,
+            node,
             summary: getDocSummary(node),
           });
         }
       }
     }
   }
-  const items = Array.from(nodeMap).map(([name, { kind, summary }]) => ({
+  const items = Array.from(nodeMap).map(([name, { node, summary }]) => ({
     name,
-    kind,
+    node,
     summary,
   }));
   items.sort((a, b) => a.name.localeCompare(b.name));
@@ -133,8 +124,8 @@ function Mod(
   state.entries = entries;
   state.url = href.slice(1);
   store.setState(state);
-  const exports = items.map(({ name, kind, summary }) => (
-    <ExportSymbol base={href} name={name} kind={kind}>
+  const exports = items.map(({ name, node, summary }) => (
+    <ExportSymbol base={href} name={name} node={node}>
       {summary}
     </ExportSymbol>
   ));

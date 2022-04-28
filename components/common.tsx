@@ -18,7 +18,8 @@ import { assert, take } from "../util.ts";
 import type { Child } from "../util.ts";
 import { store } from "../shared.ts";
 import type { StoreState } from "../shared.ts";
-import { isDeprecated, JsDoc, Tag } from "./jsdoc.tsx";
+import { isDeprecated, Tag } from "./jsdoc.tsx";
+import { getDocSummary, MarkdownSummary } from "./markdown.tsx";
 import { gtw } from "./styles.ts";
 import type { BaseStyles } from "./styles.ts";
 
@@ -183,16 +184,20 @@ function Entry<Node extends DocNode>(
 ) {
   const [label, node] = take(children);
   return (
-    <li>
-      <h3 class={gtw(style)}>
-        <NodeLink>{label}</NodeLink>
-        {isAbstract(node) ? <Tag color="yellow">abstract</Tag> : undefined}
-        {isDeprecated(node.jsDoc)
-          ? <Tag color="gray">deprecated</Tag>
-          : undefined}
-      </h3>
-      <JsDoc>{node.jsDoc}</JsDoc>
-    </li>
+    <tr>
+      <td class={tw`py-1 px-2 align-top`}>
+        <span class={gtw(style)}>
+          <NodeLink>{label}</NodeLink>
+          {isAbstract(node) ? <Tag color="yellow">abstract</Tag> : undefined}
+          {isDeprecated(node.jsDoc)
+            ? <Tag color="gray">deprecated</Tag>
+            : undefined}
+        </span>
+      </td>
+      <td class={tw`py-1 px-2 align-top`}>
+        <MarkdownSummary>{getDocSummary(node)}</MarkdownSummary>
+      </td>
+    </tr>
   );
 }
 
@@ -233,7 +238,7 @@ export function Section<Node extends DocNode>(
   return (
     <div>
       <SectionTitle>{title}</SectionTitle>
-      <ul>{items}</ul>
+      <table>{items}</table>
     </div>
   );
 }
