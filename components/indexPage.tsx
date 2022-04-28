@@ -83,10 +83,10 @@ function ExportSymbol(
   }
   return (
     <tr>
-      <td class={tw`px-2 align-top`}>
+      <td class={tw`py-1 px-2 align-top`}>
         <a href={href} class={linkClass}>{name}</a>
       </td>
-      <td class={tw`px-2 align-top`}>
+      <td class={tw`py-1 px-2 align-top`}>
         <MarkdownSummary>{summary}</MarkdownSummary>
       </td>
     </tr>
