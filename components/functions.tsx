@@ -9,7 +9,8 @@ import type {
 } from "../deps.ts";
 import { getState, setState, STYLE_OVERRIDE } from "../shared.ts";
 import { Anchor, DocWithLink, SubSectionTitle } from "./common.tsx";
-import { getReturnDoc, JsDoc, Markdown } from "./jsdoc.tsx";
+import { getReturnDoc, JsDoc } from "./jsdoc.tsx";
+import { MarkdownBlock } from "./markdown.tsx";
 import { Params, ParamsSubDoc } from "./params.tsx";
 import { codeBlockStyles, gtw, largeMarkdownStyles } from "./styles.ts";
 import { TypeDef, TypeParams, TypeParamsSubDoc } from "./types.tsx";
@@ -73,7 +74,9 @@ function ReturnTypeSubDoc(
           <DocWithLink location={location}>
             <TypeDef inline>{returnType}</TypeDef>
           </DocWithLink>
-          {doc && <Markdown style={largeMarkdownStyles}>{doc}</Markdown>}
+          {doc && (
+            <MarkdownBlock style={largeMarkdownStyles}>{doc}</MarkdownBlock>
+          )}
         </div>
       </div>
     </div>

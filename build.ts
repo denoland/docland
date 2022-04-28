@@ -5,6 +5,7 @@
 
 import { default as semver } from "https://esm.sh/semver@7.3.5?pin=v74";
 import { colors, doc } from "./deps.ts";
+import { getIndexStructure, getPackageVersions } from "./docs.ts";
 
 await Deno.permissions.request({ name: "read", path: "." });
 await Deno.permissions.request({ name: "write", path: "./static" });
@@ -298,5 +299,41 @@ const domPromises = ["dom", "dom.iterable", "dom.asynciterable"].map((lib) =>
 console.log(`${colors.bold(colors.green("Saving"))} lib dom...`);
 const domDoc = (await Promise.all(domPromises)).flat();
 await Deno.writeTextFile("./static/dom.json", JSON.stringify(domDoc));
+
+console.log(`${colors.bold(colors.green("Documenting"))} std libs...`);
+
+const stdLibVersions = (await getPackageVersions("std"))?.versions.filter(
+  (version) => {
+    try {
+      const stat = Deno.statSync(`./static/std_${version}.json`);
+      return !stat.isFile;
+    } catch {
+      return true;
+    }
+  },
+);
+
+if (stdLibVersions && stdLibVersions.length) {
+  for (const version of stdLibVersions) {
+    console.log(
+      `${colors.bold(colors.green("Indexing"))} std lib ${version}...`,
+    );
+    const indexStructure = await getIndexStructure(
+      "https:/",
+      "deno.land",
+      "std",
+      version,
+    );
+    if (indexStructure) {
+      console.log(
+        `${colors.bold(colors.green("Saving"))} std lib ${version}...`,
+      );
+      await Deno.writeTextFile(
+        `./static/std_${version}.json`,
+        JSON.stringify(indexStructure),
+      );
+    }
+  }
+}
 
 console.log(colors.bold(colors.green("Done.")));

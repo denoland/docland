@@ -9,7 +9,13 @@ import { handleErrors } from "./middleware/errors.tsx";
 import { createFaviconMW } from "./middleware/favicon.ts";
 import { ga } from "./middleware/ga.ts";
 import { logging, timing } from "./middleware/logging.ts";
-import { docGet, imgGet, pathGetHead } from "./routes/doc.tsx";
+import {
+  docGet,
+  imgGet,
+  imgPackageGet,
+  packageGetHead,
+  pathGetHead,
+} from "./routes/doc.tsx";
 import { indexGet } from "./routes/index.tsx";
 import { getRaw } from "./routes/raw.ts";
 
@@ -157,12 +163,26 @@ router.get(
 router.get("/raw/deno/stable/:version", getRaw);
 
 // The main documentation routes
-router.get("/:proto(http:/|https:/)/:host/:path*/~/:item+", pathGetHead);
-router.get("/:proto(http:/|https:/)/:host/:path*", pathGetHead);
+// The first middleware handles known package registries where indexed are
+// provided (currently only `deno.land`) and the second handles everything else
+router.get(
+  "/:proto(http:/|https:/)/:host/:path*/~/:item+",
+  packageGetHead,
+  pathGetHead,
+);
+router.get("/:proto(http:/|https:/)/:host/:path*", packageGetHead, pathGetHead);
 router.get("/:proto(deno)/:host", pathGetHead);
 router.get("/:proto(deno)/:host/~/:item+", pathGetHead);
-router.head("/:proto(http:/|https:/)/:host/:path*/~/:item+", pathGetHead);
-router.head("/:proto(http:/|https:/)/:host/:path*", pathGetHead);
+router.head(
+  "/:proto(http:/|https:/)/:host/:path*/~/:item+",
+  packageGetHead,
+  pathGetHead,
+);
+router.head(
+  "/:proto(http:/|https:/)/:host/:path*",
+  packageGetHead,
+  pathGetHead,
+);
 router.head("/:proto(deno)/:host", pathGetHead);
 router.head("/:proto(deno)/:host/~/:item+", pathGetHead);
 
@@ -170,8 +190,12 @@ router.head("/:proto(deno)/:host/~/:item+", pathGetHead);
 router.get("/doc", docGet);
 
 // "card" image URLs for open graph/twitter
-router.get("/img/:proto(http:/|https:/)/:host/:path*/~/:item+", imgGet);
-router.get("/img/:proto(http:/|https:/)/:host/:path*", imgGet);
+router.get(
+  "/img/:proto(http:/|https:/)/:host/:path*/~/:item+",
+  imgPackageGet,
+  imgGet,
+);
+router.get("/img/:proto(http:/|https:/)/:host/:path*", imgPackageGet, imgGet);
 router.get("/img/:proto(deno)/:host", imgGet);
 router.get("/img/:proto(deno)/:host/~/:item+", imgGet);
 

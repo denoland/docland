@@ -122,6 +122,7 @@ export {
   Application,
   type Context,
   HttpError,
+  httpErrors,
   type Middleware,
   type RouteParams,
   Router,

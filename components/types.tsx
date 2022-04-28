@@ -46,7 +46,8 @@ import {
   SubSectionTitle,
   TocLink,
 } from "./common.tsx";
-import { getTypeParamDoc, Markdown } from "./jsdoc.tsx";
+import { getTypeParamDoc } from "./jsdoc.tsx";
+import { MarkdownBlock } from "./markdown.tsx";
 import { Params } from "./params.tsx";
 import { codeBlockStyles, gtw, largeMarkdownStyles } from "./styles.ts";
 
@@ -869,7 +870,9 @@ export function TypeParamsSubDoc(
           <DocWithLink location={location}>
             <TypeParam>{typeParam}</TypeParam>
           </DocWithLink>
-          {doc && <Markdown style={largeMarkdownStyles}>{doc}</Markdown>}
+          {doc && (
+            <MarkdownBlock style={largeMarkdownStyles}>{doc}</MarkdownBlock>
+          )}
         </div>
       </div>
     );
