@@ -15,15 +15,11 @@ export const handleNotFound: Middleware = async (ctx, next) => {
       const page = renderSSR(
         <App>
           <ErrorBody title="Not Found">
-            The requested URL ({`<code>"${ctx.request.url}"</code>`}) was not
-            found.
+            The requested URL <code>{ctx.request.url.href}</code> was not found.
           </ErrorBody>
         </App>,
       );
-      ctx.response.body = getBody(
-        Helmet.SSR(page),
-        getStyleTag(sheet),
-      );
+      ctx.response.body = getBody(Helmet.SSR(page), getStyleTag(sheet));
     }
   }
 };

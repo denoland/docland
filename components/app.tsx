@@ -32,7 +32,7 @@ function Footer() {
   return (
     <footer
       class={tw
-        `mt-20 max-w-screen-xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8`}
+        `sticky top-full mt-20 max-w-screen-xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8`}
     >
       <nav class={tw`-mx-5 -my-2 flex flex-wrap justify-center`}>
         <FooterLink href="https://deno.land/manual">Manual</FooterLink>
@@ -165,9 +165,7 @@ function Logo() {
   );
 }
 
-const NavLink = (
-  { children, href }: { children?: unknown; href: string },
-) => (
+const NavLink = ({ children, href }: { children?: unknown; href: string }) => (
   <a
     class={tw
       `block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:(text-gray-900 bg-gray-50) focus:(outline-none text-gray-900 bg-gray-50) md:(inline-block font-medium text-gray-500) dark:(text-gray-200 hover:(text-gray-50 bg-gray-900) focus:(text-gray-50 bg-gray-900) md:(text-gray-400))`}
@@ -177,9 +175,13 @@ const NavLink = (
   </a>
 );
 
-const FooterLink = (
-  { children, href }: { children?: unknown; href: string },
-) => (
+const FooterLink = ({
+  children,
+  href,
+}: {
+  children?: unknown;
+  href: string;
+}) => (
   <div class={tw`p-2`}>
     <a
       class={tw
