@@ -22,7 +22,7 @@ function setup(): Promise<string> {
   }
   app.addEventListener("listen", onListen);
 
-  app.listen({ signal: close.signal, port: 5000 });
+  app.listen({ signal: close.signal, port: 5001 });
 
   return start;
 }
@@ -60,7 +60,7 @@ Deno.test({
     // validate that builtin doc nodes get merged properly
     res = await fetch(`${server}deno/stable/~/Deno.connect`);
     assertEquals(res.status, 200);
-    const text = await res.text();
+    let text = await res.text();
     assertStringIncludes(text, ">Deno.connect<");
 
     // validate that namespaced type references are resolved
@@ -73,10 +73,16 @@ Deno.test({
     assertEquals(res.status, 200);
     assert(
       res.url.match(
-        /http:\/{2}(0\.){3}0:5000\/https:\/{2}deno\.land\/std@\d+\.\d+\.\d+\/testing\/asserts\.ts/,
+        /http:\/{2}(0\.){3}0:5001\/https:\/{2}deno\.land\/std@\d+\.\d+\.\d+\/testing\/asserts\.ts/,
       ),
     );
     await res.text();
+
+    // valid results for non-index modules
+    res = await fetch(`${server}https://deno.land/std@0.138.0/http/server.ts`);
+    assertEquals(res.status, 200);
+    text = await res.text();
+    assertStringIncludes(text, `Server">Server</a>`);
 
     teardown();
   },
