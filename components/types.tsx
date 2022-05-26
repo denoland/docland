@@ -376,9 +376,12 @@ function TypeDefLiteral({ children }: TypeDefProps<TsTypeDefLiteral>) {
     case "number":
       return <span class={gtw("numberLiteral", so)}>{repr}</span>;
     case "string":
-      return <span class={gtw("stringLiteral", so)}>"{repr}"</span>;
+      return (
+        <span class={gtw("stringLiteral", so)}>{JSON.stringify(repr)}</span>
+      );
     case "template":
       // TODO(@kitsonk) do this properly
+      // TODO(@kitsonk) escape the template string
       return <span class={gtw("stringLiteral", so)}>`{repr}`</span>;
   }
 }
