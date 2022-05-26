@@ -547,7 +547,12 @@ function ConstructorsDoc(
             {accessibility}
           </AccessibilityTag>
         </DocWithLink>
-        <JsDoc style={largeMarkdownStyles}>{jsDoc}</JsDoc>
+        <JsDoc
+          style={largeMarkdownStyles}
+          tags={["param", "template", "deprecated"]}
+        >
+          {jsDoc}
+        </JsDoc>
       </div>
     </div>
   ));
