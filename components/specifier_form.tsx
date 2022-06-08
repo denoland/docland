@@ -93,6 +93,7 @@ export function SpecifierForm() {
               {"https://deno.land/x/redis/mod.ts"}
               {"https://deno.land/x/amqp/mod.ts"}
               {"https://esm.sh/@firebase/firestore"}
+              {"https://esm.sh/@supabase/supabase-js"}
               {"https://esm.sh/preact"}
               {"https://deno.land/x/nano_jsx/"}
             </DocLinks>
