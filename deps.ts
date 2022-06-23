@@ -17,7 +17,7 @@ export {
   doc,
   type DocOptions,
   type LoadResponse,
-} from "https://deno.land/x/deno_doc@v0.33.0/mod.ts";
+} from "https://deno.land/x/deno_doc@v0.36.0/mod.ts";
 export type {
   Accessibility,
   ClassConstructorDef,
