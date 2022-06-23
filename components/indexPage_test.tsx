@@ -1,7 +1,7 @@
 // Copyright 2021-2022 the Deno authors. All rights reserved. MIT license.
 
 /** @jsx h */
-import { type DocNode, h, renderSSR } from "../deps.ts";
+import { type DocNode, h, Helmet, renderSSR } from "../deps.ts";
 import { assertEquals } from "../deps_test.ts";
 import { type IndexStructure, SerializeMap } from "../docs.ts";
 import { sheet } from "../shared.ts";
@@ -43,7 +43,7 @@ Deno.test({
     const indexStructure = getFixtureIndexStructure();
     const Expected = () => (
       <div class="tw-j2pie2">
-        <helmet data-ssr="true" data-placement="head">
+        <Helmet data-ssr="true" data-placement="head">
           <title>deno.land/x/tst/ | Deno Doc</title>
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:site" content="@denoland" />
@@ -70,7 +70,7 @@ Deno.test({
           <meta property="og:description" content="test description" />
           <meta property="og:type" content="article" />
           <meta name="description" content="test description" />
-        </helmet>
+        </Helmet>
         <nav class="tw-1rrmr5m">
           <div>
             <h2 class="text-gray-900 dark:text-gray-50 text-xl lg:text-2xl font-bold">
