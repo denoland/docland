@@ -283,6 +283,9 @@ export function DocWithLink(
       }
       try {
         const url = new URL(filename);
+        if (url.hostname === "deno.land") {
+          url.searchParams.set("codeview", "");
+        }
         url.hash = `L${location.line}`;
         href = url.toString();
       } catch {
