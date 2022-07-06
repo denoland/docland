@@ -162,7 +162,7 @@ export const pathGetHead = async <R extends DocRoutes>(
   }
   await maybeCacheStatic(url, host);
   let importMap;
-  const maybeMatchX = path.match(RE_X_PKG);
+  const maybeMatchX = path?.match(RE_X_PKG);
   if (maybeMatchX) {
     const [, module, version] = maybeMatchX;
     importMap = await getImportMapSpecifier(module, version);
