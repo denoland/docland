@@ -17,7 +17,7 @@ export {
   doc,
   type DocOptions,
   type LoadResponse,
-} from "https://deno.land/x/deno_doc@v0.36.0/mod.ts";
+} from "https://deno.land/x/deno_doc@v0.37.0/mod.ts";
 export type {
   Accessibility,
   ClassConstructorDef,
@@ -89,19 +89,21 @@ export type {
   TsTypeTypePredicateDef,
   TsTypeTypeRefDef,
   TsTypeUnionDef,
-} from "https://deno.land/x/deno_doc@v0.36.0/lib/types.d.ts";
+} from "https://deno.land/x/deno_doc@v0.37.0/lib/types.d.ts";
 
 // Used to report measurements to Google Analytics
 export { createReportMiddleware } from "https://deno.land/x/g_a@0.1.2/mod.ts";
 
 // Used to convert lowlight trees to HTML
-export { toHtml } from "https://esm.sh/hast-util-to-html@8.0.3?pin=v74";
+export { toHtml } from "https://esm.sh/hast-util-to-html@8.0.3?pin=v86";
 
 // Used to sanitize some output, ensuring html entities are encoded.
-export * as htmlEntities from "https://esm.sh/html-entities@2.3.2?pin=v74";
+export * as htmlEntities from "https://esm.sh/html-entities@2.3.2?pin=v86";
+
+export * as JSONC from "https://esm.sh/jsonc-parser@3.0.0?pin=v86";
 
 // Used to do SSR of code block highlighting
-export { lowlight } from "https://esm.sh/lowlight@2.4.1?pin=v74";
+export { lowlight } from "https://esm.sh/lowlight@2.4.1?pin=v86";
 
 // Used when overriding proxies content types when serving up static content
 export { lookup } from "https://deno.land/x/media_types@v2.12.3/mod.ts";
@@ -137,7 +139,7 @@ export {
 export { render } from "https://deno.land/x/resvg_wasm@0.1.0/mod.ts";
 
 // Used to strip markdown when adding to a card image.
-export { default as removeMarkdown } from "https://esm.sh/remove-markdown@v0.3.0?pin=v74";
+export { default as removeMarkdown } from "https://esm.sh/remove-markdown@v0.3.0?pin=v86";
 
 // twind provides server side rendered CSS leveraging tailwind functional
 // classes.
@@ -147,10 +149,10 @@ export {
   type Directive,
   setup,
   tw,
-} from "https://esm.sh/twind@0.16.16?pin=v74";
-export { css } from "https://esm.sh/twind@0.16.16/css?pin=v74";
+} from "https://esm.sh/twind@0.16.16?pin=v86";
+export { css } from "https://esm.sh/twind@0.16.16/css?pin=v86";
 export {
   getStyleTag,
   virtualSheet,
-} from "https://esm.sh/twind@0.16.16/sheets?pin=v74";
-export * as twColors from "https://esm.sh/twind@0.16.16/colors?pin=v74";
+} from "https://esm.sh/twind@0.16.16/sheets?pin=v86";
+export * as twColors from "https://esm.sh/twind@0.16.16/colors?pin=v86";

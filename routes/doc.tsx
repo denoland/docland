@@ -18,6 +18,7 @@ import {
 import {
   checkRedirect,
   getEntries,
+  getImportMapSpecifier,
   getIndexStructure,
   getLatest,
   getPackageDescription,
@@ -160,7 +161,13 @@ export const pathGetHead = async <R extends DocRoutes>(
     );
   }
   await maybeCacheStatic(url, host);
-  const entries = await getEntries(url);
+  let importMap;
+  const maybeMatchX = path.match(RE_X_PKG);
+  if (maybeMatchX) {
+    const [, module, version] = maybeMatchX;
+    importMap = await getImportMapSpecifier(module, version);
+  }
+  const entries = await getEntries(url, importMap);
   store.setState({ entries, url, includePrivate: proto === "deno" });
   sheet.reset();
   const page = renderSSR(
