@@ -7,9 +7,14 @@ import {
   type DocNodeInterface,
   type DocNodeNamespace,
   httpErrors,
+  JSONC,
   type LoadResponse,
 } from "./deps.ts";
 import { assert } from "./util.ts";
+
+interface ConfigFileJson {
+  importMap?: string;
+}
 
 /** An object which represents an "index" of a library/package. */
 export interface IndexStructure {
@@ -167,6 +172,34 @@ function enqueueCheck() {
   }
 }
 
+const CONFIG_FILES = ["deno.jsonc", "deno.json"] as const;
+
+/** Given a module and version, attempt to resolve an import map specifier from
+ * a Deno configuration file. If none can be resolved, `undefined` is
+ * resolved. */
+export async function getImportMapSpecifier(
+  module: string,
+  version: string,
+): Promise<string | undefined> {
+  let result;
+  for (const configFile of CONFIG_FILES) {
+    result = await load(
+      `https://deno.land/x/${module}@${version}/${configFile}`,
+    );
+    if (result) {
+      break;
+    }
+  }
+  if (result?.kind === "module") {
+    const { specifier, content } = result;
+    const configFileJson: ConfigFileJson = JSONC.parse(content);
+    if (typeof configFileJson.importMap === "string") {
+      return new URL(configFileJson.importMap, specifier).toString();
+    }
+    return undefined;
+  }
+}
+
 function getDirs(path: string, packageMeta: PackageMeta) {
   if (path.endsWith("/")) {
     path = path.slice(0, -1);
@@ -185,11 +218,14 @@ function getDirs(path: string, packageMeta: PackageMeta) {
   }
 }
 
-export async function getEntries(url: string): Promise<DocNode[]> {
+export async function getEntries(
+  url: string,
+  importMap?: string,
+): Promise<DocNode[]> {
   let entries = cachedEntries.get(url);
   if (!entries) {
     try {
-      entries = mergeEntries(await doc(url, { load }));
+      entries = mergeEntries(await doc(url, { load, importMap }));
       cachedEntries.set(url, entries);
     } catch (e) {
       if (e instanceof Error) {
@@ -314,7 +350,8 @@ async function getIndexEntries(
         ? `${proto}/${host}/std@${version}${mod}`
         : `${proto}/${host}/x/${pkg}@${version}${mod}`;
       try {
-        const entries = await getEntries(url);
+        const importMap = await getImportMapSpecifier(pkg, version);
+        const entries = await getEntries(url, importMap);
         if (entries.length) {
           indexEntries.set(mod, entries);
         }

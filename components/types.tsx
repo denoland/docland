@@ -402,9 +402,7 @@ function TypeDefMapped(
 ) {
   const {
     mappedType: { readonly, typeParam, nameType, optional, tsType },
-    // TODO(@kitsonk) remove, see: https://github.com/denoland/deno_doc/issues/226
-    // deno-lint-ignore no-explicit-any
-  } = take(children) as any;
+  } = take(children);
   const so = getState(STYLE_OVERRIDE);
   return (
     <span>
