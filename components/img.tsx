@@ -115,7 +115,7 @@ export function IndexCard(
           font-weight="normal"
           fill="#111827"
         >
-          <tspan x="60" y="260">{link}</tspan>
+          <tspan x="60" y="260">Link: {link}</tspan>
         </text>
         {description.length
           ? (
@@ -165,9 +165,8 @@ export function ModuleCard({ url, doc }: { url: string; doc: string }) {
   const parsed = parseURL(url);
   let title;
   let subtitle;
-  let link;
+  const link = url;
   if (parsed) {
-    link = url;
     title = parsed.module;
     if (parsed.org) {
       if (title) {
@@ -228,9 +227,10 @@ export function ModuleCard({ url, doc }: { url: string; doc: string }) {
           font-family="Inter-Regular, Inter, sans-serif"
           font-size="48"
           font-weight="normal"
+          overflow="hidden"
           fill="#111827"
         >
-          <tspan x="60" y="260">{link}</tspan>
+          <tspan x="60" y="260">long llong llongl long{link}</tspan>
         </text>
         {doc.length
           ? (

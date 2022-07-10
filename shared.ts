@@ -115,7 +115,8 @@ export function getLibWithVersion(url: string): [string, string | undefined] {
       ];
     }
   }
-  return [url.replace(/^\S+\/{2}/, ""), undefined];
+  const parsed = new URL(url);
+  return [parsed.pathname, parsed.hostname];
 }
 
 /** Return a label for a URL, attempting to match the URL to the builtin label,
