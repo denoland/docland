@@ -17,7 +17,7 @@ export {
   doc,
   type DocOptions,
   type LoadResponse,
-} from "https://deno.land/x/deno_doc@v0.37.0/mod.ts";
+} from "https://deno.land/x/deno_doc@0.38.0/mod.ts";
 export type {
   Accessibility,
   ClassConstructorDef,
@@ -89,7 +89,7 @@ export type {
   TsTypeTypePredicateDef,
   TsTypeTypeRefDef,
   TsTypeUnionDef,
-} from "https://deno.land/x/deno_doc@v0.37.0/lib/types.d.ts";
+} from "https://deno.land/x/deno_doc@0.38.0/lib/types.d.ts";
 
 // Used to report measurements to Google Analytics
 export { createReportMiddleware } from "https://deno.land/x/g_a@0.1.2/mod.ts";
