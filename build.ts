@@ -289,4 +289,57 @@ if (stdLibVersions && stdLibVersions.length) {
   }
 }
 
+if (Deno.args.includes("--create-pr")) {
+  await tryCreatePr();
+}
+
 $.logTitle("Done.");
+
+async function tryCreatePr() {
+  // check for local changes
+  await $`git add .`;
+  const hasLocalChanges = (await $`git status --porcelain`.text()).length > 0;
+  if (!hasLocalChanges) {
+    $.log("Had no local changes.");
+    return;
+  }
+
+  // commit and push
+  const branchName = `bump_version${latestTag}`;
+  const commitMessage = `Updated files for ${latestTag}`;
+  await $`git branch ${branchName}`;
+  await $`git commit -m ${commitMessage}`;
+  $.logTitle("Pushing branch...");
+  await $`git push -u origin HEAD`;
+
+  // open a PR
+  $.logTitle("Opening PR...");
+  const { createOctoKit, getGitHubRepository } = await import(
+    "https://raw.githubusercontent.com/denoland/automation/0.11.0/github_actions.ts"
+  );
+  const octoKit = createOctoKit();
+  const openedPr = await octoKit.request("POST /repos/{owner}/{repo}/pulls", {
+    ...getGitHubRepository(),
+    base: "main",
+    head: branchName,
+    draft: false,
+    title: `chore: update for ${latestTag}`,
+    body: getPrBody(),
+  });
+  $.log(`Opened PR at ${openedPr.data.url}`);
+
+  function getPrBody() {
+    let text = `Bumped versions for ${latestTag}\n\n` +
+      `To make edits to this PR:\n` +
+      "```shell\n" +
+      `git fetch upstream ${branchName} && git checkout -b ${branchName} upstream/${branchName}\n` +
+      "```\n";
+
+    const actor = Deno.env.get("GH_WORKFLOW_ACTOR");
+    if (actor != null) {
+      text += `\ncc @${actor}`;
+    }
+
+    return text;
+  }
+}
