@@ -4,7 +4,7 @@
 // `/static` directory.
 
 import * as semver from "https://deno.land/x/semver@v1.4.0/mod.ts";
-import $ from "https://deno.land/x/dax@0.5.0/mod.ts";
+import $ from "https://deno.land/x/dax@0.6.0/mod.ts";
 import { colors, doc } from "./deps.ts";
 import { getIndexStructure, getPackageVersions } from "./docs.ts";
 
@@ -33,9 +33,9 @@ const gitHubAPIHeaders = {
   accept: "application/vnd.github.v3+json",
 } as const;
 
-$.logTitle("Building deploy_doc...");
+$.logStep("Building deploy_doc...");
 
-$.logTitle("Fetching Deno CLI releases...");
+$.logStep("Fetching Deno CLI releases...");
 
 const releases = await $.request(
   "https://api.github.com/repos/denoland/deno/releases?per_page=100",
@@ -59,7 +59,7 @@ const denoLibs = denoReleases.filter(({ tag }) => {
 });
 
 if (denoLibs.length) {
-  $.logTitle("Documenting Deno CLI stable API releases...");
+  $.logStep("Documenting Deno CLI stable API releases...");
 }
 
 for (const { tag, specifier, contentType } of denoLibs) {
@@ -100,7 +100,7 @@ const denoUnstableLibs = denoReleases.filter(({ tag }) => {
 });
 
 if (denoUnstableLibs.length) {
-  $.logTitle("Documenting Deno CLI unstable API releases...");
+  $.logStep("Documenting Deno CLI unstable API releases...");
 }
 
 for (const { tag } of denoUnstableLibs) {
@@ -139,14 +139,14 @@ $.log(
   `${colors.bold(colors.green("Latest release"))}: ${colors.yellow(latestTag)}`,
 );
 
-$.logTitle("Documenting latest stable APIs...");
+$.logStep("Documenting latest stable APIs...");
 
 const latestReleaseLibUrl = latestRelease.assets.find((a) =>
   a.name === "lib.deno.d.ts"
 )?.browser_download_url;
 
 if (!latestReleaseLibUrl) {
-  $.logErrorTitle("Error cannot determine latest release lib.");
+  $.logError("Error cannot determine latest release lib.");
   Deno.exit(1);
 }
 
@@ -169,18 +169,18 @@ const builtInDoc = await doc(
     },
   },
 );
-$.logTitle("Saving latest stable APIs...");
+$.logStep("Saving latest stable APIs...");
 await Deno.writeTextFile("./static/stable.json", JSON.stringify(builtInDoc));
 
-$.logTitle("Documenting latest unstable APIs...");
+$.logStep("Documenting latest unstable APIs...");
 const unstableDoc = await doc(
   `https://raw.githubusercontent.com/denoland/deno/${latestTag}/cli/dts/lib.deno.unstable.d.ts`,
   { includeAll: true },
 );
-$.logTitle("Saving latest unstable APIs...");
+$.logStep("Saving latest unstable APIs...");
 await Deno.writeTextFile("./static/unstable.json", JSON.stringify(unstableDoc));
 
-$.logTitle("Documenting lib esnext...");
+$.logStep("Documenting lib esnext...");
 const libEsnextPromises = [
   "es5",
   "es6",
@@ -248,21 +248,21 @@ const libEsnextPromises = [
   )
 );
 const esnextDoc = (await Promise.all(libEsnextPromises)).flat();
-$.logTitle("Saving lib esnext...");
+$.logStep("Saving lib esnext...");
 await Deno.writeTextFile("./static/esnext.json", JSON.stringify(esnextDoc));
 
-$.logTitle("Documenting lib dom...");
+$.logStep("Documenting lib dom...");
 const domPromises = ["dom", "dom.iterable", "dom.asynciterable"].map((lib) =>
   doc(
     `https://raw.githubusercontent.com/denoland/deno/${latestTag}/cli/dts/lib.${lib}.d.ts`,
     { includeAll: true },
   )
 );
-$.logTitle("Saving lib dom...");
+$.logStep("Saving lib dom...");
 const domDoc = (await Promise.all(domPromises)).flat();
 await Deno.writeTextFile("./static/dom.json", JSON.stringify(domDoc));
 
-$.logTitle("Documenting std libs...");
+$.logStep("Documenting std libs...");
 
 const stdLibVersions = (await getPackageVersions("std"))?.versions.filter(
   (version) => {
@@ -272,7 +272,7 @@ const stdLibVersions = (await getPackageVersions("std"))?.versions.filter(
 
 if (stdLibVersions && stdLibVersions.length) {
   for (const version of stdLibVersions) {
-    $.logTitle(`Indexing std lib ${version}...`);
+    $.logStep(`Indexing std lib ${version}...`);
     const indexStructure = await getIndexStructure(
       "https:/",
       "deno.land",
@@ -280,7 +280,7 @@ if (stdLibVersions && stdLibVersions.length) {
       version,
     );
     if (indexStructure) {
-      $.logTitle(`Saving std lib ${version}...`);
+      $.logStep(`Saving std lib ${version}...`);
       await Deno.writeTextFile(
         `./static/std_${version}.json`,
         JSON.stringify(indexStructure),
@@ -293,7 +293,7 @@ if (Deno.args.includes("--create-pr")) {
   await tryCreatePr();
 }
 
-$.logTitle("Done.");
+$.logStep("Done.");
 
 async function tryCreatePr() {
   // check for local changes
@@ -309,11 +309,11 @@ async function tryCreatePr() {
   const commitMessage = `Updated files for ${latestTag}`;
   await $`git branch ${branchName}`;
   await $`git commit -m ${commitMessage}`;
-  $.logTitle("Pushing branch...");
+  $.logStep("Pushing branch...");
   await $`git push -u origin HEAD`;
 
   // open a PR
-  $.logTitle("Opening PR...");
+  $.logStep("Opening PR...");
   const { createOctoKit, getGitHubRepository } = await import(
     "https://raw.githubusercontent.com/denoland/automation/0.11.0/github_actions.ts"
   );
