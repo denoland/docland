@@ -139,7 +139,7 @@ $.log(
   `${colors.bold(colors.green("Latest release"))}: ${colors.yellow(latestTag)}`,
 );
 
-$.log("Documenting latest stable APIs...");
+$.logTitle("Documenting latest stable APIs...");
 
 const latestReleaseLibUrl = latestRelease.assets.find((a) =>
   a.name === "lib.deno.d.ts"
