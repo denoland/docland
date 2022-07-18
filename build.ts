@@ -4,7 +4,7 @@
 // `/static` directory.
 
 import * as semver from "https://deno.land/x/semver@v1.4.0/mod.ts";
-import $ from "https://deno.land/x/dax@0.6.0/mod.ts";
+import $ from "https://deno.land/x/dax@0.7.0/mod.ts";
 import { colors, doc } from "./deps.ts";
 import { getIndexStructure, getPackageVersions } from "./docs.ts";
 
