@@ -315,7 +315,7 @@ async function tryCreatePr() {
   // open a PR
   $.logStep("Opening PR...");
   const { createOctoKit, getGitHubRepository } = await import(
-    "https://raw.githubusercontent.com/denoland/automation/0.11.0/github_actions.ts"
+    "https://raw.githubusercontent.com/denoland/automation/0.12.0/github_actions.ts"
   );
   const octoKit = createOctoKit();
   const openedPr = await octoKit.request("POST /repos/{owner}/{repo}/pulls", {
