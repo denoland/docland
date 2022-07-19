@@ -42,9 +42,6 @@ function Footer() {
         <FooterLink href="https://deno.land/benchmarks">Benchmarks</FooterLink>
         <FooterLink href="https://deno.land/artwork">Artwork</FooterLink>
         <FooterLink href="https://deno.com/blog">Blog</FooterLink>
-        <FooterLink href="https://deno.land/translations">
-          Translations
-        </FooterLink>
         <FooterLink href="https://status.deno.land/">System Status</FooterLink>
         <FooterLink href="https://github.com/denoland/deno/wiki#companies-interested-in-deno">
           Companies interested in Deno
