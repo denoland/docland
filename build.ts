@@ -307,7 +307,7 @@ async function tryCreatePr() {
   // commit and push
   const branchName = `bump_version${latestTag}`;
   const commitMessage = `Updated files for ${latestTag}`;
-  await $`git branch ${branchName}`;
+  await $`git checkout -b ${branchName}`;
   await $`git commit -m ${commitMessage}`;
   $.logStep("Pushing branch...");
   await $`git push -u origin HEAD`;
