@@ -301,8 +301,7 @@ export function DocWithLink(
           <a
             href={href}
             target="_blank"
-            class={tw
-              `pl-2 break-words text-gray-600 hover:text-gray-800 dark:(text-gray-400 hover:text-gray-200) hover:underline`}
+            class={tw`pl-2 break-words text-gray-600 hover:text-gray-800 dark:(text-gray-400 hover:text-gray-200) hover:underline`}
           >
             [src]
           </a>
