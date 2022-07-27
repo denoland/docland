@@ -3,8 +3,8 @@
 // This is the build script for deploy_doc, which generates JSON files in the
 // `/static` directory.
 
-import * as semver from "https://deno.land/x/semver@v1.4.0/mod.ts";
-import $ from "https://deno.land/x/dax@0.7.0/mod.ts";
+import * as semver from "https://deno.land/std@0.149.0/semver/mod.ts";
+import $ from "https://deno.land/x/dax@0.7.1/mod.ts";
 import { colors, doc } from "./deps.ts";
 import { getIndexStructure, getPackageVersions } from "./docs.ts";
 
@@ -87,7 +87,7 @@ for (const { tag, specifier, contentType } of denoLibs) {
 }
 
 const denoUnstableLibs = denoReleases.filter(({ tag }) => {
-  if (semver.gt(semver.coerce(tag)!, "1.2.0")) {
+  if (semver.gt(tag, "1.2.0")) {
     try {
       const stat = Deno.statSync(`./static/unstable_${tag}.json`);
       return !stat.isFile;
