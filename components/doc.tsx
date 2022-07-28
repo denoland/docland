@@ -396,8 +396,7 @@ export function Usage(
           <span
             innerHTML={{
               __dangerousHtml: `<button
-                class="${tw
-                `float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray(500 dark:300) border border-gray(300 dark:500) rounded hover:shadow`}"
+                class="${tw`float-right px-2 font-sans focus-visible:ring-2 text-sm text-gray(500 dark:300) border border-gray(300 dark:500) rounded hover:shadow`}"
                 type="button" onclick="copyImportStatement()">Copy</button>`,
             }}
           >

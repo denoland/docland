@@ -114,8 +114,7 @@ export function SideBarHeader(
     return (
       <div>
         <h2
-          class={tw
-            `text-gray-900 dark:text-gray-50 text-xl lg:text-2xl font-bold`}
+          class={tw`text-gray-900 dark:text-gray-50 text-xl lg:text-2xl font-bold`}
         >
           <a href={href} class={tw`hover:underline break-all`}>{label}</a>
         </h2>
