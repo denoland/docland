@@ -42,7 +42,7 @@ type ImgRoutes =
   | "/img/:proto(deno)/:host/~/:item+";
 
 const RE_STD = /^std(?:@?([^/]+))?/;
-const RE_X_PKG = /^x\/([a-zA-Z_]{3,})(?:@?([^/]+))?/;
+const RE_X_PKG = /^x\/([^@\/]{3,})(?:@?([^/]+))?/;
 
 function isPackageHost(host: string): boolean {
   return host.toLowerCase() === "deno.land";
