@@ -41,15 +41,17 @@ type ImgRoutes =
   | "/img/:proto(deno)/:host"
   | "/img/:proto(deno)/:host/~/:item+";
 
-const RE_STD = /^std(?:@?([^/]+))?/;
-const RE_X_PKG = /^x\/([a-zA-Z_]{3,})(?:@?([^/]+))?/;
+const RE_STD = /^std(?:@([^/]+))?/;
+const RE_X_PKG = /^x\/([a-zA-Z0-9-_.]{3,})(?:@([^/]+))?/;
 
 function isPackageHost(host: string): boolean {
   return host.toLowerCase() === "deno.land";
 }
 
-/** Return `true` if the index structure has "children" entries that can be
- * displayed as an index, otherwise `false`. */
+/**
+ * Return `true` if the index structure has "children" entries that can be
+ * displayed as an index, otherwise `false`.
+ */
 function hasSubEntries(indexStructure: IndexStructure, path: string): boolean {
   return [...indexStructure.entries.keys()].some((key) =>
     key.startsWith(path) && key !== path
