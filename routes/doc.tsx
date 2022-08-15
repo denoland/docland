@@ -48,9 +48,9 @@ function isPackageHost(host: string): boolean {
   return host.toLowerCase() === "deno.land";
 }
 
-/** 
+/**
  * Return `true` if the index structure has "children" entries that can be
- * displayed as an index, otherwise `false`. 
+ * displayed as an index, otherwise `false`.
  */
 function hasSubEntries(indexStructure: IndexStructure, path: string): boolean {
   return [...indexStructure.entries.keys()].some((key) =>
