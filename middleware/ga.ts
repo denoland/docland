@@ -13,7 +13,7 @@ export function filter(ctx: Context) {
 export function metaData(ctx: Context) {
   let documentTitle;
   if (!(ctx.response.status >= 200 && ctx.response.status < 300)) {
-    documentTitle = STATUS_TEXT.get(ctx.response.status)?.toLowerCase();
+    documentTitle = STATUS_TEXT[ctx.response.status]?.toLowerCase();
   } else if (ctx.request.url.pathname === "/") {
     documentTitle = "homepage";
   } else {
