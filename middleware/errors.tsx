@@ -19,7 +19,7 @@ import { ErrorBody } from "../components/error.tsx";
 function htmlErrorBody(status: Status, msg: string) {
   const page = renderSSR(
     <App>
-      <ErrorBody title={STATUS_TEXT.get(status) ?? "Internal Error"}>
+      <ErrorBody title={STATUS_TEXT[status] ?? "Internal Error"}>
         {msg}
       </ErrorBody>
     </App>,
@@ -41,12 +41,10 @@ function setResponse(
     ctx.response.body = htmlErrorBody(status, message);
     ctx.response.type = "html";
   } else if (accepts === "application/json") {
-    ctx.response.body = { status, text: STATUS_TEXT.get(status), message };
+    ctx.response.body = { status, text: STATUS_TEXT[status], message };
     ctx.response.type = "json";
   } else {
-    ctx.response.body = `Error: [${status} ${
-      STATUS_TEXT.get(status)
-    }] ${message}`;
+    ctx.response.body = `Error: [${status} ${STATUS_TEXT[status]}] ${message}`;
     ctx.response.type = "text/plain";
   }
 }
