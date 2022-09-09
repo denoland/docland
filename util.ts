@@ -69,8 +69,9 @@ export type Child<T> = T | [T];
  * used to deal with the ambiguity around children properties with nano_jsx. */
 export function take<T>(value: Child<T>, itemIsArray = false): T {
   if (itemIsArray) {
-    return Array.isArray(value) && Array.isArray(value[0]) ? value[0] : // deno-lint-ignore no-explicit-any
-      value as any;
+    return Array.isArray(value) && Array.isArray(value[0])
+      ? value[0] // deno-lint-ignore no-explicit-any
+      : value as any;
   } else {
     return Array.isArray(value) ? value[0] : value;
   }
