@@ -150,6 +150,15 @@ export const pathGetHead = async <R extends DocRoutes>(
   ctx: RouterContext<R>,
 ) => {
   let { proto, host, item, path } = ctx.params;
+  if (proto === "deno") {
+    ctx.response.status = Status.MovedPermanently;
+    if (host === "unstable") {
+      ctx.response.redirect("https://deno.land/api");
+    } else {
+      ctx.response.redirect("https://deno.land/api?unstable");
+    }
+    return;
+  }
   let { search } = ctx.request.url;
   if (search.includes("/~/")) {
     [search, item] = search.split("/~/");
