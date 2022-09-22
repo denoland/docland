@@ -153,9 +153,9 @@ export const pathGetHead = async <R extends DocRoutes>(
   if (proto === "deno") {
     ctx.response.status = Status.MovedPermanently;
     if (host === "unstable") {
-      ctx.response.redirect("https://deno.land/api");
-    } else {
       ctx.response.redirect("https://deno.land/api?unstable");
+    } else {
+      ctx.response.redirect("https://deno.land/api");
     }
     return;
   }
