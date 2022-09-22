@@ -44,11 +44,11 @@ Deno.test({
     assertEquals(res.status, 200);
     assertStringIncludes(await res.text(), ">Deno Doc<");
 
-    res = await fetch(`${server}deno/stable`);
+    res = await fetch(`${server}https://deno.land/x/oak@v11.1.0/mod.ts`);
     assertEquals(res.status, 200);
     assertStringIncludes(
       await res.text(),
-      "<title>Deno CLI APIs | Deno Doc</title>",
+      "<title>mod.ts – oak – @v11.1.0 – deno.land/x | Deno Doc</title>",
     );
 
     // validate that badge.svg is available
@@ -58,13 +58,18 @@ Deno.test({
     await res.arrayBuffer();
 
     // validate that builtin doc nodes get merged properly
-    res = await fetch(`${server}deno/stable/~/Deno.connect`);
+    res = await fetch(
+      `${server}https://deno.land/x/oak@v11.1.0/mod.ts/~/etag.calculate`,
+    );
     assertEquals(res.status, 200);
     let text = await res.text();
-    assertStringIncludes(text, ">Deno.connect<");
+    assertStringIncludes(text, ">etag.calculate<");
 
     // validate that namespaced type references are resolved
-    assertStringIncludes(text, `href="/deno/stable/~/Deno.ConnectOptions"`);
+    assertStringIncludes(
+      text,
+      `href="/https://deno.land/x/oak@v11.1.0/mod.ts/~/etag.ETagOptions"`,
+    );
 
     // doc query URLs are redirected to perm-link of the redirected URL
     res = await fetch(
