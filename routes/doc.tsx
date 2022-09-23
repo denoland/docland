@@ -151,7 +151,6 @@ export const pathGetHead = async <R extends DocRoutes>(
 ) => {
   let { proto, host, item, path } = ctx.params;
   if (proto === "deno") {
-    ctx.response.status = Status.MovedPermanently;
     const search = new URLSearchParams();
     if (item) {
       search.set("s", item);
@@ -159,7 +158,19 @@ export const pathGetHead = async <R extends DocRoutes>(
     if (host === "unstable") {
       search.set("unstable", "");
     }
+    ctx.response.status = Status.MovedPermanently;
     ctx.response.redirect("https://deno.land/api?" + search.toString());
+    return;
+  } else if (host === "deno.land") {
+    const search = new URLSearchParams();
+    if (item) {
+      search.set("s", item);
+    }
+    if (!path.includes("/")) {
+      search.set("doc", "");
+    }
+    ctx.response.status = Status.MovedPermanently;
+    ctx.response.redirect(`https://deno.land/x/${path}?${search.toString()}`);
     return;
   }
   let { search } = ctx.request.url;
