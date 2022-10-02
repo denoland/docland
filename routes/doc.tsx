@@ -159,8 +159,7 @@ export const pathGetHead = async <R extends DocRoutes>(
       search.set("unstable", "");
     }
     ctx.response.status = Status.MovedPermanently;
-    ctx.response.redirect("https://deno.land/api?" + search.toString());
-    return;
+    return ctx.response.redirect("https://deno.land/api?" + search.toString());
   } else if (host === "deno.land") {
     const search = new URLSearchParams();
     if (item) {
@@ -170,8 +169,9 @@ export const pathGetHead = async <R extends DocRoutes>(
       search.set("doc", "");
     }
     ctx.response.status = Status.MovedPermanently;
-    ctx.response.redirect(`https://deno.land/x/${path}?${search.toString()}`);
-    return;
+    return ctx.response.redirect(
+      `https://deno.land/x/${path}?${search.toString()}`,
+    );
   }
   let { search } = ctx.request.url;
   if (search.includes("/~/")) {
