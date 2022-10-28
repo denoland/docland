@@ -49,7 +49,7 @@ export function SpecifierForm() {
             other libraries/packages/modules available on the internet.
           </p>
         </div>
-        <div>
+        <div class={tw`mt-6`}>
           <form
             class={tw`relative text-gray(500 focus-within:700 dark:focus-within:(300)) sm:col-span-6`}
             action="/doc"
