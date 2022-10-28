@@ -49,7 +49,6 @@ export function SpecifierForm() {
             other libraries/packages/modules available on the internet.
           </p>
         </div>
-        <div class={tw`text-center my-6`}>or view documentation for</div>
         <div>
           <form
             class={tw`relative text-gray(500 focus-within:700 dark:focus-within:(300)) sm:col-span-6`}
