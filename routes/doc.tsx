@@ -2,7 +2,6 @@
 /** @jsx h */
 import { App } from "../components/app.tsx";
 import { IndexCard, ModuleCard, SymbolCard } from "../components/img.tsx";
-import { IndexPage } from "../components/indexPage.tsx";
 import { DocPage } from "../components/doc.tsx";
 import {
   type DocNodeNamespace,
@@ -18,7 +17,6 @@ import {
 import {
   checkRedirect,
   getEntries,
-  getImportMapSpecifier,
   getIndexStructure,
   getLatest,
   getPackageDescription,
@@ -58,11 +56,8 @@ function hasSubEntries(indexStructure: IndexStructure, path: string): boolean {
   );
 }
 
-export const packageGetHead: RouterMiddleware<DocRoutes> = async (
-  ctx,
-  next,
-) => {
-  let { proto, host, item, path } = ctx.params;
+export const packageGetHead: RouterMiddleware<DocRoutes> = (ctx, next) => {
+  let { host, item, path } = ctx.params;
   let { search } = ctx.request.url;
   if (search.includes("/~/")) {
     [search, item] = search.split("/~/");
@@ -71,7 +66,6 @@ export const packageGetHead: RouterMiddleware<DocRoutes> = async (
     // it can't be an index of a package, just processes other middleware
     return next();
   }
-  const url = `${proto}/${host}/${path ?? ""}${search}`;
   let pkg;
   let version;
   const maybeMatchStd = path.match(RE_STD);
@@ -81,24 +75,16 @@ export const packageGetHead: RouterMiddleware<DocRoutes> = async (
     [, version] = maybeMatchStd;
     path = path.slice(maybeMatchStd[0].length);
     if (!version) {
-      const latest = await getLatest(pkg);
-      if (!latest) {
-        return next();
-      }
-      return ctx.response.redirect(
-        `/${proto}/${host}/std@${latest}${path}${search}`,
-      );
+      ctx.response.status = Status.MovedPermanently;
+      return ctx.response.redirect(`https://deno.land/std${path}${search}`);
     }
   } else if (maybeMatchX) {
     [, pkg, version] = maybeMatchX;
     path = path.slice(maybeMatchX[0].length);
     if (!version) {
-      const latest = await getLatest(pkg);
-      if (!latest) {
-        return next();
-      }
+      ctx.response.status = Status.MovedPermanently;
       return ctx.response.redirect(
-        `/${proto}/${host}/x/${pkg}@${latest}${path}${search}`,
+        `https://deno.land/x/${pkg}${path}${search}`,
       );
     }
   }
@@ -108,42 +94,12 @@ export const packageGetHead: RouterMiddleware<DocRoutes> = async (
   }
   path = path || "/";
 
-  const indexStructure = pkg === "std"
-    ? await getStaticIndex("std", version)
-    : await getIndexStructure(
-      proto,
-      host,
-      pkg,
-      version,
-      path,
-    );
-  if (indexStructure && hasSubEntries(indexStructure, path)) {
-    sheet.reset();
-    const base = pkg === "std"
-      ? `/${proto}/${host}/std@${version}`
-      : `/${proto}/${host}/x/${pkg}@${version}`;
-    const description = await getPackageDescription(pkg);
-    const page = renderSSR(
-      <App>
-        <IndexPage
-          requestUrl={ctx.request.url}
-          url={url}
-          base={base}
-          path={path}
-          description={description}
-        >
-          {indexStructure}
-        </IndexPage>
-      </App>,
-    );
-    ctx.response.body = getBody(
-      Helmet.SSR(page),
-      getStyleTag(sheet),
-    );
-    ctx.response.type = "html";
-  } else {
-    return next();
-  }
+  ctx.response.status = Status.MovedPermanently;
+  return ctx.response.redirect(
+    pkg === "std"
+      ? `https://deno.land/std@${version}${path}`
+      : `https://deno.land/x/${pkg}@${version}${path}`,
+  );
 };
 
 export const pathGetHead = async <R extends DocRoutes>(
@@ -155,6 +111,37 @@ export const pathGetHead = async <R extends DocRoutes>(
     [search, item] = search.split("/~/");
   }
   ctx.assert(proto && host, Status.BadRequest, "Malformed documentation URL");
+  if (proto === "deno") {
+    if (host.startsWith("stable")) {
+      const [, version] = host.split("@");
+      ctx.response.status = Status.MovedPermanently;
+      let url = version
+        ? `https://deno.land/api@${version}`
+        : `https://deno.land/api`;
+      if (item) {
+        url += `?s=${item}`;
+      }
+      return ctx.response.redirect(url);
+    } else if (host.startsWith("unstable")) {
+      const [, version] = host.split("@");
+      ctx.response.status = Status.MovedPermanently;
+      let url = version
+        ? `https://deno.land/api@${version}?unstable`
+        : `https://deno.land/api?unstable`;
+      if (item) {
+        url += `&s=${item}`;
+      }
+      return ctx.response.redirect(url);
+    }
+  }
+  if (host === "deno.land") {
+    ctx.response.status = Status.MovedPermanently;
+    return ctx.response.redirect(
+      item
+        ? `https://deno.land/${path ?? ""}?s=${item}`
+        : `https://deno.land/${path ?? ""}`,
+    );
+  }
   const url = `${proto}/${host}/${path ?? ""}${search}`;
   const maybeRedirect = await checkRedirect(url);
   if (maybeRedirect) {
@@ -164,11 +151,6 @@ export const pathGetHead = async <R extends DocRoutes>(
   }
   await maybeCacheStatic(url, host);
   let importMap;
-  const maybeMatchX = path?.match(RE_X_PKG);
-  if (maybeMatchX) {
-    const [, module, version] = maybeMatchX;
-    importMap = await getImportMapSpecifier(module, version);
-  }
   const entries = await getEntries(url, importMap);
   store.setState({ entries, url, includePrivate: proto === "deno" });
   sheet.reset();

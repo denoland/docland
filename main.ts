@@ -2,7 +2,14 @@
 
 // Copyright 2021 the Deno authors. All rights reserved. MIT license.
 
-import { Application, colors, HttpError, lookup, Router } from "./deps.ts";
+import {
+  Application,
+  colors,
+  HttpError,
+  lookup,
+  Router,
+  Status,
+} from "./deps.ts";
 import { createBadgeMW } from "./middleware/badge.ts";
 import { handleNotFound } from "./middleware/notFound.tsx";
 import { handleErrors } from "./middleware/errors.tsx";
@@ -142,14 +149,23 @@ router.get(
 );
 
 // redirects from legacy doc website
-router.get("/builtin/stable", (ctx) => ctx.response.redirect("/deno/stable"));
+router.get("/builtin/stable", (ctx) => {
+  ctx.response.status = Status.MovedPermanently;
+  return ctx.response.redirect("https://deno.land/api");
+});
 router.get(
   "/builtin/stable@:version",
-  (ctx) => ctx.response.redirect(`/deno/stable@${ctx.params.version}`),
+  (ctx) => {
+    ctx.response.status = Status.MovedPermanently;
+    return ctx.response.redirect(`https://deno.land/api@${ctx.params.version}`);
+  },
 );
 router.get(
   "/builtin/unstable",
-  (ctx) => ctx.response.redirect("/deno/unstable"),
+  (ctx) => {
+    ctx.response.status = Status.MovedPermanently;
+    return ctx.response.redirect("https://deno.land/api?unstable");
+  },
 );
 router.get(
   "/:proto(http|https)/:host/:path*",

@@ -35,7 +35,7 @@ function Footer() {
     >
       <nav class={tw`-mx-5 -my-2 flex flex-wrap justify-center`}>
         <FooterLink href="https://deno.land/manual">Manual</FooterLink>
-        <FooterLink href="/deno/stable">API</FooterLink>
+        <FooterLink href="https://deno.land/api">API</FooterLink>
         <FooterLink href="https://deno.land/std">Standard Library</FooterLink>
         <FooterLink href="https://deno.land/x">Third Party Modules</FooterLink>
         <FooterLink href="https://deno.land/benchmarks">Benchmarks</FooterLink>
@@ -116,7 +116,7 @@ function Header() {
           <NavLink href="https://deno.com/deploy">Deploy</NavLink>
           <NavLink href="https://deno.land/manual">Manual</NavLink>
           <NavLink href="https://deno.com/blog">Blog</NavLink>
-          <NavLink href="/deno/stable">API</NavLink>
+          <NavLink href="https://deno.com/api">API</NavLink>
           <NavLink href="https://deno.land/std">Standard Library</NavLink>
           <NavLink href="https://deno.land/x">Third Party Modules</NavLink>
         </div>
