@@ -44,45 +44,23 @@ Deno.test({
     assertEquals(res.status, 200);
     assertStringIncludes(await res.text(), ">Deno Doc<");
 
-    res = await fetch(`${server}deno/stable`);
-    assertEquals(res.status, 200);
-    assertStringIncludes(
-      await res.text(),
-      "<title>Deno CLI APIs | Deno Doc</title>",
-    );
-
     // validate that badge.svg is available
     res = await fetch(`${server}badge.svg`);
     assertEquals(res.status, 200);
     assertEquals(res.headers.get("content-type"), "image/svg+xml");
     await res.arrayBuffer();
 
-    // validate that builtin doc nodes get merged properly
-    res = await fetch(`${server}deno/stable/~/Deno.connect`);
-    assertEquals(res.status, 200);
-    let text = await res.text();
-    assertStringIncludes(text, ">Deno.connect<");
-
-    // validate that namespaced type references are resolved
-    assertStringIncludes(text, `href="/deno/stable/~/Deno.ConnectOptions"`);
-
     // doc query URLs are redirected to perm-link of the redirected URL
     res = await fetch(
-      `${server}doc?url=https%3A%2F%2Fdeno.land%2Fstd%2Ftesting%2Fasserts.ts`,
+      `${server}doc?url=${encodeURIComponent("https://esm.sh/preact")}`,
     );
     assertEquals(res.status, 200);
     assert(
       res.url.match(
-        /http:\/{2}(0\.){3}0:5001\/https:\/{2}deno\.land\/std@\d+\.\d+\.\d+\/testing\/asserts\.ts/,
+        /http:\/{2}(0\.){3}0:5001\/https:\/{2}esm\.sh\/v\d{1,3}\/preact@\d+\.\d+\.\d+\/src\/index\.d\.ts/,
       ),
     );
     await res.text();
-
-    // valid results for non-index modules
-    res = await fetch(`${server}https://deno.land/std@0.138.0/http/server.ts`);
-    assertEquals(res.status, 200);
-    text = await res.text();
-    assertStringIncludes(text, `Server">Server</a>`);
 
     teardown();
   },

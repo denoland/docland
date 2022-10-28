@@ -31,19 +31,22 @@ export function SpecifierForm() {
       >
         <div class={tw`space-y-4`}>
           <p>
-            <a href="/deno/stable" class={gtw("formButton")}>
-              Deno CLI APIs (Stable)
-            </a>
+            Welcome. <code>doc.deno.land</code>{" "}
+            used to be the central hub for documentation for Deno's built-in
+            APIs, standard library, and third party modules. These have been
+            integrated directly into{" "}
+            <a
+              href="https://deno.land/"
+              class={tw`text-blue-500 hover:underline`}
+            >
+              <code>deno.land</code>
+            </a>{" "}
+            and links to here will redirect to there.
           </p>
           <p>
-            <a href="/deno/unstable" class={gtw("formButton")}>
-              Deno CLI APIs (<code>--unstable</code>)
-            </a>
-          </p>
-          <p>
-            <a href="/https://deno.land/std/" class={gtw("formButton")}>
-              Deno <code>std</code> library
-            </a>
+            <code>doc.deno.land</code>{" "}
+            can still be used as a general purpose documentation generator for
+            other libraries/packages/modules available on the internet.
           </p>
         </div>
         <div class={tw`text-center my-6`}>or view documentation for</div>
@@ -84,14 +87,9 @@ export function SpecifierForm() {
           <p>
             Some samples of documentation:
             <DocLinks>
-              {"https://deno.land/x/oak/mod.ts"}
-              {"https://deno.land/x/deno_dom/"}
-              {"https://deno.land/x/redis/mod.ts"}
-              {"https://deno.land/x/amqp/mod.ts"}
               {"https://esm.sh/@firebase/firestore"}
               {"https://esm.sh/@supabase/supabase-js"}
               {"https://esm.sh/preact"}
-              {"https://deno.land/x/nano_jsx/"}
             </DocLinks>
           </p>
         </div>
