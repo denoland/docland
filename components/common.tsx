@@ -126,7 +126,7 @@ export function getLink(
       return undefined;
     }
   }
-  const ref = (link.kind === "import" ? link.importDef.src : url);
+  const ref = link.kind === "import" ? link.importDef.src : url;
   const refItem = namespacePath ? `${namespacePath}.${link.name}` : link.name;
   return `/${ref}${ref.endsWith("/") ? "" : "/"}~/${refItem}${
     anchor && `#${anchor}`
