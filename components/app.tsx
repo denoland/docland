@@ -116,7 +116,7 @@ function Header() {
           <NavLink href="https://deno.com/deploy">Deploy</NavLink>
           <NavLink href="https://deno.land/manual">Manual</NavLink>
           <NavLink href="https://deno.com/blog">Blog</NavLink>
-          <NavLink href="https://deno.com/api">API</NavLink>
+          <NavLink href="https://deno.land/api">API</NavLink>
           <NavLink href="https://deno.land/std">Standard Library</NavLink>
           <NavLink href="https://deno.land/x">Third Party Modules</NavLink>
         </div>

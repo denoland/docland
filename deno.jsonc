@@ -16,7 +16,6 @@
     }
   },
   "tasks": {
-    "build": "deno run --no-check=remote --allow-read=. --allow-write=./static --allow-net --allow-env build.ts",
     "dev": "deno run --allow-read=. --allow-net --allow-env --allow-hrtime main.ts",
     "test": "deno test --allow-read=. --allow-net --allow-env --allow-hrtime"
   }

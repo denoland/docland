@@ -18,12 +18,3 @@ jobs:
 
       - name: Install deno
         uses: denoland/setup-deno@v1
-
-      - name: Build and Create PR
-        env:
-          GITHUB_TOKEN: ${{ secrets.DENOBOT_PAT }}
-          GH_WORKFLOW_ACTOR: ${{ github.actor }}
-        run: |
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git config user.name "${{ github.actor }}"
-          deno run -A --check build.ts --create-pr
