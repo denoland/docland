@@ -56,8 +56,19 @@ function Footer() {
 function Header() {
   return (
     <header
-      class={tw`bg-gray-50 border-b border-gray-200 relative py-6 z-10 dark:(bg-gray-800 border-gray-700)`}
+      class={tw`bg-gray-50 border-b border-gray-200 relative z-10 dark:(bg-gray-800 border-gray-700)`}
     >
+      <div class={tw`bg-yellow-300 w-full p-6 text-center`}>
+        Hi there! Are you looking for the official Deno documentation? Try{" "}
+        <a
+          class={tw`text-underline`}
+          href="https://docs.deno.com"
+          target="_blank"
+        >
+          docs.deno.com
+        </a>{" "}
+        for all your Deno learning needs.
+      </div>
       <nav
         class={tw`mx-auto flex flex-wrap items-center justify-between px-4 sm:px-6 md:px-8 lg:p-0 max-w-screen-lg ${nav}`}
       >
