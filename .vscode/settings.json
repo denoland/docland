@@ -1,6 +1,9 @@
 {
   "deno.enable": true,
   "deno.lint": true,
+  "deno.unstable": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "denoland.vscode-deno",
   "deno.testing.args": [
     "--allow-read=.",
     "--allow-net",

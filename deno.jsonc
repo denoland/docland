@@ -16,7 +16,7 @@
     }
   },
   "tasks": {
-    "dev": "deno run --allow-read=. --allow-net --allow-env --allow-hrtime main.ts",
+    "dev": "deno run --allow-read=. --allow-net --allow-env --allow-hrtime --watch main.ts",
     "test": "deno test --allow-read=. --allow-net --allow-env --allow-hrtime"
   }
 }
