@@ -1,6 +1,6 @@
 // Copyright 2021 the Deno authors. All rights reserved. MIT license.
 /** @jsx h */
-import { getStyleTag, h, Helmet, renderSSR, Status, tw } from "../deps.ts";
+import { getStyleTag, h, Helmet, renderSSR, Status } from "../deps.ts";
 import type { Middleware } from "../deps.ts";
 import { sheet } from "../shared.ts";
 import { getBody } from "../util.ts";

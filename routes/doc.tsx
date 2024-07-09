@@ -21,7 +21,6 @@ import {
   getLatest,
   getPackageDescription,
   getStaticIndex,
-  type IndexStructure,
   maybeCacheStatic,
 } from "../docs.ts";
 import { sheet, store } from "../shared.ts";
@@ -44,16 +43,6 @@ const RE_X_PKG = /^x\/([a-zA-Z0-9-_.]{3,})(?:@([^/]+))?/;
 
 function isPackageHost(host: string): boolean {
   return host.toLowerCase() === "deno.land";
-}
-
-/**
- * Return `true` if the index structure has "children" entries that can be
- * displayed as an index, otherwise `false`.
- */
-function hasSubEntries(indexStructure: IndexStructure, path: string): boolean {
-  return [...indexStructure.entries.keys()].some((key) =>
-    key.startsWith(path) && key !== path
-  );
 }
 
 export const packageGetHead: RouterMiddleware<DocRoutes> = (ctx, next) => {
