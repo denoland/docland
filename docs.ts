@@ -135,7 +135,7 @@ export async function checkRedirect(
     finalSpecifier = cached.specifier;
   } else {
     try {
-      const res = await fetch(specifier, { redirect: "follow" });
+      const res = await pkgFetch(specifier, { redirect: "follow" });
       if (res.status !== 200) {
         // ensure that resources are not leaked
         await res.arrayBuffer();
@@ -289,7 +289,7 @@ export async function getPackageDescription(
   pkg: string,
 ): Promise<string | undefined> {
   if (!cachedPackageData.has(pkg)) {
-    const res = await fetch(`${DENO_API}${pkg}`);
+    const res = await pkgFetch(`${DENO_API}${pkg}`);
     let body: ApiModuleData | undefined;
     if (res.status === 200) {
       body = await res.json();
@@ -308,7 +308,7 @@ async function getPackageMeta(
   }
   const versionCache = cachedPackageMeta.get(pkg)!;
   if (!versionCache.get(version)) {
-    const res = await fetch(
+    const res = await pkgFetch(
       `${S3_BUCKET}${pkg}/versions/${version}/meta/meta.json`,
     );
     if (res.status === 200) {
@@ -325,7 +325,7 @@ export async function getPackageVersions(
   pkg: string,
 ): Promise<PackageVersions | undefined> {
   if (!cachedPackageVersions.has(pkg)) {
-    const res = await fetch(`${S3_BUCKET}${pkg}/meta/versions.json`);
+    const res = await pkgFetch(`${S3_BUCKET}${pkg}/meta/versions.json`);
     if (res.status === 200) {
       const packageVersions = await res.json() as PackageVersions;
       cachedPackageVersions.set(pkg, packageVersions);
@@ -431,7 +431,7 @@ async function load(
           cachedSpecifiers.add(specifier);
           return cachedResources.get(specifier);
         }
-        const response = await fetch(String(url), { redirect: "follow" });
+        const response = await pkgFetch(String(url), { redirect: "follow" });
         if (response.status !== 200) {
           // ensure that resources are not leaked
           await response.arrayBuffer();
@@ -550,4 +550,18 @@ function mergeEntries(entries: DocNode[]) {
     }
   }
   return merged;
+}
+
+/** Fetch a URL, adding a user agent header to the request. */
+function pkgFetch(
+  url: string | URL,
+  init: RequestInit = {},
+): Promise<Response> {
+  const DENO_DOC_USER_AGENT = "DenoDoc/1.0.0 (https://doc.deno.land)";
+
+  const hdr = new Headers(init.headers);
+  hdr.set("User-Agent", DENO_DOC_USER_AGENT);
+  init.headers = hdr;
+
+  return fetch(url, init);
 }
