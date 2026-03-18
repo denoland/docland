@@ -235,7 +235,9 @@ const DEPLOYMENT_URL_RE =
   /^\/https?:\/{1,2}[^/]+-[a-z0-9]{8,14}\.deno\.dev(\/|$)/;
 app.use(async (ctx, next) => {
   const ua = ctx.request.headers.get("user-agent") ?? "";
-  if (ua.includes("ClaudeBot") && DEPLOYMENT_URL_RE.test(ctx.request.url.pathname)) {
+  if (
+    ua.includes("ClaudeBot") && DEPLOYMENT_URL_RE.test(ctx.request.url.pathname)
+  ) {
     ctx.response.status = 403;
     ctx.response.body =
       "Forbidden: use the main project URL instead of deployment-specific URLs.";
