@@ -228,11 +228,11 @@ app.use(handleNotFound);
 
 // Block ClaudeBot from accessing deployment-specific .deno.dev URLs via
 // doc.deno.land. Deployment-specific URLs have the form
-// <project>-<deployment_id>.deno.dev where deployment_id is an 8-12 char
+// <project>-<deployment_id>.deno.dev where deployment_id is a 12 char
 // alphanumeric string. These URLs are ephemeral duplicates of the main project
 // URL and should not be crawled.
 const DEPLOYMENT_URL_RE =
-  /^\/https?:\/{1,2}[^/]+-[a-z0-9]{8,14}\.deno\.dev(\/|$)/;
+  /^\/https?:\/{1,2}[^/]+-[a-z0-9]{12}\.deno\.dev(\/|$)/;
 app.use(async (ctx, next) => {
   const ua = ctx.request.headers.get("user-agent") ?? "";
   if (
